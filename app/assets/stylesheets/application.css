@@ -1,11 +1,11 @@
 /*
  *= require_self
+ *= require jquery-ui.min
+ *= require bootstrap_and_overrides
  *= require facebox
- *= require layout
  *= require tabs
  *= require accordion
  *= require loading_notice
- *= require jquery-ui.min
  *= require auto_complete
  *= require verticalaccordion
 */
