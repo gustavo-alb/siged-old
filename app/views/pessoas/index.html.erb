@@ -14,7 +14,7 @@ Pessoas
 <table class="table table-striped tabela-colapsavel">
   <thead>
     <tr>
-      <th width='350'>NOME</th>
+      <th>NOME</th>
       <th>CPF</th>
       <th>RG</th>
       <th>NASCIMENTO</th>
@@ -54,4 +54,4 @@ Pessoas
   </tbody>
 </table>
 
-<%=will_paginate @pessoas%>
+<%=will_paginate @pessoas,renderer: BootstrapPagination::Rails%>

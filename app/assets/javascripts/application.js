@@ -10,8 +10,6 @@
 //= require jquery.ba-bbq
 //= require jquery.url
 //= require twitter/bootstrap
-//= require twitter/bootstrap/transition
-//= require twitter/bootstrap/collapse
 //= require loading_notice
 //= require ajax_pagination
 //= require maskedinput

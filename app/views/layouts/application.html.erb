@@ -43,9 +43,12 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
-          <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
+       <ul class="nav nav-sidebar">
+       <li class="accordion-toggle" data-toggle="collapse" data-target="#accordion-menu1"><a href="#">RH</a></li>
+       </ul>
+          <ul class="nav nav-sidebar collapse" id="accordion-menu1">
+            <% if can?(:read,Pessoa)%><li class="active"><%=link_to "Pessoas", pessoas_path%></li><%end%>
+            <% if can?(:gerar_ponto,Ponto)%><li><%=setor%></li><%end%>
             <li><a href="#">Analytics</a></li>
             <li><a href="#">Export</a></li>
           </ul>
