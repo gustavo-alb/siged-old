@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require noconflict
 //= require prototype
 //= require effects
 //= require jquery-ui.min

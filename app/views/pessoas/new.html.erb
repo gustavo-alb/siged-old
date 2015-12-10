@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Pessoas",pessoas_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Pessoa<a/>
-
+<%model_class = Pessoa%>
+<%content_for :titulo do%>
+Criando registro de pessoa
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Pessoas ' %>
-
+<%= render :partial => 'form' %>

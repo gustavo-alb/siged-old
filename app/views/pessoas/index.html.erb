@@ -19,22 +19,28 @@ Pessoas
       <th>RG</th>
       <th>NASCIMENTO</th>
       <th>Nº DE FUNC.</th>
+      <th>AÇÕES</th>
     </tr>
   </thead>
   <tbody>
     <%@pessoas.each_with_index do |p,i|%>
-    <tr data-toggle="collapse" data-target="#demo<%=i%>" class="accordion-toggle">
-      <td width='350'><%= p.nome%></td>
-      <td><%= p.cpf%></td>
-      <td><%= p.rg%></td>
-      <td><%= p.nascimento.to_s_br%></td>
-      <td><span class="badge"><%= p.funcionarios.count%></span></td>
+    <tr class="accordion-toggle">
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;"><%= p.nome%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
+      <td>
+      <%= link_to "Editar",edit_pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Visualizar",pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Apagar", pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
+      </td>
     </tr>
     <tr>
-      <td colspan="5" class="hiddenRow">
+      <td colspan="6" class="hiddenRow">
         <div class="accordion-body collapse" id="demo<%=i%>">
-        <table style="border-spacing: 10px; border-collapse: separate;  border-width: thin;" border=0>
-            <% p.funcionarios.each do |f|%>
+        <table style="border-spacing: 0px; border-collapse: separate;  border-width: thin;">
+            <% p.funcionarios.each.with_index(1) do |f,i|%>
             <tr>
               <td><b>MATRICULA:</b></td>
               <td><%= f.matricula%></td>
@@ -45,7 +51,18 @@ Pessoas
               <td><b>ADMISSÃO:</b></td>
               <td><%= f.data_nomeacao.to_s_br%></td>
             </tr>
+            <tr class="<%='linha' if p.funcionarios.count>1 and i!=p.funcionarios.count%>">
+              <td><b>QUADRO:</b></td>
+              <td><%= detalhes(f.entidade)%></td>
+              <td><b>LOTAÇÃO ATUAL:</b></td>
+              <td><%= lotacao(f)%></td>
+              <td><b>LOTAÇÃO ANTERIOR:</b></td>
+              <td><%= l_ant(f)%></td>
+              <td><b>VALIDADO:</b></td>
+              <td><%= booleano(f.verificado)%></td>
+            </tr>
             <% end %>
+           
           </table>
         </div>
       </td>
@@ -55,3 +72,4 @@ Pessoas
 </table>
 
 <%=will_paginate @pessoas,renderer: BootstrapPagination::Rails%>
+<%=link_to "Criar",new_pessoa_path,:class=>"btn btn-primary"%>

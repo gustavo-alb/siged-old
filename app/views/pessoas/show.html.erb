@@ -1,131 +1,72 @@
-<%content_for :links do%>
-		<%=link_to "Pessoa",pessoas_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes da pessoa</a>
-
+<%model_class = Pessoa%>
+<%content_for :titulo do%>
+Detalhes de <%=@pessoa.nome%>
 <%end%>
-<article class="module width_3_quarter">
-<header><h3>Detalhes de <%=@pessoa.nome%></h3></header>
-<div class="module_content">
+<dl class="dl-horizontal">
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= @pessoa.nome %></dd>
 
-<b>Nome:</b>
-  <%= @pessoa.nome %>
-</p>
+  <dt><strong>Sexo:</strong></dt>
+  <dd><%= detalhes(@pessoa.sexo) %></dd>
 
-<p>
-  <b>Sexo:</b>
-  <%= @pessoa.sexo %>
-</p>
+  <dt><strong>Endereço:</strong></dt>
+  <dd><%= detalhes(@pessoa.endereco) %></dd>
 
-<p>
-  <b>Telefone residencial:</b>
-  <%= @pessoa.telefone_residencial %>
-</p>
+  <dt><strong>Telefone Residencial:</strong></dt>
+  <dd><%= detalhes(@pessoa.telefone_residencial) %></dd>
 
-<p>
-  <b>Telefone celular:</b>
-  <%= @pessoa.telefone_celular %>
-</p>
+  <dt><strong>Telefone Celular:</strong></dt>
+  <dd><%= detalhes(@pessoa.telefone_celular) %></dd>
 
+  <dt><strong>Data de Nascimento:</strong></dt>
+  <dd><%= detalhes(@pessoa.nascimento.to_s_br) %></dd>
 
-<p>
-  <b>Endereço:</b>
-  <%= @pessoa.endereco %>
-</p>
+  <dt><strong>Naturalidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.naturalidade) %></dd>
 
-<p>
-  <b>Número:</b>
-  <%= @pessoa.numero %>
-</p>
+  <dt><strong>Nacionalidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.nacionalidade) %></dd>
 
-<p>
-  <b>Complemento:</b>
-  <%= @pessoa.complemento %>
-</p>
+  <dt><strong>CPF:</strong></dt>
+  <dd><%= detalhes(Cpf.new(@pessoa.cpf).numero) %></dd>
 
-<p>
-  <b>Bairro:</b>
-  <%= @pessoa.bairro %>
-</p>
+  <dt><strong>RG:</strong></dt>
+  <dd><%= detalhes(@pessoa.rg) %></dd>
 
-<p>
-  <b>Nascimento:</b>
-  <%= @pessoa.nascimento.to_s_br %>
-</p>
+  <dt><strong>UF RG:</strong></dt>
+  <dd><%= detalhes(@pessoa.uf) %></dd>
 
-<p>
-  <b>Naturalidade:</b>
-  <%= @pessoa.naturalidade %>
-</p>
+  <dt><strong>PIS:</strong></dt>
+  <dd><%= detalhes(@pessoa.pis_pasep) %></dd>
 
-<p>
-  <b>Nacionalidade:</b>
-  <%= @pessoa.nacionalidade %>
-</p>
+<dt><strong>Cidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.cidade) %></dd>
 
-<p>
-  <b>CPF:</b>
-  <%= Cpf.new("#{@pessoa.cpf}").numero %>
-</p>
+  <dt><strong>Ano de Chegada:</strong></dt>
+  <dd><%= detalhes(@pessoa.ano_de_chegada) %></dd>
 
-<p>
-  <b>RG:</b>
-  <%= @pessoa.rg %>
-</p>
+  <dt><strong>Estado Civil:</strong></dt>
+  <dd><%= detalhes(@pessoa.estado_civil) %></dd>
 
-<p>
-  <b>PIS/PASEP:</b>
-  <%= @pessoa.pis_pasep %>
-</p>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= detalhes(@pessoa.cep) %></dd>
 
-<p>
-  <b>UF:</b>
-  <%= @pessoa.uf %>
-</p>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= detalhes(@pessoa.email) %></dd>
 
-<p>
-  <b>Cidade:</b>
-  <%= @pessoa.cidade %>
-</p>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= detalhes(@pessoa.pai) %></dd>
 
-<p>
-  <b>Ano de chegada:</b>
-  <%= @pessoa.ano_de_chegada %>
-</p>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= detalhes(@pessoa.mae) %></dd>
 
-<p>
-  <b>Estado civil:</b>
-  <%= @pessoa.estado_civil %>
-</p>
-
-<p>
-  <b>Título eleitor:</b>
-  <%= @pessoa.titulo_eleitor %>
-</p>
-
-<p>
-  <b>Zona eleitoral:</b>
-  <%= @pessoa.zona_eleitoral %>
-</p>
-
-<p>
-  <b>Seção:</b>
-  <%= @pessoa.secao %>
-</p>
-
-
-
-</div>
-<div class="clear"></div>
-<footer>
-				<div class="submit_link">
-          <% if can? :edit, Pessoa%>
-				  <%= link_to 'Editar', edit_pessoa_path(@pessoa),:class=>"alt_btn",:type=>"submit"%> ou
-          <% end %>
-          <%= link_to 'Funcionarios da Pessoa', pessoa_funcionarios_path(@pessoa),:class=>"alt_btn",:type=>"submit" if can? :manage,Funcionario%> ou
-				  <%= link_to 'Voltar', pessoas_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
-<article class="module width_quarter">
-<%= foto(@pessoa) %>
-</div>
+</dl>
+<%= link_to "Voltar",
+              pessoas_path, :class => 'btn btn-default'  %>
+<%= link_to "Editar",
+              edit_pessoa_path(@pessoa), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+              pessoa_path(@pessoa),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

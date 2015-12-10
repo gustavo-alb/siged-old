@@ -1,41 +1,8 @@
-<article class="module width_full">
-<header><h3><%%=legenda%></h3></header>
-<div class="module_content">
-
-
-<%%= form_for(@<%= singular_table_name %>) do |f| %>
-  <%% if @<%= singular_table_name %>.errors.any? %>
-    <div id="error_explanation">
-      <h2><%%= pluralize(@<%= singular_table_name %>.errors.count, "erro impede","erros impedem") %> este <%= singular_table_name %> de ser cadastrado:</h2>
-
-      <ul>
-      <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
-        <li><%%= msg %></li>
-      <%% end %>
-      </ul>
-    </div>
-  <%% end %>
-
+<%%= simple_form_for @<%= singular_table_name %>, :html => { :class => 'form-horizontal' } do |f| %>
 <% for attribute in attributes -%>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%%= f.label :<%= attribute.name %> %><br />
-    <%if attribute.field_type==:text_field -%>
-    <%%= f.<%= attribute.field_type %> :<%= attribute.name %>,:style=>"width:92%;" %>
-    <%elsif attribute.field_type==:datetime_select -%>
-    <%%= f.calendar_date_select :<%= attribute.name %>,:style=>"width:92%;" %>
-    <%elsif attribute.field_type==:date_select -%>
-    <%%= f.calendar_date_select :<%= attribute.name %>,:start_year=>1970,:order=>[:day,:month,:year],:style=>"width:40%;" %>
-    <%else%>
-    <%%= f.<%= attribute.field_type %> :<%= attribute.name %>,:style=>"width:40%;" %>
-    <%end%>
-  </fieldset>
-<% end -%>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%%=f.submit "Salvar",:class=>"alt_btn" %> ou <%%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%%= f.input :<%=attribute.name%> %>
+<%end%>
+<%%= f.button :submit, :class => 'btn-primary' %>
+<%%= link_to "Cancelar",
+<%=index_helper%>_path, :class => 'btn btn-default' %>
 <%% end %>
-</article>

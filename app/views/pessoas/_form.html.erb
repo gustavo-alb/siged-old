@@ -1,165 +1,29 @@
- <article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content">
+<%= simple_form_for @pessoa, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :nome %>
+  <%= f.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"]%>
+  <%= f.input :endereco %>
+  <%= f.input :numero %>
+  <%= f.input :complemento %>
+  <%= f.input :bairro %>
+  <%= f.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
+  <%= f.input :telefone_celular,:input_html=>{:class=>"celular"}%>
+  <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+  <%= f.input :naturalidade %>
+  <%= f.input :nacionalidade %>
+  <%= f.input :cpf ,:input_html=>{:class=>"cpf"}%>
+  <%= f.input :rg %>
+  <%= f.input :pis_pasep %>
+  <%= f.input :cidade_id,:collection=>@municipios%>
+  <%= f.input :uf %>
+  <%= f.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
+  <%= f.input :cep,:input_html=>{:class=>"cep"}%>
+  <%= f.input :email,:as=>:email %>
+  <%= f.input :pai %>
+  <%= f.input :mae %>
 
 
-    <%= form_for(@pessoa) do |f| %>
-    <% if @pessoa.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@pessoa.errors.count, "erro","erros") %> impedem esta pessoa de ser cadastrada:</h2>
 
-      <ul>
-        <% @pessoa.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-    <% end %>
-
-    <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-    <%if current_user.role?("lotacao")==true%>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :telefone_residencial %><br />
-      <%= f.text_field :telefone_residencial,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :telefone_celular %><br />
-      <%= f.text_field :telefone_celular,:style=>"width:92%;" %>
-    </fieldset>
-    <%else%>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :nome %><br />
-      <%= f.text_field :nome,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :sexo %><br /><br />
-      <%= f.select :sexo,Pessoa::SEXO,:prompt=>true,:style=>"width:92%;" %>
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <table border=0>
-        <tr>
-          <th ALIGN=LEFT WIDTH="80%">ENDEREÇO</th>
-          <th ALIGN=LEFT WIDTH="20%">NÚMERO</th>
-        </tr>
-        <tr>
-          <td WIDTH="80%"><%= f.text_field :endereco,:style=>"width:90%;" %></td>
-
-          <td WIDTH="20%"><%= f.text_field :numero,:style=>"width:60%;" %></td>
-        </tr>
-      </table>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :complemento %><br />
-      <%= f.text_field :complemento,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <div id="cidade">
-
-        <%= f.label :cidade %><br />
-        <%= f.select :cidade_id,@municipios,:style=>"width:92%;" %>
-      </div>
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :bairro %><br />
-      <%= f.text_field :bairro,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :telefone_residencial %><br />
-      <%= f.text_field :telefone_residencial,:id=>'telefone',:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :telefone_celular %><br />
-      <%= f.text_field :telefone_celular,:style=>"width:92%;",:id=>'celular'%>
-
-    </fieldset>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :data_de_nascimento %><br /><br />
-      <%if @pessoa.nascimento.blank?%>
-      <%= f.text_field :nascimento,:class=>"date",:style=>"width:92%;" %>
-      <%else%>
-      <%= f.text_field :nascimento,:value=>@pessoa.nascimento.to_s_br,:class=>"date",:style=>"width:92%;"%>
-      <% end%>
-
-    </fieldset>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :naturalidade %><br />
-      <%= f.text_field :naturalidade,:prompt=>true,:style=>"width:92%;" %>
-      <br /><br />
-    </fieldset>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :nacionalidade %><br /><br />
-      <%= f.select :nacionalidade,Pessoa::NACION,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :cpf %><br />
-      <%= f.text_field :cpf,:style=>"width:92%;",:id=>:cpf%>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :rg %><br />
-      <%= f.text_field :rg,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :uf %><br /><br />
-      <%= f.select :uf,Pessoa::UF,:prompt=>"UF",:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :pis_pasep %><br />
-      <%= f.text_field :pis_pasep,:style=>"width:92%;" %>
-
-    </fieldset>
-
-<!--
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :ano_de_chegada %><br />
-        <%= f.text_field :ano_de_chegada,:style=>"width:92%;" %>
-
-  </fieldset>
--->
-
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-  <%= f.label :estado_civil %><br /><br />
-  <%= f.select :estado_civil,Pessoa::ESTCIV,:prompt=>"Indique o estado cívil",:style=>"width:92%;" %>
-  <br/>
-</fieldset>
-
-</fieldset>
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-  <%= f.label :título_de_eleitor %><br />
-  <%= f.text_field :titulo_eleitor,:style=>"width:92%;" %>
-
-</fieldset>
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-  <%= f.label :zona_eleitoral %><br />
-  <%= f.text_field :zona_eleitoral,:style=>"width:92%;" %>
-
-</fieldset>
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-  <%= f.label :seção %><br />
-  <%= f.text_field :secao,:style=>"width:92%;" %>
-
-</fieldset>
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                pessoas_path, :class => 'btn btn-default' %>
 <% end %>
-<div class="clear"></div>
-</div>
-<footer>
-  <div class="submit_link">
-   <%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
- </div>
-</footer>
-<% end %>
-</article>

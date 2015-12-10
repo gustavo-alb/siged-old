@@ -44,8 +44,8 @@ module ApplicationHelper
 
   def setor
     user = current_user
-    if user.unidade_organizacional
-      html = "<li class='icn_descri'>#{link_to 'Gerenciar Funcionários', funcionarios_pontos_path(:objeto_id=>user.unidade_organizacional_id,:tipo=>user.unidade_organizacional_type.downcase)}</li>"
+    if user.unidade_organizacional and user.gerar_ponto?
+      html = "<li>#{link_to 'Funcionários do Setor', funcionarios_pontos_path(:objeto_id=>user.unidade_organizacional_id,:tipo=>user.unidade_organizacional_type.downcase)}</li>"
     elsif user.unidade_organizacional.nil?
       ''
     end

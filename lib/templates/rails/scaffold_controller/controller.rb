@@ -3,7 +3,8 @@ class <%= controller_class_name %>Controller < ApplicationController
   # GET <%= route_url %>
   # GET <%= route_url %>.xml
   def index
-    @<%= plural_table_name %> = <%= class_name%>.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @q = <%=singular_table_name.capitalize%>.ransack(params[:q])
+    @<%= plural_table_name %> = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
     
     respond_to do |format|
       format.html # index.html.erb

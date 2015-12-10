@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Pessoas",pessoas_path%><div class="breadcrumb_divider"></div><a class="current">Editando Pessoa</a>
-
+<%model_class = Pessoa%>
+<%content_for :titulo do%>
+Editando <%=@pessoa.nome%>
 <%end%>
-<%= render 'form',:legenda=>"Editando #{@pessoa.nome.titleize}" %>
-
+<%= render :partial => 'form' %>

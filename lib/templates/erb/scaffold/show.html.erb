@@ -1,22 +1,17 @@
-<article class="module width_full">
-<header><h3>Detalhes de </h3></header>
-<div class="module_content">
-
-
+<%%model_class = singular_table_name.capitalize%>
+<%%content_for :titulo do%>
+Detalhes de 
+<%%end%>
+<dl class="dl-horizontal">
 <% for attribute in attributes -%>
-<p>
-  <b><%= attribute.human_name %>:</b>
-  <%%= @<%= singular_table_name %>.<%= attribute.name %> %>
-</p>
-
-<% end -%>
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%%= link_to 'Voltar', <%= index_helper %>_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+  <dt><strong><%= attribute.human_name %>:</strong></dt>
+  <dd><%%= @<%= singular_table_name %>.<%= attribute.name %> %></dd>
+<%end%>
+</dl>
+<%%= link_to 'Voltar', <%= index_helper %>_path, :class => 'btn btn-default'  %>
+<%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), :class => 'btn btn-default' %>
+<%%= link_to "Apagar",
+              <%= singular_table_name %>_path(@<%= singular_table_name %>),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

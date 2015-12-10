@@ -1,2 +1,5 @@
-<%%= render 'form',:legenda=>' Cadastro de <%= plural_table_name.capitalize %> ' %>
-
+<%%model_class = <%=singular_table_name.capitalize%>%>
+<%%content_for :titulo do%>
+Criando registro de <%=singular_table_name.capitalize%>
+<%%end%>
+<%%= render :partial => 'form' %>

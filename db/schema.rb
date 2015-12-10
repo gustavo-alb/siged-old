@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151126170345) do
+ActiveRecord::Schema.define(:version => 20151210162154) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -207,6 +207,13 @@ ActiveRecord::Schema.define(:version => 20151126170345) do
   create_table "categoria_funcionarios", :id => false, :force => true do |t|
     t.integer "categoria_id"
     t.integer "funcionario_id"
+  end
+
+  create_table "certificados", :force => true do |t|
+    t.string   "nome"
+    t.string   "poar"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "cidades", :force => true do |t|

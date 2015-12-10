@@ -1,38 +1,39 @@
-<article class="module width_3_quarter">
-		<header><h3 class="tabs_involved">Listando <%= plural_table_name %></h3>
-		</header>
-    
-		
-<table class="tablesorter" cellspacing="0">
-<thead>
-  <tr>
-<% for attribute in attributes -%>
-    <th><%= attribute.human_name %></th>
-<% end -%>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-<%% @<%= plural_table_name %>.each do |<%= singular_table_name %>| %>
-  <tr>
-<% for attribute in attributes -%>
-    <td><%%= <%= singular_table_name %>.<%= attribute.name %> %></td>
-<% end -%>
-    <td><%%= link_to 'Detalhes', <%= singular_table_name %> %></td>
-    <td><%%= link_to  image_tag('/images/icn_edit.png',:title=>"Editar"), edit_<%= singular_table_name %>_path(<%= singular_table_name %>) %></td>
-    <td><%%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), <%= singular_table_name %>, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-  </tr>
-<%% end %>
-</tbody>
+<%%content_for :titulo do%>
+<%= plural_table_name.capitalize%>
+<div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+  <%%= search_form_for @q do |f|%>
+  <%%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+  <span class="input-group-btn">
+    <%%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+    <span class="glyphicon glyphicon-search"></span> 
+    <%% end %>
+  </span>
+</div>
+<%%end%>
+<%%end%>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+    <%attributes[0..3].each do |attribute|%>
+      <th><%=attribute.name%></th>
+      <%end%>
+    </tr>
+  </thead>
+  <tbody>
+    <%% @<%=plural_table_name%>.each_with_index do |<%=singular_table_name[0]%>,i| %>
+    <tr>
+    <%attributes[0..3].each do |attribute|%>
+      <td><%%= <%=singular_table_name[0]%>.<%=attribute.name%>%></td>
+      <%end%>
+      <td>
+      <%%= link_to "Editar", edit_<%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-primary btn-xs"%>
+      <%%= link_to "Visualizar",<%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-primary btn-xs"%>
+      <%%= link_to "Apagar", <%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
+      </td>
+    </tr>
+    <%% end%>
+  </tbody>
 </table>
 
-<footer>
-				<div class="submit_link">
-				  <%%= link_to 'Cadastrar <%= human_name %>', new_<%= singular_table_name %>_path,:class=>"alt_btn",:type=>"submit"%> ou
-				  <%%= link_to 'Voltar', :back,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%%= will_paginate @<%=singular_table_name%>,renderer: BootstrapPagination::Rails%>
+<%%= link_to "Criar",new_<%=singular_table_name%>_path,:class=>"btn btn-primary"%>
