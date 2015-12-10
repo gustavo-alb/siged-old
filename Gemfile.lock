@@ -120,6 +120,7 @@ GEM
       activerecord (>= 3.0, < 4.0)
     hike (1.2.3)
     i18n (0.7.0)
+    iconv (1.0.4)
     journey (1.0.4)
     jquery-historyjs (0.3.0)
       railties (>= 3.0)
@@ -267,6 +268,7 @@ DEPENDENCIES
   combine_pdf
   devise
   friendly_id
+  iconv
   jquery-historyjs
   jquery-rails
   kaminari

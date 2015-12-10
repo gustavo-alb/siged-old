@@ -10,6 +10,8 @@
 //= require jquery.ba-bbq
 //= require jquery.url
 //= require twitter/bootstrap
+//= require twitter/bootstrap/transition
+//= require twitter/bootstrap/collapse
 //= require loading_notice
 //= require ajax_pagination
 //= require maskedinput
@@ -23,3 +25,6 @@
 //= require paginate
 //= require accordion
 //= require accordion_activator
+//= require holder
+//= require ie10-viewport-bug-workaround
+//= require ie-emulation-modes-warning

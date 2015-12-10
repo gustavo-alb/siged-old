@@ -15,8 +15,8 @@ ActiveRecord::Schema.define(:version => 20151126170345) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "administracao_logs", :force => true do |t|
@@ -694,8 +694,8 @@ ActiveRecord::Schema.define(:version => 20151126170345) do
     t.string   "codigo"
     t.integer  "valor_fixo"
     t.integer  "valor_porcentagem"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
     t.integer  "rubrica_id"
     t.integer  "funcionario_id"
   end
@@ -1186,8 +1186,8 @@ ActiveRecord::Schema.define(:version => 20151126170345) do
   create_table "rubricas", :force => true do |t|
     t.string   "nome"
     t.integer  "codigo"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "series", :force => true do |t|

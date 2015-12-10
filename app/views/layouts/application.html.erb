@@ -8,12 +8,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
+
     <title>Dashboard Template for Bootstrap</title>
+
     <!-- Bootstrap core CSS -->
-    <%=stylesheet_link_tag "application.css"%>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+  <%=stylesheet_link_tag "application.css"%>
+
   </head>
+
   <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
@@ -32,12 +36,10 @@
             <li><a href="#">Profile</a></li>
             <li><a href="#">Help</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
         </div>
       </div>
     </nav>
+
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
@@ -60,9 +62,10 @@
             <li><a href="">Another nav item</a></li>
           </ul>
         </div>
-        <div class="col-sm-9 col-md-10 main">
-          <h1 class="page-header">Dashboard</h1>
-          <div class="row placeholders">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header"><%=yield :titulo%></h1>
+
+         <!--  <div class="row placeholders">
             <div class="col-xs-6 col-sm-3 placeholder">
               <img src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" width="200" height="200" class="img-responsive" alt="Generic placeholder thumbnail">
               <h4>Label</h4>
@@ -83,8 +86,9 @@
               <h4>Label</h4>
               <span class="text-muted">Something else</span>
             </div>
-          </div>
-          <h2 class="sub-header">Section title</h2>
+          </div> -->
+
+          <!-- <h2 class="sub-header">Section title</h2>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -210,14 +214,16 @@
                   <td>libero</td>
                 </tr>
               </tbody>
-            </table>
+            </table> -->
+            <%= yield%>
           </div>
         </div>
       </div>
     </div>
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <%=javascript_include_tag "application.js"%>
+<%=javascript_include_tag "application.js"%>
   </body>
 </html>
