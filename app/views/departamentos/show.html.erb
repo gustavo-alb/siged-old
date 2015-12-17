@@ -1,34 +1,27 @@
-<%content_for :links do%>
-		<%=link_to "Orgãos",orgaos_path%><div class="breadcrumb_divider"></div><%=link_to "Departamentos",orgao_departamentos_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-
+<%model_class = Departamento%>
+<%content_for :titulo do%>
+  Detalhes de <%= "#{@departamento.sigla}/#{@orgao.sigla}"%>
 <%end%>
-<article class="module width_full">
-<header><h3>Detalhes de </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Nome:</b>
-  <%= @departamento.nome %>
-</p>
-
-<p>
-  <b>Sigla:</b>
-  <%= @departamento.sigla %>
-</p>
-
-<p>
-  <b>Orgao:</b>
-  <%= @departamento.orgao_id %>
-</p>
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_orgao_departamento_path(@orgao,@departamento),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', orgao_departamentos_path(@orgao),:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<dl class="dl-horizontal">
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= @departamento.nome %></dd>
+  <dt><strong>Sigla:</strong></dt>
+  <dd><%= @departamento.sigla %></dd>
+  <dt><strong>Orgao:</strong></dt>
+  <dd><%= detalhes(@departamento.orgao) %></dd>
+  <dt><strong>Criado em:</strong></dt>
+  <dd><%= @departamento.created_at.strftime("%d/%m/%Y, %T") %></dd>
+  <dt><strong>Última atualização:</strong></dt>
+  <dd><%= @departamento.updated_at.strftime("%d/%m/%Y, %T")%></dd>
+  <dt><strong>Departamento pai:</strong></dt>
+  <dd><%= detalhes(@departamento.departamento_pai) %></dd>
+  <dt><strong>Telefone:</strong></dt>
+  <dd><%= @departamento.telefone %></dd>
+</dl>
+<%= link_to 'Voltar', orgao_departamentos_path(@orgao), :class => 'btn btn-default'  %>
+<%= link_to 'Editar', edit_orgao_departamento_path(@orgao,@departamento), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+              orgao_departamento_path(@orgao,@departamento),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

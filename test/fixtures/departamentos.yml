@@ -1,0 +1,49 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  nome: MyString
+  string: MyString
+  sigla: MyString
+  string: MyString
+  orgao_id: MyString
+  integer: MyString
+  created_at: MyString
+  datetime: MyString
+  updated_at: MyString
+  datetime: MyString
+  tipo_destino_id: MyString
+  integer: MyString
+  pai_id: MyString
+  integer: MyString
+  filho_id: MyString
+  integer: MyString
+  telefone: MyString
+  string: MyString
+  hierarquia: MyString
+  string: MyString
+  entidade_id: MyString
+  integer: MyString
+
+two:
+  nome: MyString
+  string: MyString
+  sigla: MyString
+  string: MyString
+  orgao_id: MyString
+  integer: MyString
+  created_at: MyString
+  datetime: MyString
+  updated_at: MyString
+  datetime: MyString
+  tipo_destino_id: MyString
+  integer: MyString
+  pai_id: MyString
+  integer: MyString
+  filho_id: MyString
+  integer: MyString
+  telefone: MyString
+  string: MyString
+  hierarquia: MyString
+  string: MyString
+  entidade_id: MyString
+  integer: MyString

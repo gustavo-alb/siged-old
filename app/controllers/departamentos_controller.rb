@@ -1,23 +1,24 @@
 # -*- encoding : utf-8 -*-
 class DepartamentosController < ApplicationController
   load_and_authorize_resource
-  def autocomplete_departamento_nome
-    term = params[:term]
-    departamentos = Departamento.where("nome ilike ? or sigla ilike ?","%#{term}%","%#{term}%").order("hierarquia asc")
-    orgaos = Orgao.where("nome ilike ? or sigla ilike ?","%#{term}%","%#{term}%").order("nome asc")
-    departamentos = orgaos+departamentos
-    render :json => departamentos.map { |departamento| {:id => departamento.id, :label => departamento.nome, :value => departamento.nome} }
-  end
   # GET /departamentos
   # GET /departamentos.xml
   before_filter :orgao,:dados_essenciais,:except=>[:auto_complete_for_pessoa_nome,:autocomplete_departamento_nome]
 
+  def autocomplete_departamento_nome
+    @orgao = Orgao.find(params[:orgao_id])
+    term = params[:term]
+    departamentos = Departamento.where("nome ilike ? or sigla ilike ? and orgao_id = ?","%#{term}%","%#{term}%",@orgao.id).order("hierarquia asc")
+    departamentos = departamentos
+    render :json => departamentos.map { |departamento| {:id => departamento.id, :label => departamento.nome, :value => departamento.nome} }
+  end
+
   def create
-    @departamento = Departamento.new(params[:departamento])
+    @departamento = @orgao.departamentos.new(params[:departamento])
     respond_to do |format|
       if @departamento.save
 
-        format.html { redirect_to(orgao_departamentos_url(@orgao), :notice => 'Departamento cadastrado com sucesso.') }
+        format.html { redirect_to(orgao_departamento_url(@orgao,@departamento), :notice => 'Departamento cadastrado com sucesso.') }
         format.xml  { render :xml => @departamento, :status => :created, :location => @departamento }
       else
         format.html { render :action => "new" }
@@ -27,8 +28,8 @@ class DepartamentosController < ApplicationController
   end
 
   def index
-    @search = Departamento.scoped_search(params[:search])
-    @departamentos = @search.order(:hierarquia).find(:all,:conditions=>["orgao_id = ?",@orgao.id]).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @q = Departamento.ransack(params[:q])
+    @departamentos = @q.result(:distinct=>true).order(:hierarquia).find(:all,:conditions=>["orgao_id = ?",@orgao.id]).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
     #@departamentos = Departamento.do_orgao(@orgao.id).find(:all, :joins =>[:departamento_pai],:order => 'departamento_pais_departamentos.sigla').paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
@@ -113,8 +114,8 @@ class DepartamentosController < ApplicationController
   # GET /departamentos/new
   # GET /departamentos/new.xml
   def new
-
-    @departamento = Departamento.new
+    @url = orgao_departamentos_url
+    @departamento = @orgao.departamentos.new
     @pais = Departamento.do_orgao(@orgao.id).order(:nome).collect{|p|[p.nome,p.id]}
     respond_to do |format|
       format.html # new.html.erb
@@ -124,6 +125,7 @@ class DepartamentosController < ApplicationController
 
   # GET /departamentos/1/edit
   def edit
+    @url = orgao_departamento_url(@orgao)
     @orgao = Orgao.find(params[:orgao_id])
     @departamento = Departamento.find(params[:id])
     @pais = Departamento.do_orgao(@orgao.id).order(:nome).collect{|p|[p.nome,p.id]}
@@ -141,7 +143,7 @@ class DepartamentosController < ApplicationController
 
       if @departamento.update_attributes(params[:departamento])
 
-        format.html { redirect_to(orgao_departamentos_url(@orgao), :notice => 'Departamento atualizado com sucesso.') }
+        format.html { redirect_to(orgao_departamento_url(@orgao,@departamento), :notice => 'Departamento atualizado com sucesso.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

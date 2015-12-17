@@ -1,16 +1,16 @@
-<%%model_class = singular_table_name.capitalize%>
+<%%model_class = <%=singular_table_name.capitalize%>%>
 <%%content_for :titulo do%>
-Detalhes de 
-<%%end%>
-<dl class="dl-horizontal">
-<% for attribute in attributes -%>
-  <dt><strong><%= attribute.human_name %>:</strong></dt>
-  <dd><%%= @<%= singular_table_name %>.<%= attribute.name %> %></dd>
-<%end%>
-</dl>
-<%%= link_to 'Voltar', <%= index_helper %>_path, :class => 'btn btn-default'  %>
-<%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), :class => 'btn btn-default' %>
-<%%= link_to "Apagar",
+  Detalhes de 
+  <%%end%>
+  <dl class="dl-horizontal">
+    <% for attribute in attributes -%>
+      <dt><strong><%= attribute.human_name %>:</strong></dt>
+      <dd><%%= @<%= singular_table_name %>.<%= attribute.name %> %></dd>
+    <%end%>
+  </dl>
+  <%%= link_to 'Voltar', <%= index_helper %>_path, :class => 'btn btn-default'  %>
+  <%%= link_to 'Editar', edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), :class => 'btn btn-default' %>
+  <%%= link_to "Apagar",
               <%= singular_table_name %>_path(@<%= singular_table_name %>),
               :method => 'delete',
               :data => { :confirm => "Você tem certeza?" },

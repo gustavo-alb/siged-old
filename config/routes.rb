@@ -3,6 +3,8 @@ Siged20::Application.routes.draw do
 
 
 
+
+
   resources :periodos
 
 
@@ -149,10 +151,7 @@ Siged20::Application.routes.draw do
 
   resources :settings
 
-  resources :departamentos do
-    get :autocomplete_departamento_nome, :on => :collection
-    get :funcionarios
-  end
+
 
   resources :disciplina_contratacoes
 
@@ -188,7 +187,7 @@ Siged20::Application.routes.draw do
     get 'agenda'
     get 'funcionarios'
     resources :departamentos do
-
+      get :autocomplete_departamento_nome, :on => :collection
       get 'tarefas'
       get 'pontos_funcionarios'
       get 'pontos'

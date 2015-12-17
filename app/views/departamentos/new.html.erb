@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Orgãos",orgaos_path%><div class="breadcrumb_divider"></div><%=link_to "Departamentos",orgao_departamentos_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Departamentos   </a>
-
+<%model_class = Departamento%>
+<%content_for :titulo do%>
+Criando registro de Departamento
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Departamentos ' %>
-
+<%= render :partial => 'form' %>

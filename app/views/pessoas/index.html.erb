@@ -1,15 +1,16 @@
 <%content_for :titulo do%>
-Pessoas
-<div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
-  <%= search_form_for @q do |f|%>
-  <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_cont,:class=>"form-control input-lg"%>
-  <span class="input-group-btn">
-    <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-    <span class="glyphicon glyphicon-search"></span> 
-    <% end %>
-  </span>
-</div>
-<%end%>
+  Pessoas
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </span>
+    </div>
+  <%end%>
+  <%=link_to "Criar",new_pessoa_path,:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -24,52 +25,49 @@ Pessoas
   </thead>
   <tbody>
     <%@pessoas.each_with_index do |p,i|%>
-    <tr class="accordion-toggle">
-      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;"><%= p.nome%></td>
-      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
-      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
-      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
-      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
-      <td>
-      <%= link_to "Editar",edit_pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
-      <%= link_to "Visualizar",pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
-      <%= link_to "Apagar", pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="6" class="hiddenRow">
-        <div class="accordion-body collapse" id="demo<%=i%>">
-        <table style="border-spacing: 0px; border-collapse: separate;  border-width: thin;">
-            <% p.funcionarios.each.with_index(1) do |f,i|%>
-            <tr>
-              <td><b>MATRICULA:</b></td>
-              <td><%= f.matricula%></td>
-              <td><b>CARGO:</b></td>
-              <td><%= cargo_disciplina(f)%></td>
-              <td><b>CATEGORIA:</b></td>
-              <td><%= detalhes(f.categoria)%></td>
-              <td><b>ADMISSÃO:</b></td>
-              <td><%= f.data_nomeacao.to_s_br%></td>
-            </tr>
-            <tr class="<%='linha' if p.funcionarios.count>1 and i!=p.funcionarios.count%>">
-              <td><b>QUADRO:</b></td>
-              <td><%= detalhes(f.entidade)%></td>
-              <td><b>LOTAÇÃO ATUAL:</b></td>
-              <td><%= lotacao(f)%></td>
-              <td><b>LOTAÇÃO ANTERIOR:</b></td>
-              <td><%= l_ant(f)%></td>
-              <td><b>VALIDADO:</b></td>
-              <td><%= booleano(f.verificado)%></td>
-            </tr>
-            <% end %>
-           
-          </table>
-        </div>
-      </td>
-    </tr>
+      <tr class="accordion-toggle">
+        <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;"><%= p.nome%></td>
+        <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
+        <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
+        <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
+        <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
+        <td>
+          <%= link_to "Editar",edit_pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",pessoa_path(p),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="6" class="hiddenRow">
+          <div class="accordion-body collapse" id="demo<%=i%>">
+            <table style="border-spacing: 0px; border-collapse: separate;  border-width: thin;">
+              <% p.funcionarios.each.with_index(1) do |f,i|%>
+                <tr>
+                  <td><b>MATRICULA:</b></td>
+                  <td><%= f.matricula%></td>
+                  <td><b>CARGO:</b></td>
+                  <td><%= cargo_disciplina(f)%></td>
+                  <td><b>CATEGORIA:</b></td>
+                  <td><%= detalhes(f.categoria)%></td>
+                  <td><b>ADMISSÃO:</b></td>
+                  <td><%= f.data_nomeacao.to_s_br%></td>
+                </tr>
+                <tr class="<%='linha' if p.funcionarios.count>1 and i!=p.funcionarios.count%>">
+                  <td><b>QUADRO:</b></td>
+                  <td><%= detalhes(f.entidade)%></td>
+                  <td><b>LOTAÇÃO ATUAL:</b></td>
+                  <td><%= lotacao(f)%></td>
+                  <td><b>LOTAÇÃO ANTERIOR:</b></td>
+                  <td><%= l_ant(f)%></td>
+                  <td><b>VALIDADO:</b></td>
+                  <td><%= booleano(f.verificado)%></td>
+                </tr>
+              <% end %>
+            </table>
+          </div>
+        </td>
+      </tr>
     <% end%>
   </tbody>
 </table>
-
 <%=will_paginate @pessoas,renderer: BootstrapPagination::Rails%>
-<%=link_to "Criar",new_pessoa_path,:class=>"btn btn-primary"%>
