@@ -1,56 +1,8 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@disciplina_contratacao) do |f| %>
-  <% if @disciplina_contratacao.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@disciplina_contratacao.errors.count, "erro impede","erros impedem") %> este descricao_cargo de ser cadastrado:</h2>
+<%= simple_form_for @disciplina_contratacao, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :codigo %>
+<%= f.input :nome %>
 
-      <ul>
-      <% @disciplina_contratacao.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :codigo %><br />
-        <%= f.text_field :codigo,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :nome,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :tipo_id %><br />
-        <%= f.select :tipo_id,@tipos,:prompt=>true,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nivel_do_cargo_id %><br />
-        <%= f.select :nivel_cargo_id,@niveiscargos,:prompt=>true,:style=>"width:92%;" %>
-
-  </fieldset>
-
-<fieldset style="width:97%; height: auto; float:left; margin-right: 1%;">
-<label> Disciplinas de Habilitação </label> <br/><br/>
-  <% for disciplina in Disciplina.find(:all) %>
-    <div>
-      <%= check_box_tag "disciplina_contratacao[disciplina_ids][]", disciplina.id, @disciplina_contratacao.disciplinas.include?(disciplina) %>
-      <%= disciplina.nome %>
-    </div>
-  <% end %>
-</fieldset>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+disciplina_contratacoes_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

@@ -1,5 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Cargos",cargos_path%><div class="breadcrumb_divider"></div><a class="current">Editando Cargo</a>
-<%end%>
-<%= render 'form',:legenda=>'Edição de Cargos ' %>
-
+<%model_class = Cargo%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

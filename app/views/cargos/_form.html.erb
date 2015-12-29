@@ -1,42 +1,8 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@cargo) do |f| %>
-  <% if @cargo.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@cargo.errors.count, "error") %> prohibited this cargo from being saved:</h2>
+<%= simple_form_for @cargo, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :nome %>
+<%= f.input :codigo %>
 
-      <ul>
-      <% @cargo.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :codigo %><br />
-        <%= f.text_field :codigo,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :nome,:style=>"width:92%;" %>
-
-  </fieldset>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :tipo %><br />
-        <%= f.select :tipo_id,@tipos,:style=>"width:92%;",:prompt=>"Selecione o tipo" %>
-
-  </fieldset>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+cargos_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

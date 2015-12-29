@@ -1,39 +1,40 @@
 <%%content_for :titulo do%>
-<%= plural_table_name.capitalize%>
-<div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
-  <%%= search_form_for @q do |f|%>
-  <%%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
-  <span class="input-group-btn">
-    <%%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-    <span class="glyphicon glyphicon-search"></span> 
-    <%% end %>
-  </span>
-</div>
-<%%end%>
-<%%end%>
-<table class="table table-striped tabela-colapsavel">
-  <thead>
-    <tr>
-    <%attributes[0..3].each do |attribute|%>
-      <th><%=attribute.name%></th>
-      <%end%>
-    </tr>
-  </thead>
-  <tbody>
-    <%% @<%=plural_table_name%>.each_with_index do |<%=singular_table_name[0]%>,i| %>
-    <tr>
-    <%attributes[0..3].each do |attribute|%>
-      <td><%%= <%=singular_table_name[0]%>.<%=attribute.name%>%></td>
-      <%end%>
-      <td>
-      <%%= link_to "Editar", edit_<%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-primary btn-xs"%>
+  <%= plural_table_name.capitalize%>
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%%= search_form_for @q do |f|%>
+      <%%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+          <%% end %>
+        </span>
+      </div>
+      <%%end%>
+      <%%= link_to "Criar",new_<%=singular_table_name%>_path,:class=>"btn btn-primary"%>
+      <%%end%>
+      <table class="table table-striped tabela-colapsavel">
+        <thead>
+          <tr>
+            <%attributes[0..3].each do |attribute|%>
+              <th><%=attribute.name%></th>
+            <%end%>
+          </tr>
+        </thead>
+        <tbody>
+          <%% @<%=plural_table_name%>.each_with_index do |<%=singular_table_name[0]%>,i| %>
+    
+          
+          <tr>
+            <%attributes[0..3].each do |attribute|%>
+              <td><%%= <%=singular_table_name[0]%>.<%=attribute.name%>%></td>
+            <%end%>
+            <td>
+              <%%= link_to "Editar", edit_<%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-primary btn-xs"%>
       <%%= link_to "Visualizar",<%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-primary btn-xs"%>
-      <%%= link_to "Apagar", <%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
+      <%%= link_to "Apagar", <%=singular_table_name%>_path(<%=singular_table_name[0]%>),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
       </td>
-    </tr>
-    <%% end%>
-  </tbody>
-</table>
-
-<%%= will_paginate @<%=singular_table_name%>,renderer: BootstrapPagination::Rails%>
-<%%= link_to "Criar",new_<%=singular_table_name%>_path,:class=>"btn btn-primary"%>
+          </tr>
+          <%% end%>
+        </tbody>
+      </table>
+      <%%= will_paginate @<%=singular_table_name%>,renderer: BootstrapPagination::Rails%>

@@ -1,71 +1,18 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for @orgao,:url=>orgaos_url do |f| %>
-  <% if @orgao.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@orgao.errors.count, "error") %> prohibited this orgao from being saved:</h2>
-
-      <ul>
-      <% @orgao.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :esfera_id %><br />
-        <%= f.select :esfera_id,@esferas,:prompt=>true,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :codigo %><br />
-        <%= f.text_field :codigo,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :nome,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :sigla %><br />
-        <%= f.text_field :sigla,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :telefone %><br />
-        <%= f.text_field :telefone,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :endereco %><br />
-        <%= f.text_field :endereco,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :numero %><br />
-        <%= f.text_field :numero,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :complemento %><br />
-        <%= f.text_field :complemento,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :grupo %><br />
-        <%= f.text_field :grupo,:style=>"width:92%;" %>
-
-  </fieldset>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= simple_form_for @orgao,:url=>@url, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :codigo %>
+  <%= f.input :nome %>
+  <%= f.input :sigla %>
+  <%= f.input :responsavel_id %>
+  <%= f.input :telefone %>
+  <%= f.input :endereco %>
+  <%= f.input :numero %>
+  <%= f.input :complemento %>
+  <%= f.input :grupo %>
+  <%= f.input :entidade_id %>
+  <%= f.input :esfera_id %>
+  <%= f.input :poder_id %>
+  <%= f.input :tipo_administracao_id %>
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to "Cancelar",
+orgaos_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

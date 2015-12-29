@@ -1,48 +1,37 @@
-<%content_for :links do%>
-		<a class="current">Papéis</a>
-
+<%content_for :titulo do%>
+  Roles
+  
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :name_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </span>
+    </div>
+  <%end%>
+  <%= link_to "Criar",new_role_path,:class=>"btn btn-primary"%>
 <%end%>
-<article class="module width_3_quarter">
-		<header><h3 class="tabs_involved">Listando Papéis</h3>
-		<ul class="tabs">
-   			<%= form_for @search do |f| %>
-   			<li><%= f.text_field :busca,:size=>12 %></li>
-    		<li><%= image_submit_tag "icn_busca.png" %></li>
-			<% end %>
-		</ul>
-		</header>
-    
-		
-<table class="tablesorter" cellspacing="0">
-<thead>
-  <tr>
-    <th>Nome</th>
-    <th>Nome Completo</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-<% @roles.each do |role| %>
-  <tr>
-    <td><%= role.name %></td>
-    <td><%=role.fullname%></td>
-    <td><%= link_to 'Detalhes', role %></td>
-    <td><%= link_to  image_tag('/images/icn_edit_article.png',:title=>"Editar"), edit_role_path(role) %></td>
-    <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), role, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-  </tr>
-<% end %>
-</tbody>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>fullname</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @roles.each_with_index do |r,i| %>
+      <tr>
+        <td><%= r.name%></td>
+        <td><%= r.fullname%></td>
+        <td>
+          <%= link_to "Editar", edit_role_path(r),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",role_path(r),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", role_path(r),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
 </table>
-
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Cadastrar Papel', new_role_path,:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', :back,:type=>"submit" %>
-				</div>
-        <div class="submit_link">
-          <%= will_paginate @roles%>
-        </div>
-			</footer>
-</article>
+<%= will_paginate @role,renderer: BootstrapPagination::Rails%>

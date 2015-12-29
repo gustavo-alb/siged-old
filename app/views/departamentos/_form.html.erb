@@ -2,10 +2,10 @@
   <%= f.input :nome %>
   <%= f.input :sigla %>
   <%= f.input :orgao_id,:as=>:hidden,:input_html=>{:value=>@orgao.id}%>
-  <%=  f.input :pai_nome, :url => autocomplete_departamento_nome_departamentos_path(:orgao_id=>@orgao.id), :as => :autocomplete,:input_html=>{:'data-id-element'=>"#pai_id",:class=>"string optional form-control"}%>
+  <%=  f.input :pai_nome, :url => autocomplete_departamento_nome_orgao_departamentos_path(:orgao_id=>@orgao.id), :as => :autocomplete,:input_html=>{:'data-id-element'=>"#pai_id",:class=>"string optional form-control"}%>
   <%= f.input :pai_id,:as=>:hidden,:input_html=>{:id=>"pai_id"}%>
   <%= f.input :telefone %>
   <%= f.button :submit, :class => 'btn-primary' %>
   <%= link_to "Cancelar",
-departamentos_path, :class => 'btn btn-default' %>
+orgao_departamentos_path(@orgao), :class => 'btn btn-default' %>
 <% end %>

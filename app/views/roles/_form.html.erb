@@ -1,42 +1,8 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@role) do |f| %>
-  <% if @role.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@role.errors.count, "erro impede","erros impedem") %> este role de ser cadastrado:</h2>
+<%= simple_form_for @role, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :name %>
+<%= f.input :fullname %>
 
-      <ul>
-      <% @role.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :name,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome_completo %><br />
-        <%= f.text_field :fullname,:style=>"width:92%;" %>
-
-  </fieldset>
-
-  <fieldset style="width:48%; height: auto;float:left; margin-right: 1%;">
-    <%= f.label :descrição %><br />
-        <%= f.text_area :description ,:style=>"width:92%;" %>
-
-  </fieldset>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+roles_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

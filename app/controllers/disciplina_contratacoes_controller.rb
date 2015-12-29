@@ -1,22 +1,19 @@
 # -*- encoding : utf-8 -*-
 class DisciplinaContratacoesController < ApplicationController
-  load_and_authorize_resource
-  # GET /descricao_cargos
-  # GET /descricao_cargos.xml
-  before_filter :dados_essenciais
+  # GET /disciplina_contratacoes
+  # GET /disciplina_contratacoes.xml
   def index
     @q = DisciplinaContratacao.ransack(params[:q])
-    @disciplina_contratacoes = @q.result(distinct: true).order('nome ASC').paginate :page => params[:page], :per_page => 10
-
+    @disciplina_contratacoes = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @disciplina_contratacaos }
+      format.xml  { render :xml => @disciplina_contratacoes }
     end
   end
 
-  # GET /descricao_cargos/1
-  # GET /descricao_cargos/1.xml
+  # GET /disciplina_contratacoes/1
+  # GET /disciplina_contratacoes/1.xml
   def show
     @disciplina_contratacao = DisciplinaContratacao.find(params[:id])
 
@@ -26,8 +23,8 @@ class DisciplinaContratacoesController < ApplicationController
     end
   end
 
-  # GET /descricao_cargos/new
-  # GET /descricao_cargos/new.xml
+  # GET /disciplina_contratacoes/new
+  # GET /disciplina_contratacoes/new.xml
   def new
     @disciplina_contratacao = DisciplinaContratacao.new
 
@@ -37,19 +34,19 @@ class DisciplinaContratacoesController < ApplicationController
     end
   end
 
-  # GET /descricao_cargos/1/edit
+  # GET /disciplina_contratacoes/1/edit
   def edit
     @disciplina_contratacao = DisciplinaContratacao.find(params[:id])
   end
 
-  # POST /descricao_cargos
-  # POST /descricao_cargos.xml
+  # POST /disciplina_contratacoes
+  # POST /disciplina_contratacoes.xml
   def create
     @disciplina_contratacao = DisciplinaContratacao.new(params[:disciplina_contratacao])
 
     respond_to do |format|
       if @disciplina_contratacao.save
-        format.html { redirect_to(@disciplina_contratacao, :notice => 'Descricao cargo cadastrado com sucesso.') }
+        format.html { redirect_to(@disciplina_contratacao, :notice => 'Disciplina contratacao cadastrado com sucesso.') }
         format.xml  { render :xml => @disciplina_contratacao, :status => :created, :location => @disciplina_contratacao }
       else
         format.html { render :action => "new" }
@@ -58,14 +55,14 @@ class DisciplinaContratacoesController < ApplicationController
     end
   end
 
-  # PUT /descricao_cargos/1
-  # PUT /descricao_cargos/1.xml
+  # PUT /disciplina_contratacoes/1
+  # PUT /disciplina_contratacoes/1.xml
   def update
     @disciplina_contratacao = DisciplinaContratacao.find(params[:id])
 
     respond_to do |format|
       if @disciplina_contratacao.update_attributes(params[:disciplina_contratacao])
-        format.html { redirect_to(@disciplina_contratacao, :notice => 'Descricao cargo atualizado com sucesso.') }
+        format.html { redirect_to(@disciplina_contratacao, :notice => 'Disciplina contratacao atualizado com sucesso.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -74,8 +71,8 @@ class DisciplinaContratacoesController < ApplicationController
     end
   end
 
-  # DELETE /descricao_cargos/1
-  # DELETE /descricao_cargos/1.xml
+  # DELETE /disciplina_contratacoes/1
+  # DELETE /disciplina_contratacoes/1.xml
   def destroy
     @disciplina_contratacao = DisciplinaContratacao.find(params[:id])
     @disciplina_contratacao.destroy
@@ -86,4 +83,3 @@ class DisciplinaContratacoesController < ApplicationController
     end
   end
 end
-

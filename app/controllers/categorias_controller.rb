@@ -4,9 +4,9 @@ class CategoriasController < ApplicationController
   # GET /categorias
   # GET /categorias.xml
   def index
-    #@search = Categoria.scoped_search(params[:search])  
-    @categorias = Categoria.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @q = Categoria.ransack(params[:q])
+    @categorias = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @categorias }
@@ -84,4 +84,3 @@ class CategoriasController < ApplicationController
     end
   end
 end
-

@@ -1,32 +1,18 @@
-<%content_for :links do%>
-		<%=link_to "Cargo",cargos_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-<%end%>
-<article class="module width_full">
-<header><h3>Detalhes de <%=@cargo.nome%> </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Código:</b>
-  <%= @cargo.codigo %>
-</p>
-
-<p>
-  <b>Nome:</b>
-  <%= @cargo.nome.titleize %>
-</p>
-
-<p>
-  <b>Tipo:</b>
-  <%= detalhes(@cargo.tipo) %>
-</p>
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_cargo_path(@cargo),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', cargos_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
+<%model_class = Cargo%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @cargo.nome %></dd>
+          <dt><strong>Codigo:</strong></dt>
+      <dd><%= @cargo.codigo %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', cargos_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_cargo_path(@cargo), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              cargo_path(@cargo),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

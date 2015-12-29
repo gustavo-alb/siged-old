@@ -1,9 +1,8 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class ReferenciaNiveisControllerTest < ActionController::TestCase
   setup do
-    @referencia_nivei = referencia_niveis(:one)
+    @referencia_nivel = referencia_niveis(:one)
   end
 
   test "should get index" do
@@ -17,35 +16,34 @@ class ReferenciaNiveisControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should create referencia_nivei" do
-    assert_difference('ReferenciaNivei.count') do
-      post :create, :referencia_nivei => @referencia_nivei.attributes
+  test "should create referencia_nivel" do
+    assert_difference('ReferenciaNivel.count') do
+      post :create, referencia_nivel: @referencia_nivel.attributes
     end
 
-    assert_redirected_to referencia_nivei_path(assigns(:referencia_nivei))
+    assert_redirected_to referencia_nivel_path(assigns(:referencia_nivel))
   end
 
-  test "should show referencia_nivei" do
-    get :show, :id => @referencia_nivei.to_param
+  test "should show referencia_nivel" do
+    get :show, id: @referencia_nivel
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @referencia_nivei.to_param
+    get :edit, id: @referencia_nivel
     assert_response :success
   end
 
-  test "should update referencia_nivei" do
-    put :update, :id => @referencia_nivei.to_param, :referencia_nivei => @referencia_nivei.attributes
-    assert_redirected_to referencia_nivei_path(assigns(:referencia_nivei))
+  test "should update referencia_nivel" do
+    put :update, id: @referencia_nivel, referencia_nivel: @referencia_nivel.attributes
+    assert_redirected_to referencia_nivel_path(assigns(:referencia_nivel))
   end
 
-  test "should destroy referencia_nivei" do
-    assert_difference('ReferenciaNivei.count', -1) do
-      delete :destroy, :id => @referencia_nivei.to_param
+  test "should destroy referencia_nivel" do
+    assert_difference('ReferenciaNivel.count', -1) do
+      delete :destroy, id: @referencia_nivel
     end
 
     assert_redirected_to referencia_niveis_path
   end
 end
-

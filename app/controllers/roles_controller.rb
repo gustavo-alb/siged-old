@@ -1,24 +1,21 @@
 # -*- encoding : utf-8 -*-
 class RolesController < ApplicationController
-  load_and_authorize_resource
   # GET /roles
   # GET /roles.xml
   def index
-    @search = Role.scoped_search(params[:search])
-    @roles = @search.order(:name).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-
+    @q = Role.ransack(params[:q])
+    @roles = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @roles }
-
-     end
+    end
   end
 
   # GET /roles/1
   # GET /roles/1.xml
   def show
     @role = Role.find(params[:id])
-   
 
     respond_to do |format|
       format.html # show.html.erb
@@ -30,7 +27,7 @@ class RolesController < ApplicationController
   # GET /roles/new.xml
   def new
     @role = Role.new
-    
+
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @role }
@@ -46,10 +43,10 @@ class RolesController < ApplicationController
   # POST /roles.xml
   def create
     @role = Role.new(params[:role])
-    
+
     respond_to do |format|
       if @role.save
-        format.html { redirect_to(@role, :notice => 'Papel cadastrado com sucesso.') }
+        format.html { redirect_to(@role, :notice => 'Role cadastrado com sucesso.') }
         format.xml  { render :xml => @role, :status => :created, :location => @role }
       else
         format.html { render :action => "new" }
@@ -62,10 +59,10 @@ class RolesController < ApplicationController
   # PUT /roles/1.xml
   def update
     @role = Role.find(params[:id])
-    
+
     respond_to do |format|
       if @role.update_attributes(params[:role])
-        format.html { redirect_to(@role, :notice => 'Papel atualizado com sucesso.') }
+        format.html { redirect_to(@role, :notice => 'Role atualizado com sucesso.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -79,7 +76,7 @@ class RolesController < ApplicationController
   def destroy
     @role = Role.find(params[:id])
     @role.destroy
-    
+
     respond_to do |format|
       format.html { redirect_to(roles_url) }
       format.xml  { head :ok }

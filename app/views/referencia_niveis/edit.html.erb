@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Referência/Níveis",referencia_niveis_path%><div class="breadcrumb_divider"></div><a class="current">Editando Nível</a>
-
-<%end%>
-<%= render 'form',:legenda=>'Edição de Referência/Nível ' %>
-
+<%model_class = Referencia_nivel%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

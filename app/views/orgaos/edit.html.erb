@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Orgãos",orgaos_path%><div class="breadcrumb_divider"></div><a class="current">Editando Cargo</a>
-
-<%end%>
-<%= render 'form',:legenda=>'Edição de Orgaos ' %>
-
+<%model_class = Orgao%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

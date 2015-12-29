@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class CargosControllerTest < ActionController::TestCase
@@ -19,33 +18,32 @@ class CargosControllerTest < ActionController::TestCase
 
   test "should create cargo" do
     assert_difference('Cargo.count') do
-      post :create, :cargo => @cargo.attributes
+      post :create, cargo: @cargo.attributes
     end
 
     assert_redirected_to cargo_path(assigns(:cargo))
   end
 
   test "should show cargo" do
-    get :show, :id => @cargo.to_param
+    get :show, id: @cargo
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @cargo.to_param
+    get :edit, id: @cargo
     assert_response :success
   end
 
   test "should update cargo" do
-    put :update, :id => @cargo.to_param, :cargo => @cargo.attributes
+    put :update, id: @cargo, cargo: @cargo.attributes
     assert_redirected_to cargo_path(assigns(:cargo))
   end
 
   test "should destroy cargo" do
     assert_difference('Cargo.count', -1) do
-      delete :destroy, :id => @cargo.to_param
+      delete :destroy, id: @cargo
     end
 
     assert_redirected_to cargos_path
   end
 end
-

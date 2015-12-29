@@ -1,33 +1,18 @@
-<%content_for :links do%>
-    <%=link_to "Papéis",roles_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-
-<%end%>
-<article class="module width_full">
-<header><h3>Detalhes do papel </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Nome:</b>
-  <%= @role.name %>
-</p>
-
-<p>
-  <b>Nome completo:</b>
-  <%= @role.fullname %>
-</p>
-
-<p>
-  <b>Descrição:</b>
-  <%= @role.description %>
-</p>
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_role_path(@role),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', roles_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%model_class = Role%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Name:</strong></dt>
+      <dd><%= @role.name %></dd>
+          <dt><strong>Fullname:</strong></dt>
+      <dd><%= @role.fullname %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', roles_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_role_path(@role), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              role_path(@role),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

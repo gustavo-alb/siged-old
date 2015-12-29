@@ -1,6 +1,5 @@
-<%content_for :links do%>
-    <%=link_to "Papéis",roles_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Papel</a>
-
+<%model_class = Role%>
+<%content_for :titulo do%>
+Criando registro de Role
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Papéis ' %>
-
+<%= render :partial => 'form' %>

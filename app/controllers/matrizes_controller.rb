@@ -4,8 +4,8 @@ class MatrizesController < ApplicationController
   # GET /matrizes
   # GET /matrizes.xml
   def index
-    #@search = Matrize.scoped_search(params[:search])
-    @matrizes = Matriz.order(:codigo).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @q = Matriz.ransack(params[:q])
+    @matrizes = @q.result.order(:codigo).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -109,4 +109,3 @@ class MatrizesController < ApplicationController
     end
   end
 end
-

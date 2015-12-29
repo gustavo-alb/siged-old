@@ -1,38 +1,48 @@
-<%content_for :links do%>
-  <a class="current">Categoria</a>
-<%end%>
-<article class="module width_3_quarter">
-  <header>
-    <h3 class="tabs_involved">Listando categorias</h3>
-    <ul class="tabs">
-    </ul>
-  </header>
-  <table class="tablesorter" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Nome</th>
-        <th colspan=4></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @categorias.each do |categoria| %>
-        <tr>
-          <td><%= categoria.nome %></td>
-          <td><%= link_to 'Detalhes', categoria %></td>
-          <td><%= link_to  image_tag('/images/icn_edit.png',:title=>"Editar"), edit_categoria_path(categoria) %></td>
-          <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), categoria, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-          <td><%= link_to  image_tag('/images/icn_edit.png',:title=>"Textos"), categoria_textos_path(categoria) %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <footer>
-    <div class="submit_link">
-      <%= link_to 'Cadastrar Categoria', new_categoria_path,:class=>"alt_btn",:type=>"submit"%> ou
-          <%= link_to 'Voltar', :back,:type=>"submit" %>
-    </div>
-    <div class="submit_link">
-      <%=will_paginate @categorias%>
-    </div>
-  </footer>
-</article>
+<%content_for :titulo do%>
+  Categorias
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+          <% end %>
+        </span>
+      </div>
+      <%end%>
+      <%= link_to "Criar",new_categoria_path,:class=>"btn btn-primary"%>
+      <%end%>
+      <table class="table table-striped tabela-colapsavel">
+        <thead>
+          <tr>
+            
+              <th>nome</th>
+            
+              <th>sigla</th>
+            
+              <th>lei</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <% @categorias.each_with_index do |c,i| %>
+    
+          
+          <tr>
+            
+              <td><%= c.nome%></td>
+            
+              <td><%= c.sigla%></td>
+            
+              <td><%= c.lei%></td>
+            
+            <td>
+              <%= link_to "Editar", edit_categoria_path(c),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Visualizar",categoria_path(c),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Apagar", categoria_path(c),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+      </td>
+          </tr>
+          <% end%>
+        </tbody>
+      </table>
+      <%= will_paginate @categoria,renderer: BootstrapPagination::Rails%>

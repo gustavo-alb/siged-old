@@ -1,32 +1,37 @@
-<article class="module width_3_quarter">
-		<header><h3 class="tabs_involved">Listando Níveis de Ensino</h3>
-		</header>
-<table class="tablesorter" cellspacing="0">
-<thead>
-  <tr>
-    <th>Nome</th>
-    <th>Código</th>
-    <th colspan=4></th>
-  </tr>
-</thead>
-<tbody>
-<% @niveis_ensinos.each do |niveis_ensino| %>
-  <tr>
-    <td><%= niveis_ensino.nome %></td>
-    <td><%= niveis_ensino.codigo %></td>
-    <td><%= link_to 'Detalhes', niveis_ensino %></td>
-    <td><%= link_to 'Séries', niveis_ensino_series_path(niveis_ensino) %></td>
-    <td><%= link_to  image_tag('/images/icn_edit.png',:title=>"Editar"), edit_niveis_ensino_path(niveis_ensino) %></td>
-    <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), niveis_ensino, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-  </tr>
-<% end %>
-</tbody>
+<%content_for :titulo do%>
+  Niveis_ensinos
+  
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </span>
+    </div>
+  <%end%>
+  <%= link_to "Criar",new_niveis_ensino_path,:class=>"btn btn-primary"%>
+<%end%>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>nome</th>
+      <th>codigo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @niveis_ensinos.each_with_index do |n,i| %>
+      <tr>
+        <td><%= n.nome%></td>
+        <td><%= n.codigo%></td>
+        <td>
+          <%= link_to "Editar", edit_niveis_ensino_path(n),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",niveis_ensino_path(n),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", niveis_ensino_path(n),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
 </table>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Cadastrar Niveis ensino', new_niveis_ensino_path,:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', :back,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%= will_paginate @niveis_ensino,renderer: BootstrapPagination::Rails%>

@@ -1,16 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Usuário",usuarios_path%><div class="breadcrumb_divider"></div><a class="current">Editando Usuário</a>
-
-<%end%>
-<article class="module width_3_quarter">
-<header><h3>Editando Usuário <%=@user.name%></h3></header>
-<div class="module_content">
-<%= render 'form' %>
-
-
-
-<div class="clear"></div>
-</div>
-
-
-</article>
+<%model_class = Usuario%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

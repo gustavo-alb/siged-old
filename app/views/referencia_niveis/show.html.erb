@@ -1,40 +1,24 @@
-<%content_for :links do%>
-		<%=link_to "Referência/Níveis",referencia_niveis_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-
-<%end%>
-<article class="module width_full">
-<header><h3>Detalhes de Refêrencia/Nível </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Nome:</b>
-  <%= @referencia_nivei.nome %>
-</p>
-
-<p>
-  <b>Codigo:</b>
-  <%= @referencia_nivei.codigo %>
-</p>
-
-<p>
-  <b>Vencimento:</b>
-  <%= @referencia_nivei.vencimento.valor.reais_contabeis %>
-</p>
-
-<p>
-  <b>Funcionarios:</b>
-  <%= @referencia_nivei.funcionarios.size %>
-</p>
-
-
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_referencia_nivel_path(@referencia_nivei),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', referencia_niveis_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
+<%model_class = Referencia_nivel%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @referencia_nivel.nome %></dd>
+          <dt><strong>Codigo:</strong></dt>
+      <dd><%= @referencia_nivel.codigo %></dd>
+          <dt><strong>Vencimento:</strong></dt>
+      <dd><%= @referencia_nivel.vencimento_id %></dd>
+          <dt><strong>Entidade:</strong></dt>
+      <dd><%= @referencia_nivel.entidade_id %></dd>
+          <dt><strong>Jornada:</strong></dt>
+      <dd><%= @referencia_nivel.jornada %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', referencia_niveis_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_referencia_nivel_path(@referencia_nivel), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              referencia_nivel_path(@referencia_nivel),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

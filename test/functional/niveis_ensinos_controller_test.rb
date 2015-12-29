@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class NiveisEnsinosControllerTest < ActionController::TestCase
@@ -19,33 +18,32 @@ class NiveisEnsinosControllerTest < ActionController::TestCase
 
   test "should create niveis_ensino" do
     assert_difference('NiveisEnsino.count') do
-      post :create, :niveis_ensino => @niveis_ensino.attributes
+      post :create, niveis_ensino: @niveis_ensino.attributes
     end
 
     assert_redirected_to niveis_ensino_path(assigns(:niveis_ensino))
   end
 
   test "should show niveis_ensino" do
-    get :show, :id => @niveis_ensino.to_param
+    get :show, id: @niveis_ensino
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @niveis_ensino.to_param
+    get :edit, id: @niveis_ensino
     assert_response :success
   end
 
   test "should update niveis_ensino" do
-    put :update, :id => @niveis_ensino.to_param, :niveis_ensino => @niveis_ensino.attributes
+    put :update, id: @niveis_ensino, niveis_ensino: @niveis_ensino.attributes
     assert_redirected_to niveis_ensino_path(assigns(:niveis_ensino))
   end
 
   test "should destroy niveis_ensino" do
     assert_difference('NiveisEnsino.count', -1) do
-      delete :destroy, :id => @niveis_ensino.to_param
+      delete :destroy, id: @niveis_ensino
     end
 
     assert_redirected_to niveis_ensinos_path
   end
 end
-

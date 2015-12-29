@@ -1,0 +1,31 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  codigo: MyString
+  nome: MyString
+  sigla: MyString
+  responsavel_id: 1
+  telefone: MyString
+  endereco: MyString
+  numero: MyString
+  complemento: MyString
+  grupo: MyString
+  entidade_id: 1
+  esfera_id: 1
+  poder_id: 1
+  tipo_administracao_id: 1
+
+two:
+  codigo: MyString
+  nome: MyString
+  sigla: MyString
+  responsavel_id: 1
+  telefone: MyString
+  endereco: MyString
+  numero: MyString
+  complemento: MyString
+  grupo: MyString
+  entidade_id: 1
+  esfera_id: 1
+  poder_id: 1
+  tipo_administracao_id: 1

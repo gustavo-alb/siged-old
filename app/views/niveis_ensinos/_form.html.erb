@@ -1,34 +1,8 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@niveis_ensino) do |f| %>
-  <% if @niveis_ensino.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@niveis_ensino.errors.count, "erro impede","erros impedem") %> este niveis_ensino de ser cadastrado:</h2>
+<%= simple_form_for @niveis_ensino, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :nome %>
+<%= f.input :codigo %>
 
-      <ul>
-      <% @niveis_ensino.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :nome,:style=>"width:92%;" %>
-    
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :codigo %><br />
-        <%= f.text_field :codigo,:style=>"width:92%;" %>
-    
-  </fieldset>
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+niveis_ensinos_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

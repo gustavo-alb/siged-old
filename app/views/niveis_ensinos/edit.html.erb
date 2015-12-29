@@ -1,2 +1,5 @@
-<%= render 'form',:legenda=>'Edição de Niveis_ensinos ' %>
-
+<%model_class = Niveis_ensino%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

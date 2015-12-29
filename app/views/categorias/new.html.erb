@@ -1,6 +1,5 @@
-<%content_for :links do%>
-    <a class="current">Cadastrando Categoria</a>
-
+<%model_class = Categoria%>
+<%content_for :titulo do%>
+Criando registro de Categoria
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Categorias ' %>
-
+<%= render :partial => 'form' %>

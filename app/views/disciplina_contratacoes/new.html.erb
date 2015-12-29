@@ -1,6 +1,5 @@
-<%content_for :links do%>
-    <%=link_to "Descrição de Cargo",disciplina_contratacoes_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Descricao de cargos</a>
-
+<%model_class = DisciplinaContratacao%>
+<%content_for :titulo do%>
+  Criando registro de Disciplina_contratacao
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Descricao de cargos ' %>
-
+<%= render :partial => 'form' %>

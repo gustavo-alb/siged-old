@@ -1,5 +1,5 @@
-<%content_for :links do%>
-<%=link_to "categoria",categorias_path%><div class="breadcrumb_divider"></div><a class="current">Editando Categoria</a>
-<%end%>
-<%= render 'form',:legenda=>'Edição de Categorias ' %>
-
+<%model_class = Categoria%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

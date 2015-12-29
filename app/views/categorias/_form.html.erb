@@ -1,41 +1,9 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@categoria) do |f| %>
-<% if @categoria.errors.any? %>
-<div id="error_explanation">
-<h2><%= pluralize(@categoria.errors.count, "erro impede","erros impedem") %> este categoria de ser cadastrado:</h2>
+<%= simple_form_for @categoria, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :nome %>
+<%= f.input :sigla %>
+<%= f.input :lei %>
 
-<ul>
-<% @categoria.errors.full_messages.each do |msg| %>
-<li><%= msg %></li>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+categorias_path, :class => 'btn btn-default' %>
 <% end %>
-</ul>
-</div>
-<% end %>
-
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-<%= f.label :nome %><br />
-<%= f.text_field :nome,:style=>"width:92%;" %>
-
-</fieldset>
-
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-<%= f.label :sigla %><br />
-<%= f.text_field :sigla,:style=>"width:92%;" %>
-
-</fieldset>
-
-<fieldset style="width:48%; height:auto; float:left; margin-right: 1%;">
-<%= f.label :lei %><br />
-<%= f.text_area :lei,:style=>"width:92%;" %>
-
-</fieldset>
-<div class="clear"></div>
-</div>
-<footer>
-<div class="submit_link">
-<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-</div>
-</footer>
-<% end %>
-</article>

@@ -1,9 +1,8 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class MatrizesControllerTest < ActionController::TestCase
   setup do
-    @matrize = matrizes(:one)
+    @matriz = matrizes(:one)
   end
 
   test "should get index" do
@@ -17,35 +16,34 @@ class MatrizesControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test "should create matrize" do
-    assert_difference('Matrize.count') do
-      post :create, :matrize => @matrize.attributes
+  test "should create matriz" do
+    assert_difference('Matriz.count') do
+      post :create, matriz: @matriz.attributes
     end
 
-    assert_redirected_to matrize_path(assigns(:matrize))
+    assert_redirected_to matriz_path(assigns(:matriz))
   end
 
-  test "should show matrize" do
-    get :show, :id => @matrize.to_param
+  test "should show matriz" do
+    get :show, id: @matriz
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @matrize.to_param
+    get :edit, id: @matriz
     assert_response :success
   end
 
-  test "should update matrize" do
-    put :update, :id => @matrize.to_param, :matrize => @matrize.attributes
-    assert_redirected_to matrize_path(assigns(:matrize))
+  test "should update matriz" do
+    put :update, id: @matriz, matriz: @matriz.attributes
+    assert_redirected_to matriz_path(assigns(:matriz))
   end
 
-  test "should destroy matrize" do
-    assert_difference('Matrize.count', -1) do
-      delete :destroy, :id => @matrize.to_param
+  test "should destroy matriz" do
+    assert_difference('Matriz.count', -1) do
+      delete :destroy, id: @matriz
     end
 
     assert_redirected_to matrizes_path
   end
 end
-

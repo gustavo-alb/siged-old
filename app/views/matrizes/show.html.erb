@@ -1,88 +1,38 @@
- <%content_for :links do%>
- <%=link_to "Matrizes",matrizes_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
- <%end%>
- <article class="module width_full">
-  <header>
-    <h3>Detalhes da matriz <%=@matriz.codigo%>  <%= link_to 'Editar', edit_matriz_path(@matriz),:class=>"alt_btn",:type=>"submit"%> ou
-      <%= link_to 'Voltar', matrizes_path,:type=>"submit" %></h3>
-  </header>
-  <div class="module_content">
-    <div id="tabs1" class="tabset">
-      <ul class="tabset_tabs">
-        <li><a href="#tab-um">Detalhes da matriz</a></li>
-        <li><a href="#tab-dois">Configurar matriz</a></li>
-      </ul>
-
-      <div class="tabset_content_container">
-        <div id="tab-one" class="tabset_content">
-          <p>
-            <b>Codigo:</b>
-            <%= @matriz.codigo %>
-          </p>
-
-          <p>
-            <b>Nivel:</b>
-            <%= detalhes(@matriz.nivel) %>
-          </p>
-
-          <p>
-            <b>Módulo/Aula:</b>
-            <%= @matriz.modulo_aula %>
-          </p>
-
-          <p>
-            <b>Dias letivos anuais:</b>
-            <%= @matriz.dias_letivos_anuais %>
-          </p>
-
-          <p>
-            <b>Dias letivos semanais:</b>
-            <%= @matriz.dias_letivos_semanais %>
-          </p>
-
-          <p>
-            <b>Semanas letivas:</b>
-            <%= @matriz.semanas_letivas %>
-          </p>
-
-          <p>
-            <b>Carga horária anual:</b>
-            <%= @matriz.carga_horaria_anual %>
-          </p>
-
-        </div>
-        <div id="tab-two" class="tabset_content">
-          <div id='curriculos'>
-            <h1 align=center>Séries Cadastradas na Matriz</h1>
-            <%@matriz.series.uniq.each do |s|%>
-            <h2 align=center>Disciplinas da <%=s.nome%></h2><b>
-
-            <fieldset style='border: 1px solid #CCCCCC; background: none; width: 80%; align: right; margin-left: 10.5%;'>
-              <%for c in s.curriculos.da_matriz(@matriz).joins(:disciplina).order("grupo asc","horas_semanal desc")%>
-
-              <%=form_for c,:url=>matriz_curriculo_url(@matriz,c),:method=>:post,:remote=>true do |f|%>
-
-              <fieldset style="width:32%;float:left; margin-left: 0.76%; margin-right: 0%;">
-                &nbsp;&nbsp;&nbsp;<b><%=c.disciplina.nome%></b><br/><br/>
-                &nbsp;&nbsp;&nbsp;<b>horas semanais</b><br/>
-                <div id="campo_<%=c.id%>">
-                  <%=f.text_field :horas_semanal,:style=>"width:30px;align:left;",:id=>"horas_semanais_"+c.id.to_s%>
-                  <%=f.submit "Salvar",:class=>"alt_btn"%>
-                  <%end%>
-                </div>
-                <br/>
-              </fieldset>
-
-              <%end%>
-            </fieldset>
-            <%end%>
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <footer>
-  </footer>
-</article>
-
+<%model_class = Matriz%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Codigo:</strong></dt>
+      <dd><%= @matriz.codigo %></dd>
+          <dt><strong>Modalidade:</strong></dt>
+      <dd><%= @matriz.modalidade %></dd>
+          <dt><strong>Dias letivos anuais:</strong></dt>
+      <dd><%= @matriz.dias_letivos_anuais %></dd>
+          <dt><strong>Created at:</strong></dt>
+      <dd><%= @matriz.created_at %></dd>
+          <dt><strong>Updated at:</strong></dt>
+      <dd><%= @matriz.updated_at %></dd>
+          <dt><strong>Entidade:</strong></dt>
+      <dd><%= @matriz.entidade_id %></dd>
+          <dt><strong>Dias letivos semanais:</strong></dt>
+      <dd><%= @matriz.dias_letivos_semanais %></dd>
+          <dt><strong>Semanas letivas:</strong></dt>
+      <dd><%= @matriz.semanas_letivas %></dd>
+          <dt><strong>Modulo aula:</strong></dt>
+      <dd><%= @matriz.modulo_aula %></dd>
+          <dt><strong>Carga horaria anual:</strong></dt>
+      <dd><%= @matriz.carga_horaria_anual %></dd>
+          <dt><strong>Nivel:</strong></dt>
+      <dd><%= @matriz.nivel_id %></dd>
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @matriz.nome %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', matrizes_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_matriz_path(@matriz), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              matriz_path(@matriz),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

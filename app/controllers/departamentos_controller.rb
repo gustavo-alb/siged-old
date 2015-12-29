@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class DepartamentosController < ApplicationController
+  autocomplete :departamento,:nome
   load_and_authorize_resource
   # GET /departamentos
   # GET /departamentos.xml

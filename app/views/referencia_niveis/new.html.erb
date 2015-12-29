@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Referência/Níveis",referencia_niveis_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Nível</a>
-
+<%model_class = Referencia_nivel%>
+<%content_for :titulo do%>
+Criando registro de Referencia_nivel
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Referencia_niveis ' %>
-
+<%= render :partial => 'form' %>

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class CategoriasControllerTest < ActionController::TestCase
@@ -19,33 +18,32 @@ class CategoriasControllerTest < ActionController::TestCase
 
   test "should create categoria" do
     assert_difference('Categoria.count') do
-      post :create, :categoria => @categoria.attributes
+      post :create, categoria: @categoria.attributes
     end
 
     assert_redirected_to categoria_path(assigns(:categoria))
   end
 
   test "should show categoria" do
-    get :show, :id => @categoria.to_param
+    get :show, id: @categoria
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @categoria.to_param
+    get :edit, id: @categoria
     assert_response :success
   end
 
   test "should update categoria" do
-    put :update, :id => @categoria.to_param, :categoria => @categoria.attributes
+    put :update, id: @categoria, categoria: @categoria.attributes
     assert_redirected_to categoria_path(assigns(:categoria))
   end
 
   test "should destroy categoria" do
     assert_difference('Categoria.count', -1) do
-      delete :destroy, :id => @categoria.to_param
+      delete :destroy, id: @categoria
     end
 
     assert_redirected_to categorias_path
   end
 end
-

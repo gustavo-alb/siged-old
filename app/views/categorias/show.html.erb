@@ -1,29 +1,20 @@
-<%content_for :links do%>
-<%=link_to "categoria",categorias_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-<%end%>
-
-<article class="module width_full">
-<header><h3>Detalhes de </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Nome:</b>
-  <%= @categoria.nome %>
-</p>
-
-<p>
-  <b>Lei:</b>
-  <%= @categoria.lei %>
-</p>
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_categoria_path(@categoria),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', categorias_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%model_class = Categoria%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @categoria.nome %></dd>
+          <dt><strong>Sigla:</strong></dt>
+      <dd><%= @categoria.sigla %></dd>
+          <dt><strong>Lei:</strong></dt>
+      <dd><%= @categoria.lei %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', categorias_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_categoria_path(@categoria), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              categoria_path(@categoria),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

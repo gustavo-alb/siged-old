@@ -1,25 +1,18 @@
-<article class="module width_full">
-<header><h3>Detalhes de </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Nome:</b>
-  <%= @niveis_ensino.nome %>
-</p>
-
-<p>
-  <b>Codigo:</b>
-  <%= @niveis_ensino.codigo %>
-</p>
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_niveis_ensino_path(@niveis_ensino),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', niveis_ensinos_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%model_class = Niveis_ensino%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @niveis_ensino.nome %></dd>
+          <dt><strong>Codigo:</strong></dt>
+      <dd><%= @niveis_ensino.codigo %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', niveis_ensinos_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_niveis_ensino_path(@niveis_ensino), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              niveis_ensino_path(@niveis_ensino),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

@@ -1,2 +1,5 @@
-<%= render 'form',:legenda=>' Cadastro de Niveis_ensinos ' %>
-
+<%model_class = Niveis_ensino%>
+<%content_for :titulo do%>
+Criando registro de Niveis_ensino
+<%end%>
+<%= render :partial => 'form' %>

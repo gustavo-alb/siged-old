@@ -1,0 +1,64 @@
+<%content_for :links do%>
+		<%=link_to "Orgão",orgaos_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
+
+<%end%>
+<article class="module width_full">
+<header><h3>Detalhes de <%=@orgao.sigla%> </h3></header>
+<div class="module_content">
+
+
+<p>
+  <b>Código:</b>
+  <%= @orgao.codigo %>
+</p>
+
+<p>
+  <b>Nome:</b>
+  <%= @orgao.nome %>
+</p>
+
+<p>
+  <b>Sigla:</b>
+  <%= @orgao.sigla %>
+</p>
+
+<p>
+  <b>Responsável:</b>
+  <%= @orgao.responsavel_id %>
+</p>
+
+<p>
+  <b>Telefone:</b>
+  <%= @orgao.telefone %>
+</p>
+
+<p>
+  <b>Endereço:</b>
+  <%= @orgao.endereco %>
+</p>
+
+<p>
+  <b>Número:</b>
+  <%= @orgao.numero %>
+</p>
+
+<p>
+  <b>Complemento:</b>
+  <%= @orgao.complemento %>
+</p>
+
+<p>
+  <b>Grupo:</b>
+  <%= @orgao.grupo %>
+</p>
+
+
+</div>
+<footer>
+				<div class="submit_link">
+				  <%= link_to 'Editar', edit_orgao_path(@orgao),:class=>"alt_btn",:type=>"submit"%> ou
+				  <%= link_to 'Voltar', orgaos_path,:type=>"submit" %>
+				</div>
+			</footer>
+</article>
+

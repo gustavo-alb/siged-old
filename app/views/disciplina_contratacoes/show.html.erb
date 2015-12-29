@@ -1,39 +1,17 @@
-<%content_for :links do%>
-    <%=link_to "Descrição de Cargo",disciplina_contratacoes_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-
-<%end%>
-<article class="module width_full">
-<header><h3>Detalhes de </h3></header>
-<div class="module_content">
-
-
-<p>
-  <b>Codigo:</b>
-  <%= @disciplina_contratacao.codigo %>
-</p>
-
-<p>
-  <b>Nome:</b>
-  <%= @disciplina_contratacao.nome %>
-</p>
-
-<p>
-  <b>Tipo:</b>
-  <%= @disciplina_contratacao.tipo_id %>
-</p>
-
-<p>
-  <b>Nivel cargo:</b>
-  <%= @disciplina_contratacao.nivel_cargo_id %>
-</p>
-
-
-</div>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Editar', edit_disciplina_contratacao_path(@disciplina_contratacao),:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', disciplina_contratacoes_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
-
+<%model_class = DisciplinaContratacao%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+<dl class="dl-horizontal">
+  <dt><strong>Codigo:</strong></dt>
+  <dd><%= @disciplina_contratacao.codigo %></dd>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= @disciplina_contratacao.nome %></dd>
+</dl>
+<%= link_to 'Voltar', disciplina_contratacoes_path, :class => 'btn btn-default'  %>
+<%= link_to 'Editar', edit_disciplina_contratacao_path(@disciplina_contratacao), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+              disciplina_contratacao_path(@disciplina_contratacao),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

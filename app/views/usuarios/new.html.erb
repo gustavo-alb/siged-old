@@ -1,11 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Usuário",usuarios_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando novo usuario</a>
-
+<%model_class = Usuario%>
+<%content_for :titulo do%>
+Criando registro de Usuario
 <%end%>
-<article class="module width_3_quarter">
-<header><h3>Cadastrar Usuário</h3></header>
-<div class="module_content">
-<%= render 'form' %>
-<div class="clear"></div>
-</div>
-</article>
+<%= render :partial => 'form' %>

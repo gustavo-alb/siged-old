@@ -1,48 +1,37 @@
-<%content_for :links do%>
-  <a class="current">Cargos</a>
+<%content_for :titulo do%>
+  Cargos
+  
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </span>
+    </div>
+  <%end%>
+  <%= link_to "Criar",new_cargo_path,:class=>"btn btn-primary"%>
 <%end%>
-<article class="module width_3_quarter">
-  <header>
-    <h3 class="tabs_involved">Cargos</h3>
-    <ul class="tabs">
-      <%= search_form_for @q,:url=>cargos_path do |f| %>
-        <%= f.search_field :nome_or_codigo_cont,:size=>12 %>
-        <li><%= image_submit_tag "icn_busca.png" %></li>
-      <% end %>
-    </ul>
-  </header>
-  <table class="tablesorter" cellspacing="0">
-    <thead>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>nome</th>
+      <th>codigo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @cargos.each_with_index do |c,i| %>
       <tr>
-        <th>Código</th>
-        <th>Nome</th>
-        <th>Tipo</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <td><%= c.nome%></td>
+        <td><%= c.codigo%></td>
+        <td>
+          <%= link_to "Editar", edit_cargo_path(c),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",cargo_path(c),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", cargo_path(c),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      <% @cargos.each do |cargo| %>
-        <tr>
-          <td><%= cargo.codigo %></td>
-          <td><%= cargo.nome.titleize %></td>
-          <td><%= detalhes(cargo.tipo) %></td>
-          <td><%= detalhes(cargo.entidade) %></td>
-          <td><%= link_to 'Detalhes', cargo %></td>
-          <td><%= link_to  image_tag('/images/icn_edit.png',:title=>"Editar"), edit_cargo_path(cargo) %></td>
-          <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), cargo, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-  <footer>
-    <div class="submit_link">
-      <%= link_to 'Cadastrar Cargo', new_cargo_path,:class=>"alt_btn",:type=>"submit"%> ou
-          <%= link_to 'Voltar', :back,:type=>"submit" %>
-    </div>
-    <div class="submit_link">
-      <%= will_paginate @cargos %>
-    </div>
-  </footer>
-</article>
+    <% end%>
+  </tbody>
+</table>
+<%= will_paginate @cargo,renderer: BootstrapPagination::Rails%>

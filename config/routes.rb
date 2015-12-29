@@ -5,6 +5,14 @@ Siged20::Application.routes.draw do
 
 
 
+  resources :categorias
+
+  resources :referencia_niveis
+
+  resources :matrizes
+
+  resources :niveis_ensinos
+
   resources :periodos
 
 

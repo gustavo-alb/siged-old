@@ -1,55 +1,44 @@
-<%content_for :links do%>
-<a class="current">Descrição de Cargo</a>
-
-<%end%>
-<article class="module width_3_quarter">
-  <header><h3 class="tabs_involved">Listando Disciplinas de Contratação</h3>
-   <ul class="tabs">
-      <%= search_form_for @q,:url=>disciplina_contratacoes_path do |f| %>
-        <%= f.search_field :nome_or_codigo_cont,:size=>12 %>
-        <li><%= image_submit_tag "icn_busca.png" %></li>
-      <% end %>
-    </ul>
-   </ul>
- </header>
- 
-  
-    <table class="tablesorter" cellspacing="0">
-      <thead>
-        <tr>
-          <th>Código</th>
-          <th>Nome</th>
-          <th>Tipo</th>
-          <th>Nível</th>
-          <th>Nº de funcionários</th>
-          <th>Ações</th>
-          <th></th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @disciplina_contratacoes.each do |disciplina_contratacao| %>
-        <tr>
-          <td><%= disciplina_contratacao.codigo %></td>
-          <td><%= disciplina_contratacao.nome %></td>
-          <td><%= detalhes(disciplina_contratacao.tipo) %></td>
-          <td><%= detalhes(disciplina_contratacao.nivel_cargo) %></td>
-          <td><%= disciplina_contratacao.funcionarios.count %></td>
-          <td><%= link_to 'Detalhes', disciplina_contratacao %></td>
-          <td><%= link_to  image_tag('/images/icn_edit_article.png',:title=>"Editar"), edit_disciplina_contratacao_path(disciplina_contratacao) %></td>
-          <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), disciplina_contratacao, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-        </tr>
-        <% end %>
-      </tbody>
-    </table>
-  
-<footer>
-  <div class="submit_link">
-    <%= link_to 'Cadastrar Descricao cargo', new_disciplina_contratacao_path,:class=>"alt_btn",:type=>"submit"%> ou
-    <%= link_to 'Voltar', :back,:type=>"submit" %>
-  </div>
-  <div class="submit_link">
-   <%= will_paginate @disciplina_contratacoes %>
- </div>
-</footer>
-</article>
+<%content_for :titulo do%>
+  Disciplina_contratacoes
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+          <% end %>
+        </span>
+      </div>
+      <%end%>
+      <%= link_to "Criar",new_disciplina_contratacao_path,:class=>"btn btn-primary"%>
+      <%end%>
+      <table class="table table-striped tabela-colapsavel">
+        <thead>
+          <tr>
+            
+              <th>codigo</th>
+            
+              <th>nome</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <% @disciplina_contratacoes.each_with_index do |d,i| %>
+    
+          
+          <tr>
+            
+              <td><%= d.codigo%></td>
+            
+              <td><%= d.nome%></td>
+            
+            <td>
+              <%= link_to "Editar", edit_disciplina_contratacao_path(d),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Visualizar",disciplina_contratacao_path(d),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Apagar", disciplina_contratacao_path(d),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+      </td>
+          </tr>
+          <% end%>
+        </tbody>
+      </table>
+      <%= will_paginate @disciplina_contratacao,renderer: BootstrapPagination::Rails%>

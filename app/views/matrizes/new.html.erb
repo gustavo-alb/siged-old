@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Matrizes",matrizes_path%><div class="breadcrumb_divider"></div><a class="current">Cadastrando Matriz</a>
-
+<%model_class = Matriz%>
+<%content_for :titulo do%>
+Criando registro de Matriz
 <%end%>
-<%= render 'form',:legenda=>' Cadastro de Matrizes ' %>
-
+<%= render :partial => 'form' %>

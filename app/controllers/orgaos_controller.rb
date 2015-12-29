@@ -7,7 +7,7 @@ class OrgaosController < ApplicationController
   before_filter :dados_essenciais
   def index
     @q = Orgao.ransack(params[:q])
-    @orgaos = @q.result(distinct: true).order('nome ASC').paginate :page => params[:page], :per_page => 10
+    @orgaos = @q.result(distinct: true).paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -58,6 +58,7 @@ class OrgaosController < ApplicationController
   # GET /orgaos/new
   # GET /orgaos/new.xml
   def new
+    @url = orgaos_url
     @orgao = Orgao.new
     respond_to do |format|
       format.html # new.html.erb
@@ -67,6 +68,7 @@ class OrgaosController < ApplicationController
 
   # GET /orgaos/1/edit
   def edit
+    @url = orgao_url
     @orgao = Orgao.find(params[:id])
   end
 

@@ -4,8 +4,8 @@ class ReferenciaNiveisController < ApplicationController
   # GET /referencia_niveis
   # GET /referencia_niveis.xml
   def index
-    @search = ReferenciaNivel.scoped_search(params[:search])
-    @referencia_niveis = @search.order(:codigo).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @q = ReferenciaNivel.ransack(params[:q])
+    @referencia_niveis = @q.result.order(:codigo).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -84,4 +84,3 @@ class ReferenciaNiveisController < ApplicationController
     end
   end
 end
-

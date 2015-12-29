@@ -1,78 +1,18 @@
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content">
+<%= simple_form_for @matriz, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :codigo %>
+<%= f.input :modalidade %>
+<%= f.input :dias_letivos_anuais %>
+<%= f.input :created_at %>
+<%= f.input :updated_at %>
+<%= f.input :entidade_id %>
+<%= f.input :dias_letivos_semanais %>
+<%= f.input :semanas_letivas %>
+<%= f.input :modulo_aula %>
+<%= f.input :carga_horaria_anual %>
+<%= f.input :nivel_id %>
+<%= f.input :nome %>
 
-
-    <%= form_for(@matriz) do |f| %>
-    <% if @matriz.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@matriz.errors.count, "erro impede","erros impedem") %> este matrize de ser cadastrado:</h2>
-
-      <ul>
-        <% @matriz.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-    <% end %>
-
-    <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :codigo %><br />
-      <%= f.text_field :codigo,:style=>"width:92%;" %>
-
-    </fieldset>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :nome %><br />
-      <%= f.text_field :nome,:style=>"width:92%;" %>
-    </fieldset>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :nivel %><br /><br />
-      <%= f.select :nivel_id,@niveis,:prompt=>"Indique o nível de ensino",:style=>"width:92%;" %>  
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :dias_letivos_anuais %><br />
-      <%= f.text_field :dias_letivos_anuais,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :dias_letivos_semanais %><br />
-      <%= f.text_field :dias_letivos_semanais,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :semanas_letivas %><br />
-      <%= f.text_field :semanas_letivas,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :carga_horária_anual %><br />
-      <%= f.text_field :carga_horaria_anual,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :modulo_aula %><br />
-      <%= f.text_field :modulo_aula,:style=>"width:92%;" %>
-
-    </fieldset>
-
-    <div id='serie'>
-    </div>    
-
-    <%=observe_field :matriz_nivel_id, :url => "/matrizes/series_nivel",
-    :frequency => 0.25,
-    :update => :serie,
-    :with => 'nivel_ensino'%>
-
-    <div class="clear"></div>
-  </div>
-  <footer>
-    <div class="submit_link">
-     <%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-   </div>
- </footer>
- <% end %>
-</article>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+matrizes_path, :class => 'btn btn-default' %>
+<% end %>

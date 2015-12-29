@@ -1,43 +1,41 @@
-<%content_for :links do%>
-		<a class="current">Matrizes</a>
-
+<%content_for :titulo do%>
+  Matrizes
+  
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </span>
+    </div>
+  <%end%>
+  <%= link_to "Criar",new_matriz_path,:class=>"btn btn-primary"%>
 <%end%>
-
-<article class="module width_3_quarter">
-		<header><h3 class="tabs_involved">Listando matrizes</h3>
-		<ul class="tabs">
-		</ul>
-		</header>
-<table class="tablesorter" cellspacing="0">
-<thead>
-  <tr>
-    <th>Código</th>
-    <th>Nome</th>
-    <th>Ações</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-</thead>
-<tbody>
-<% @matrizes.each do |matrize| %>
-  <tr>
-    <td><%= matrize.codigo %></td>
-    <td><%= matrize.nome %></td>
-    <td><%= link_to 'Detalhes', matrize %></td>
-    <td><%= link_to  image_tag('/images/icn_edit_article.png',:title=>"Editar"), edit_matriz_path(matrize) %></td>
-    <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), matrize, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-  </tr>
-<% end %>
-</tbody>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>codigo</th>
+      <th>modalidade</th>
+      <th>dias_letivos_anuais</th>
+      <th>created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @matrizes.each_with_index do |m,i| %>
+      <tr>
+        <td><%= m.codigo%></td>
+        <td><%= m.modalidade%></td>
+        <td><%= m.dias_letivos_anuais%></td>
+        <td><%= m.created_at%></td>
+        <td>
+          <%= link_to "Editar", edit_matriz_path(m),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",matriz_path(m),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", matriz_path(m),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
 </table>
-<footer>
-				<div class="submit_link">
-				  <%= link_to 'Cadastrar Matriz', new_matriz_path,:class=>"alt_btn",:type=>"submit"%> ou
-				  <%= link_to 'Voltar', :back,:type=>"submit" %>
-				</div>
-                <div class="submit_link">
-                    <%=will_paginate @matrizes%>
-                </div>
-			</footer>
-</article>
+<%= will_paginate @matriz,renderer: BootstrapPagination::Rails%>

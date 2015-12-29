@@ -1,0 +1,54 @@
+<%content_for :links do%>
+		<a class="current">Orgãos</a>
+
+<%end%>
+<article class="module width_full">
+  <header><h3 class="tabs_involved">Listando Orgao</h3>
+    <ul class="tabs">
+      <%= search_form_for @q,:url=>orgaos_path do |f| %>
+        <%= f.search_field :nome_or_sigla_cont,:size=>12 %>
+        <li><%= image_submit_tag "icn_busca.png" %></li>
+      <% end %>
+    </ul>
+  </header>
+    
+		
+<table class="tablesorter" cellspacing="0">
+<thead>
+  <tr>
+    <th>Nome</th>
+    <th>Sigla</th>
+    <th>Esfera</th>
+    <th>Nº de Departamentos</th>
+    <!--<th>Responsável</th>-->
+    <th colspan=5></th>
+  </tr>
+</thead>
+<tbody>
+<% @orgaos.each do |orgao| %>
+  <tr>
+    <td><%= orgao.nome.upcase %></td>
+    <td><%= orgao.sigla %></td>
+    <td><%= detalhes(orgao.esfera) %></td>
+    <td><%= orgao.departamentos.count%>
+    <!--<td><%= orgao.responsavel_id %></td>-->
+    <td><%= link_to 'Detalhes', orgao %></td>
+    <td><%= link_to  image_tag('/images/icn_agenda.png',:title=>"Agenda Telefonica da entidade"), "#{orgao_agenda_path(orgao)}.pdf" %></td>
+    <td><%= link_to  image_tag('/images/icn_edit_article.png',:title=>"Editar"), edit_orgao_path(orgao) %></td>
+    <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), orgao, :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
+    <td><%= link_to  image_tag("/images/theme.png",:title=>"Departamentos"), orgao_departamentos_path(orgao) %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<footer>
+				<div class="submit_link">
+				  <%= link_to 'Cadastrar Orgao', new_orgao_path,:class=>"alt_btn",:type=>"submit"%> ou
+				  <%= link_to 'Voltar', :back,:type=>"submit" %>
+				</div>
+				<div>
+				<%=will_paginate @orgaos%>
+				</div>
+			</footer>
+</article>

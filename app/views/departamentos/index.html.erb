@@ -1,7 +1,7 @@
 <%content_for :titulo do%>
   Departamentos do(a) <%= @orgao.sigla%>
   <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
-    <%= search_form_for @q do |f|%>
+    <%= search_form_for @q,:url=>orgao_departamentos_path(@orgao) do |f|%>
       <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
       <span class="input-group-btn">
         <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
@@ -10,7 +10,7 @@
       </span>
     </div>
   <%end%>
-  <%= link_to "Criar",new_departamento_path,:class=>"btn btn-primary"%>
+  <%= link_to "Criar",new_orgao_departamento_path(@orgao),:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -28,7 +28,7 @@
           <%= link_to "Editar", edit_orgao_departamento_path(@orgao,d),:class=>"btn btn-primary btn-xs"%>
           <%= link_to 'Gerenciar Func.', funcionarios_pontos_path(:objeto_id=>d.id,:tipo=>'departamento'),:class=>"btn btn-primary btn-xs" %>
           <%= link_to "Visualizar",orgao_departamento_path(@orgao,d),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Apagar", orgao_departamento_path(@orgao,d),:class=>"btn btn-danger btn-xs",:method=>:destroy,:confirm=>"Tem Certeza?"%>
+          <%= link_to "Apagar", orgao_departamento_path(@orgao,d),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
         </td>
       </tr>
     <% end%>
