@@ -3,7 +3,7 @@ class FuncionariosController < ApplicationController
   # GET /funcionarios
   # GET /funcionarios.xml
   before_filter :pessoa,:except=>[:folha,:relatorio_por_disciplina,:comissionados,:cargo,:distrito,:diretor,:categoria]
-  before_filter :dados_essenciais,:except=>:comissionados
+  before_filter :dados_essenciais,:except=>[:comissionados]
   def index
     #@search = Funcionario.da_pessoa(params[:pessoa_id]).scoped_search(params[:search])
     @funcionarios = Funcionario.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10

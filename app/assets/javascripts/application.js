@@ -31,6 +31,13 @@
 jQuery(function() {
     // Executes a callback detecting changes
     jQuery("#funcionario_cargo_id").change(function(){
-    jQuery.ajax({data:'name=' + this.value, success:function(request){jQuery('#disc').html(request);}, url:"/funcionarios/cargo"
+    jQuery.ajax({data:'disciplina=' + this.value, success:function(request){jQuery('#disc').html(request);}, url:"/funcionarios/cargo"
   })});});
+
+jQuery(function() {
+    // Executes a callback detecting changes
+    jQuery("#funcionario_municipio_id").change(function(){
+    jQuery.ajax({data:'municipio=' + this.value, success:function(request){jQuery('#dist').html(request);}, url:"/funcionarios/distrito"
+  })});});
+
 

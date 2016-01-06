@@ -3,16 +3,18 @@
   <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
   <%= f.input :entidade_id,as: :select, :collection=>@entidades %>
   <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
-  <div id='disc'></div>
-  <div id='munic'></div>
-  <div id='dist'></div>
+  <div id='disc'>
+    <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+  </div>
   <%= f.input :nivel_id,as: :select, :collection=>@niveis %>
-  <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas %>
   <%= f.input :decreto_nomeacao %>
   <%= f.input :termo_posse %>
   <%= f.input :orgao_id,as: :select, :collection=>@orgaos%>
   <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: @funcionario.data_nomeacao.strftime("%d/%m/%Y")}%>
   <%= f.input :municipio_id,as: :select, :collection=>@municipios %>
+  <div id='dist'>
+    <%= f.input :distrito_id,as: :select, :collection=>@distritos  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+  </div>
   <%= f.input :observacao,as: :text,input_html: {size: "3x3"} %>
   <%= f.button :submit, :class => 'btn-primary' %>
   <%= link_to "Cancelar",

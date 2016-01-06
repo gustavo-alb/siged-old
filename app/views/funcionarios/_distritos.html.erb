@@ -1,4 +1,3 @@
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-<%= label_tag "distrito/área" %><br /><br />
-<%= select :funcionario,:distrito_id,@distritos,:prompt=>"Selecione o distrito de opção"%>
-</fieldset>
+<%=simple_fields_for :funcionario do |f| %>
+  <%= f.input :distrito_id,as: :select, :collection=>@distritos %>
+<% end %>

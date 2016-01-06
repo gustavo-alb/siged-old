@@ -204,7 +204,6 @@ Siged20::Application.routes.draw do
   resources :lotacoes
 
   get 'relatorios/funcionarios_por_disciplina',:controller=>"funcionarios",:action=>'relatorio_por_disciplina'
-  resources :funcionarios
   resources :anos_letivos,:controller=>'ano_letivos' do
     get :gerir_carencias
     get :listar_carencias
@@ -285,11 +284,11 @@ Siged20::Application.routes.draw do
   # Sample of regular route:
   post 'administracao/tarefas/send_data'
   match 'funcionarios/folha'
+  post 'funcionarios/cargo'
   match 'pessoas/naturalidade'
   match 'lotacoes/prolabore'
   match 'lotacoes/especial',:controller=>"lotacoes",:action=>"lotacao_especial"
   match 'lotacoes/destino'
-  match 'funcionarios/cargo'
   match 'lotacoes/turmas'
   match 'lotacoes/tipo_destino'
   match 'funcionarios/distrito'

@@ -1,5 +1,3 @@
-<fieldset style="width:48%; float:left; margin-right: 1%;">
-	<%= label_tag :disciplina_de_contratação_id %><br /><br />
-	<%= select :funcionario,:disciplina_contratacao_id,@disciplinas,:prompt=>true %>
-
-</fieldset>
+<%=simple_fields_for :funcionario do |f| %>
+  <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas %>
+<% end %>
