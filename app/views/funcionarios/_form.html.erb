@@ -1,148 +1,20 @@
-<%= javascript_include_tag "mascara.js" %>
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content">
-
-
-
-
-    <%= form_for @funcionario, :url=>pessoa_funcionarios_url do |f| %>
-    <% if @funcionario.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@funcionario.errors.count, "erro impede","erros impedem") %> este funcionário de ser cadastrado:</h2>
-
-      <ul>
-        <% @funcionario.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-        <% end %>
-      </ul>
-    </div>
-    <% end %>
-
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :matricula%><br />
-      <%= f.text_field :matricula,:style=>"width:92%;" %>
-
-    </fieldset>
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :cargo_id %><br /><br />
-      <%= f.select :cargo_id,@cargos,:prompt=>"Selecione o Cargo" %>
-
-    </fieldset>
-
-    <!--<fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :codigo_sirh%><br />
-      <%= f.text_field :codigo_sirh,:style=>"width:92%;" %>
-
-    </fieldset>-->
-
-    <%=observe_field :funcionario_cargo_id, :url => "/funcionarios/cargo",
-    :frequency => 0.25,
-    :update => :disc,
-    :with => 'disciplina'%>
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :quadro %><br /><br />
-      <%=select :funcionario,:entidade_id,@entidades,:prompt=>true,:style=>"width:92%;"%>
-
-    </fieldset>
-
-    <!--<fieldset style="width:48%; float:left; margin-right: 1%;">
-      <%= f.label :folha %><br /><br />
-      <%=select :funcionario,:fonte_recurso_id,@recursos,:prompt=>true,:style=>"width:92%;"%>
-
-    </fieldset>-->
-
-    <fieldset style="width:48%; float:left; margin-right: 1%;">
-      <label> Categoria Funcional </label> <br/><br />
-      <%=f.select :categoria_id,@categorias,:prompt=>"Indique a categoria funcional",:style=>"width:92%;" %>
-    </fieldset>
-
-    <%=observe_field :funcionario_categoria_id, :url => "/funcionarios/categoria",
-    :frequency => 0.25,
-    :update => :munic,
-    :with => 'categoria'%>
-
-    <div id=disc>
-    </div>
-
-    <%if GrupoEducacional.count>0%>
-    <fieldset style="width:98%; float:left; margin-right: 1%;">
-      <label>Grupos Educacionais Disponíveis</label><br/><br/>
-      <% for grupo in GrupoEducacional.find(:all) %>
-
-      <%= check_box_tag "usuario[grupos_educacional_ids][]", grupo.id, @user.grupos_educacionais.include?(grupo) %>
-      <%= grupo.nome %>
-      <% end %>
-    </fieldset>
-    <%end%>
-
-  </fieldset>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nivel_id %><br /><br />
-    <%= f.select :nivel_id,@niveis,:style=>"width:92%;",:prompt=>"Selecione a Referência/Nível do Funcionário" %>
-
-  </fieldset>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :orgao %><br /><br />
-    <%= f.select :orgao_id,@orgaos,:style=>"width:92%;",:selected=>5,:prompt=>"Selecione o Orgão" %>
-  </fieldset>
-
-  <!--<fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :situação_juridica %><br /><br />
-    <%= f.select:sjuridica_id,@sitjuridicas,:style=>"width:92%;",:prompt=>"Selecione a Situação Jurídica" %>
-  </fieldset>-->
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :decreto_de_nomeacao %><br /><br />
-    <%= f.text_field :decreto_nomeacao,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :termo_de_posse %><br /><br />
-    <%= f.text_field :termo_posse,:style=>"width:92%;" %>
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :data_da_nomeação %><br /><br />
-    <%= f.text_field :data_nomeacao,:class=>"date",:style=>"width:92%;" %>
-  </fieldset>
-
-
-
+<%= simple_form_for @funcionario,:url=>@url, :html => { :class => 'form-horizontal' } do |f| %>
+  <%= f.input :matricula %>
+  <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
+  <%= f.input :entidade_id,as: :select, :collection=>@entidades %>
+  <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
+  <div id='disc'></div>
   <div id='munic'></div>
-
-
-
-  <!--<fieldset style="width:97%; float:left; margin-right: 1%;">
-    <table>
-      <tr>
-        <th align=left><%= f.label :banco %></center></th>
-        <th align=left><%= f.label :agencia %></th>
-        <th align=left><%= f.label :conta %></th>
-      </tr>
-      <tr>
-       <td><%= f.select :banco,Funcionario::BANCO,:style=>"width:92%;",:prompt=>true %></td>
-       <td><%= f.text_field :agencia,:style=>"width:92%;" %></td>
-       <td><%= f.text_field :conta,:style=>"width:92%;" %></td>
-     </tr>
-   </table>
-   
-
- </fieldset>-->
-
-
-
-
-
- <div class="clear"></div>
-</div>
-<footer>
-  <div class="submit_link">
-   <%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
- </div>
-</footer>
+  <div id='dist'></div>
+  <%= f.input :nivel_id,as: :select, :collection=>@niveis %>
+  <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas %>
+  <%= f.input :decreto_nomeacao %>
+  <%= f.input :termo_posse %>
+  <%= f.input :orgao_id,as: :select, :collection=>@orgaos%>
+  <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: @funcionario.data_nomeacao.strftime("%d/%m/%Y")}%>
+  <%= f.input :municipio_id,as: :select, :collection=>@municipios %>
+  <%= f.input :observacao,as: :text,input_html: {size: "3x3"} %>
+  <%= f.button :submit, :class => 'btn-primary' %>
+  <%= link_to "Cancelar",
+funcionarios_path, :class => 'btn btn-default' %>
 <% end %>
-<div class="clear"></div>
-</article>

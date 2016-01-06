@@ -274,6 +274,7 @@ class FuncionariosController < ApplicationController
   # GET /funcionarios/new
   # GET /funcionarios/new.xml
   def new
+    @url = pessoa_funcionarios_url
     @funcionario = Funcionario.new
 
     respond_to do |format|
@@ -284,6 +285,7 @@ class FuncionariosController < ApplicationController
 
   # GET /funcionarios/1/edit
   def edit
+    @url = pessoa_funcionario_url(@pessoa)
     @funcionario = Funcionario.find(params[:id])
     @comissionados = @funcionario.comissionados.all
   end

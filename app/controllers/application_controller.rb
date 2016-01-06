@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   private
   def dados_essenciais
     @destinos = TipoDestino.all.collect{|t|[t.nome,t.id]}
-    @cargos = Cargo.order(:nome).collect{|c|[c.nome,c.id]}
+    @cargos = Cargo.order(:nome).collect{|c|[c.nome.upcase,c.id]}
     @orgaos = Orgao.order(:nome).collect{|o|[o.sigla.upcase,o.id]}
     @niveis_f = Nivel.order(:ordem).collect{|n|[n.nome.upcase,n.id]}
     @municipios = Municipio.order(:nome).collect{|m|[m.nome,m.id]}

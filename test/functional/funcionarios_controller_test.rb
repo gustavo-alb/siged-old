@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 
 class FuncionariosControllerTest < ActionController::TestCase
@@ -19,33 +18,32 @@ class FuncionariosControllerTest < ActionController::TestCase
 
   test "should create funcionario" do
     assert_difference('Funcionario.count') do
-      post :create, :funcionario => @funcionario.attributes
+      post :create, funcionario: @funcionario.attributes
     end
 
     assert_redirected_to funcionario_path(assigns(:funcionario))
   end
 
   test "should show funcionario" do
-    get :show, :id => @funcionario.to_param
+    get :show, id: @funcionario
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, :id => @funcionario.to_param
+    get :edit, id: @funcionario
     assert_response :success
   end
 
   test "should update funcionario" do
-    put :update, :id => @funcionario.to_param, :funcionario => @funcionario.attributes
+    put :update, id: @funcionario, funcionario: @funcionario.attributes
     assert_redirected_to funcionario_path(assigns(:funcionario))
   end
 
   test "should destroy funcionario" do
     assert_difference('Funcionario.count', -1) do
-      delete :destroy, :id => @funcionario.to_param
+      delete :destroy, id: @funcionario
     end
 
     assert_redirected_to funcionarios_path
   end
 end
-

@@ -1,10 +1,9 @@
 <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= label :funcionario, :municipio_de_opção %><br/><br/>
-        <%= select :funcionario, :municipio_id,@municipios,:prompt=>"Selecione o Município" %>
-  </fieldset>
+  <%= label :funcionario, :municipio_de_opção %><br/>
+  <br/>
+  <%= select :funcionario, :municipio_id,@municipios,:prompt=>"Selecione o Município" %>
+</fieldset>
 </div>
-  <div id=dist></div>
-
 <%=observe_field :funcionario_municipio_id, :url => "/funcionarios/distrito",
       :frequency => 0.25,
       :update => :dist,

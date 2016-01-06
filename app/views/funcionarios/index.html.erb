@@ -1,68 +1,52 @@
-<%content_for :links do%>
-  <%=link_to "Pessoas",pessoas_path%>
-  <div class="breadcrumb_divider"></div>
-  <a class="current">Funcionários</a>
-<%end%>
-<article class="module width_full">
-  <header>
-    <h4 class="tabs_involved">Funcionários de <%=@pessoa.nome.titleize%></h3>
-    <ul class="tabs">
-    </ul>
-  </header>
-  <table class="tablesorter" cellspacing="0">
-    <thead>
-      <tr>
-        <th>Matricula</th>
-        <th>Cargo</th>
-        <th>Quadro</th>
-        <th>Categoria</th>
-        <th>Status</th>
-        <th colspan=6>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @funcionarios.each do |funcionario| %>
-        <tr>
-          <td><%= funcionario.matricula %></td>
-          <td><%=cargo_disciplina(funcionario)%> </td>
-          <td><%= detalhes(funcionario.entidade) %></td>
-          <td><%= detalhes(funcionario.categoria) %></td>
-          <td><%= status_lotacao(funcionario.status_lotacao) %></td>
-          <td><%= link_to 'Detalhes', pessoa_funcionario_path(@pessoa,funcionario)%></td>
-          <!--<td><%= link_to 'Assinar Ponto', pessoa_funcionario_ponto_diarios_path(@pessoa,funcionario)%></td>-->
-          <%if can? :update,Funcionario-%>
-            <td><%= link_to  image_tag('/images/icn_edit.png',:title=>"Editar"), edit_pessoa_funcionario_path(@pessoa,funcionario) %></td>
-          <% end -%>
-          <%if can? :destroy,Funcionario-%>
-            <td><%= link_to  image_tag("/images/icn_trash.png",:title=>"Apagar"), pessoa_funcionario_path(@pessoa,funcionario), :confirm => 'Tem certeza que deseja Apagar?', :method => :delete %></td>
-          <%end-%>
-          <%if can? :update,Funcionario%>
-            <td>
-              <div id='ativo-<%=funcionario.matricula%>'>
-                <%if funcionario.ativo%>
-                  <%= button_to "Ativo",pessoa_funcionario_desativar_funcionario_path(@pessoa,funcionario),:remote=>true,:method=>:post,:class=>'alt_btn'%>
-                <%else !funcionario.ativo%>
-                  <%= button_to "Inativo",pessoa_funcionario_ativar_funcionario_path(@pessoa,funcionario),:remote=>true,:method=>:post,:class=>'alt_btn_dng'%>
-                <%end%>
-              </div>
-            </td>
-          <%end%>
-          <%if can? :manage,Lotacao %>
-            <td><%= link_to  image_tag('/images/icn_categories.png',:title=>"Lotação Funcional"),  pessoa_funcionario_lotacoes_path(@pessoa,funcionario)%></td>
+<%content_for :titulo do%>
+  Funcionarios
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
           <% end %>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-</div>
-<footer>
-  <div class="submit_link">
-    <%if can? :manage,Funcionario %><%= link_to 'Cadastrar Funcionario', new_pessoa_funcionario_path,:class=>"alt_btn",:type=>"submit"%> ou<%end%>
-    <%= link_to 'Voltar', pessoas_path,:type=>"submit" %>
-  </div>
-  <div class="submit_link">
-    <%= will_paginate @funcionarios %>
-  </div>
-</footer>
-</article>
+        </span>
+      </div>
+      <%end%>
+      <%= link_to "Criar",new_funcionario_path,:class=>"btn btn-primary"%>
+      <%end%>
+      <table class="table table-striped tabela-colapsavel">
+        <thead>
+          <tr>
+            
+              <th>matricula</th>
+            
+              <th>cargo_id</th>
+            
+              <th>entidade_id</th>
+            
+              <th>categoria_id</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <% @funcionarios.each_with_index do |f,i| %>
+    
+          
+          <tr>
+            
+              <td><%= f.matricula%></td>
+            
+              <td><%= f.cargo_id%></td>
+            
+              <td><%= f.entidade_id%></td>
+            
+              <td><%= f.categoria_id%></td>
+            
+            <td>
+              <%= link_to "Editar", edit_funcionario_path(f),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Visualizar",funcionario_path(f),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Apagar", funcionario_path(f),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+      </td>
+          </tr>
+          <% end%>
+        </tbody>
+      </table>
+      <%= will_paginate @funcionario,renderer: BootstrapPagination::Rails%>

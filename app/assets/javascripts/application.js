@@ -27,3 +27,10 @@
 //= require holder
 //= require ie10-viewport-bug-workaround
 //= require ie-emulation-modes-warning
+
+jQuery(function() {
+    // Executes a callback detecting changes
+    jQuery("#funcionario_cargo_id").change(function(){
+    jQuery.ajax({data:'name=' + this.value, success:function(request){jQuery('#disc').html(request);}, url:"/funcionarios/cargo"
+  })});});
+

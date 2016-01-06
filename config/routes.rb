@@ -3,19 +3,6 @@ Siged20::Application.routes.draw do
 
 
 
-
-
-  resources :categorias
-
-  resources :referencia_niveis
-
-  resources :matrizes
-
-  resources :niveis_ensinos
-
-  resources :periodos
-
-
   resources :requisicoes do
     get :definir_funcionario,:on=>:collection
     post :gerar_links,:on=>:collection
@@ -302,6 +289,7 @@ Siged20::Application.routes.draw do
   match 'lotacoes/prolabore'
   match 'lotacoes/especial',:controller=>"lotacoes",:action=>"lotacao_especial"
   match 'lotacoes/destino'
+  match 'funcionarios/cargo'
   match 'lotacoes/turmas'
   match 'lotacoes/tipo_destino'
   match 'funcionarios/distrito'

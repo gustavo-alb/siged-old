@@ -1,87 +1,38 @@
-<%content_for :links do%>
-		<%=link_to "Pessoas",pessoas_path%><div class="breadcrumb_divider"></div><%=link_to "Funcionários",pessoa_funcionarios_path(@pessoa)%><div class="breadcrumb_divider"></div><a class="current">Detalhes de Funcionários</a>
-
-<%end%>
-<article class="module width_full">
-<header><h3>Detalhes de <%=@pessoa.nome.titleize%>  <% if can? :qualificar,Funcionario %>-<%= link_to  image_tag("/images/badge.png",:title=>"Qualificar Funcionário"),pessoa_qualificar_funcionario_path(@pessoa),:rel=>"facebox",:rev=>"height:300px;width:300px"%><%end%>  </h3></header>
-
-<div class="module_content">
-
-
-<p>
-  <b>Matrícula:</b>
-  <%= @funcionario.matricula %>
-</p>
-
-<p>
-  <b>Cargo:</b>
-  <%= cargo_disciplina(@funcionario) %>
-</p>
-
-<p>
-  <b>Orgão:</b>
-  <%= detalhes(@funcionario.orgao)%>
-</p>
-
-<p>
-  <b>Nível:</b>
-  <%= cod(@funcionario.nivel) %>
-</p>
-
-<p>
-  <b>Quadro:</b>
-  <%= detalhes(@funcionario.entidade)%>
-</p>
-
-<p>
-  <b>Categoria Funcional:</b>
-  <%= detalhes(@funcionario.categoria) %>
-</p>
-
-<p>
-  <b>Jornada:</b>
-  <%= detalhes(@funcionario.nivel,'jornada') %>
-</p>
-
-<p>
-  <b>Data da Nomeação:</b>
-  <%= detalhes_str(@funcionario.data_nomeacao.to_s_br) %>
-</p>
-
-<p>
-  <b>Decreto de nomeacao:</b>
-  <%= detalhes_str(@funcionario.decreto_nomeacao) %>
-</p>
-
-<p>
-  <b>Termo de posse:</b>
-  <%= detalhes_str(@funcionario.termo_posse) %>
-</p>
-
-
-
-<%= municipio_distrito(@funcionario)%>
-
-
- <div id='com'>
-       <%if @funcionario.comissionados.size>0 -%>
-             <%=render :partial=>"mostrar_comissionados"%>
-       <%end%>
-
-       <% if can? :manage,Comissionado %>
-        <div class="submit_link">
-            <%=link_to "Cadastrar Comissionado","/funcionarios/comissionados/#{@funcionario.id}",:rel=>"facebox",:rev=>"height:100px;width:600px"%>
-            </div><br/><%end%>
-  </div>
-
-
-
-</div>
-<footer>
-				<div class="submit_link">
-          <%if can? :update,Funcionario%>
-				  <%= link_to 'Editar', edit_pessoa_funcionario_path(@pessoa,@funcionario),:class=>"alt_btn",:type=>"submit"%> ou <%end%>
-				  <%= link_to 'Voltar', pessoa_funcionarios_path,:type=>"submit" %>
-				</div>
-			</footer>
-</article>
+<%model_class = Funcionario%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Matricula:</strong></dt>
+      <dd><%= @funcionario.matricula %></dd>
+          <dt><strong>Cargo:</strong></dt>
+      <dd><%= @funcionario.cargo_id %></dd>
+          <dt><strong>Entidade:</strong></dt>
+      <dd><%= @funcionario.entidade_id %></dd>
+          <dt><strong>Categoria:</strong></dt>
+      <dd><%= @funcionario.categoria_id %></dd>
+          <dt><strong>Nivel:</strong></dt>
+      <dd><%= @funcionario.nivel_id %></dd>
+          <dt><strong>Disciplina contratacao:</strong></dt>
+      <dd><%= @funcionario.disciplina_contratacao_id %></dd>
+          <dt><strong>Decreto nomeacao:</strong></dt>
+      <dd><%= @funcionario.decreto_nomeacao %></dd>
+          <dt><strong>Termo posse:</strong></dt>
+      <dd><%= @funcionario.termo_posse %></dd>
+          <dt><strong>Orgao:</strong></dt>
+      <dd><%= @funcionario.orgao_id %></dd>
+          <dt><strong>Data nomeacao:</strong></dt>
+      <dd><%= @funcionario.data_nomeacao %></dd>
+          <dt><strong>Municipio:</strong></dt>
+      <dd><%= @funcionario.municipio_id %></dd>
+          <dt><strong>Observacao:</strong></dt>
+      <dd><%= @funcionario.observacao %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', funcionarios_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_funcionario_path(@funcionario), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              funcionario_path(@funcionario),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

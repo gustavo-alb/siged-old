@@ -1,6 +1,7 @@
 <%content_for :titulo do%>
   Pessoas
   
+  
   <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
     <%= search_form_for @q do |f|%>
       <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_cont,:class=>"form-control input-lg"%>
@@ -52,6 +53,7 @@
                   <td><%= detalhes(f.categoria)%></td>
                   <td><b>ADMISSÃO:</b></td>
                   <td><%= f.data_nomeacao.to_s_br%></td>
+                  <td><%= link_to "Editar",edit_pessoa_funcionario_path(p,f),:class=>"btn btn-primary btn-xs"%></td>
                 </tr>
                 <tr class="<%='linha' if p.funcionarios.count>1 and i!=p.funcionarios.count%>">
                   <td><b>QUADRO:</b></td>
