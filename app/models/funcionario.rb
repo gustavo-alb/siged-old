@@ -57,7 +57,6 @@ class Funcionario < ActiveRecord::Base
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:conditions=>{:ativo=>true},:dependent => :destroy
   scope :direcao, joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')
   after_create :criar_comissionado
-  attr_accessor(:nome) {pessoa.nome}
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}
   #attr_accessor(:rsd) {self.regencia_semanal_disponivel}
   attr_accessor(:disciplina) {self.disciplina_nome}
