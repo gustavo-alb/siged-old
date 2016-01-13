@@ -1,7 +1,5 @@
 //= require jquery
 //= require jquery_ujs
-//= require noconflict
-//= require prototype
 //= require effects
 //= require jquery-ui.min
 //= require jquery.purr
@@ -27,6 +25,7 @@
 //= require holder
 //= require ie10-viewport-bug-workaround
 //= require ie-emulation-modes-warning
+//= require selectize
 
 jQuery(function() {
     // Executes a callback detecting changes
@@ -41,3 +40,7 @@ jQuery(function() {
   })});});
 
 
+jQuery('#lotacao_destino_id').selectize({
+    delimiter: ',',
+    persist: false
+});

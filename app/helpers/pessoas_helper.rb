@@ -16,14 +16,14 @@ module PessoasHelper
     elsif !pessoa.telefone_residencial.blank?
       return "#{pessoa.telefone_residencial}"
     else
-      return "Nenhum telefone cadastrado."  
+      return "Nenhum telefone cadastrado."
     end
   end
-  
+
   def local(func)
     texto=""
     if !func.lotacoes.atual.none? and func.status_lotacao=="LOTADO" or func.status_lotacao=="EM TRÂNSITO"
-      texto+="#{func.status_lotacao}/#{destino(func.lotacoes.inativa[0])}"
+      texto+="#{func.status_lotacao}/#{destino(func.lotacoes.inativas[0])}"
     elsif !func.lotacoes.size.nil? and func.status_lotacao=="À DISPOSIÇÃO"
       texto+="#{func.status_lotacao}"
     else texto+="#{func.status_lotacao}"
@@ -32,20 +32,20 @@ module PessoasHelper
   end
 
   def lotacao(func)
-    if func and func.lotacoes.ativo.none?
+    if func and func.lotacoes.ativas.none?
       return "NÃO LOTADO"
     else
-      return detalhes(func.lotacoes.ativo.first.destino)
+      return detalhes(func.lotacoes.ativas.first.destino)
     end
   end
 
 
 
   def l_ant(func)
-    if func and func.lotacoes.inativa.none?
+    if func and func.lotacoes.inativas.none?
       return "NADA CADASTRADO"
     else
-      return detalhes(func.lotacoes.inativa('data_lotacao desc').first.destino)
+      return detalhes(func.lotacoes.inativas('data_lotacao desc').first.destino)
     end
   end
 

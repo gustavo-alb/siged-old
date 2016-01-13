@@ -1,8 +1,8 @@
 # -*- encoding : utf-8 -*-
 class Comissionado < ActiveRecord::Base
   scope :do_func, lambda {|id|where("funcionario_id = ?",id) }
-  scope :exoneracoes,where("ativo = ? and decreto_exoneracao is not null",false)
-  scope :ativos,where("ativo = ? and decreto_exoneracao is null",true)
+  scope :exoneracoes, -> { where("ativo = ? and decreto_exoneracao is not null",false)}
+  scope :ativos, -> { where("ativo = ? and decreto_exoneracao is null",true)}
   scope :busca, lambda { |q| where("funcionario_id like ? or funcionario_id like ?" ,"%#{q}%","%#{q}%") }
   scope :tipos, lambda{|t| where("tipo ilike ?",t)}
   belongs_to :orgao

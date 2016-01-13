@@ -20,7 +20,7 @@ class PessoasController < ApplicationController
         @pessoas = @q.result(distinct: true).order('nome ASC').paginate :page => params[:page], :per_page => 10
       end
     else
-      @pessoas = Pessoa.find_all_by_entidade_id(0).paginate :page => params[:page], :per_page => 10
+      @pessoas = Pessoa.all.order("nome asc").paginate :page => params[:page], :per_page => 10
     end
     respond_to do |format|
       format.html # index.html.erb

@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class Requisicao < ActiveRecord::Base
-  attr_accessible :funcionario_id, :periodo_id, :status, :tipo_requisicao,:funcionario_attributes,:pessoa_attributes,:ambiente,:ambiente_cd
+  #attr_accessible :funcionario_id, :periodo_id, :status, :tipo_requisicao,:funcionario_attributes,:pessoa_attributes,:ambiente,:ambiente_cd
   scope :do_funcionario, lambda {|id|where("funcionario_id = ?",id) }
   scope :em_aberto, where("status in (?)",['aguardando_liberacao','aguardando_tramites_internos','aguardando_envio_a_sead','aguardando_tramites_sead','aguardando_recolhimento_de_portaria','aguardando_notificacao_do_nao_concedimento'])
   belongs_to :funcionario,:inverse_of=>:requisicoes
@@ -28,12 +28,12 @@ class Requisicao < ActiveRecord::Base
       transition :aguardando_tramites_sead =>[:aguardando_recolhimento_de_portaria,:aguardando_notificacao_do_nao_concedimento]
     end
   end
-    
+
 
   def vquantidade
-      if self.funcionario.requisicoes.em_aberto.any?
-        self.errors.add(:periodo_id,"Você já tem uma requisição em andamento.")
-        self.errors.add(:tipo_requisicao,"Você já tem uma requisição em andamento.")
+    if self.funcionario.requisicoes.em_aberto.any?
+      self.errors.add(:periodo_id,"Você já tem uma requisição em andamento.")
+      self.errors.add(:tipo_requisicao,"Você já tem uma requisição em andamento.")
     end
   end
 end

@@ -3,7 +3,7 @@ class LotacoesController < ApplicationController
   # GET /lotacaos
   # GET /lotacaos.xml
   load_and_authorize_resource
-  before_filter :funcionario,:except=>[:escolas_destino,:complementar_esp,:complementar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome,:fator_lotacao_fisico,:disciplinas_especificacao,:sumesp,:convalidar,:salvar_especificacao,:fator_lotacao,:verifica_lotacao,:regencia,:destino,:lotacao_especial,:tipo_destino,:tipo_especificacao,:fator_lotacao_fisico]
+  before_filter :funcionario,:except=>[:escolas_destino,:complementar_esp,:complementar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome,:fator_lotacao_fisico,:disciplinas_especificacao,:sumesp,:convalidar,:salvar_especificacao,:fator_lotacao,:verifica_lotacao,:regencia,:destino,:lotacao_especial,:tipo_destino,:tipo_especificacao,:fator_lotacao_fisico,:destinos]
   before_filter :dados_essenciais,:except=>[:convalidar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome]
 
   def index
@@ -15,6 +15,15 @@ class LotacoesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @lotacaos }
+    end
+  end
+
+  def destinos
+    respond_to do |format|
+      format.json{
+        @escolas = Escola.where('nome LIKE ?', "%#{params[:query]}%").limit(20).order('nome')
+        render :json => { :query => params[:query], :suggestions => escolas.map(&:nome), :data => escolas.map(&:id) }
+      }
     end
   end
 
@@ -335,7 +344,7 @@ class LotacoesController < ApplicationController
     respond_to do |format|
       if @lotacao.save
         format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.
-        Destino: ") }
+            Destino: ") }
         format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
       else
         html="<ul>"

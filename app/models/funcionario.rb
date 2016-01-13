@@ -12,17 +12,17 @@ class Funcionario < ActiveRecord::Base
   scope :busca, lambda { |q| where("matricula like ?" ,"%#{q}%") }
   scope :da_pessoa, lambda {|id|where("pessoa_id = ?",id) }
   scope :diretores, lambda { |q| where("diretor = ?" , true) }
-  scope :disciplina_def, where("disciplina_contratacao_id is not ?",nil)
-  scope :sem_categoria, where("categoria_id is ?",nil)
-  scope :sem_lotacao, includes(:lotacoes).where(:lotacaos => { :funcionario_id => nil })
+  scope :disciplina_def, -> {  where("disciplina_contratacao_id is not ?",nil)}
+  scope :sem_categoria,  -> { where("categoria_id is ?",nil)}
+  scope :sem_lotacao,  -> { includes(:lotacoes).where(:lotacaos => { :funcionario_id => nil })}
   scope :da_escola,lambda {|id|joins(:lotacoes).where("lotacaos.escola_id = ?",id) }
-  scope :ativos,where(:ativo=>true)
+  scope :ativos, -> { where(:ativo=>true)}
 
 
-  scope :efetivos, where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo"),Categoria.find_by_nome("Concurso de 2012"),Categoria.find_by_nome("992")])
-  scope :federais, where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])
-  scope :contratos, where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Administrativo")])
-  scope :em_comissao, where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])
+  scope :efetivos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo"),Categoria.find_by_nome("Concurso de 2012"),Categoria.find_by_nome("992")])}
+  scope :federais,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
+  scope :contratos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Administrativo")])}
+  scope :em_comissao,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
 
 
   #has_and_belongs_to_many :grupos_educacionais,:class_name=>"GrupoEducacional",:join_table=>:colapso_grupo
@@ -43,7 +43,7 @@ class Funcionario < ActiveRecord::Base
   has_many :pontos,:dependent=>:destroy
   #has_many :ponto_diarios
   has_many :funcoes_comissionadas,:class_name=>"Processo",:dependent=>:destroy
-  has_many :pontos_do_mes,:class_name=>"Ponto",:conditions=>["EXTRACT(MONTH FROM data)=? and EXTRACT(YEAR FROM data)=?",Time.now.month,Time.now.year]
+  has_many :pontos_do_mes,:class_name=>"Ponto"
   belongs_to :disciplina_contratacao
   has_many :comissionados,:dependent=>:destroy
   belongs_to :gaveta,:class_name=>"Arquivo"
@@ -51,11 +51,11 @@ class Funcionario < ActiveRecord::Base
   belongs_to :sjuridica,:class_name=>'SituacoesJuridica'
   belongs_to :categoria
   has_many :lotacoes,:class_name=>"Lotacao",:dependent=>:destroy
-  has_many :lotacoes_atuais,:class_name=>"Lotacao",:conditions=>["finalizada = ? and ativo = ? and complementar = ?",true,true,false]
+  has_many :lotacoes_atuais,:class_name=>"Lotacao"
   has_many :processos,:dependent=>:destroy
   has_many :boletins, :class_name=>"BoletimFuncional",:dependent=>:nullify
-  has_many :especificacoes,:class_name=>"EspecificarLotacao",:conditions=>{:ativo=>true},:dependent => :destroy
-  scope :direcao, joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')
+  has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
+  scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}
   after_create :criar_comissionado
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}
   #attr_accessor(:rsd) {self.regencia_semanal_disponivel}

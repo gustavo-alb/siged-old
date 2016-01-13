@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 class TipoLista < ActiveRecord::Base
-  set_table_name :tipo_lista
+  self.table_name = :tipo_lista
   #default_scope where('tipo_lista.entidade_id in (?)',User.usuario_atual.entidade_ids)
 
   has_attached_file :arquivo,:url => '/arquivos/:filename'
@@ -17,12 +17,12 @@ class TipoLista < ActiveRecord::Base
 
   # has_and_belongs_to_many :naturezas,:join_table=>:naturezas_listas
   validates_uniqueness_of :nome,:scope=>:tipo_objeto
-  scope :pessoal,where("tipo_objeto=?","Pessoa")
+  scope :pessoal, -> { where("tipo_objeto=?","Pessoa")}
   scope :pessoal_filtro, lambda {|ids| where("tipo_objeto=? and id not in (?)","Pessoa",ids)}
-  scope :funcional,where("tipo_objeto=?","Funcionário")
-  scope :ativa,where("ativo = ?",true)
-  scope :privadas,where("privada = ?",true)
-  scope :publicas,where("privada = ?",false)
+  scope :funcional, -> { where("tipo_objeto=?","Funcionário")}
+  scope :ativa, -> { where("ativo = ?",true)}
+  scope :privadas, -> { where("privada = ?",true)}
+  scope :publicas, -> { where("privada = ?",false)}
 
   def possui_funcionarios?
     if self.funcionarios.size>0 or self.pessoas.size>0

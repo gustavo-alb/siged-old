@@ -22,6 +22,7 @@ Siged20::Application.configure do
 
   # See everything in the log (default is :info)
   config.log_level = :debug
+  config.eager_load = false
 
 
   # Use a different logger for distributed setups
@@ -50,4 +51,3 @@ Siged20::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
 end
-

@@ -6,12 +6,12 @@ class Escola < ActiveRecord::Base
   validates_presence_of :codigo,:nome,:message=>" Não pode ficar em branco!"
   validates_uniqueness_of :nome, :message=>"Já cadastrado",:scope => [:codigo,:nome_da_escola ],:case_sensitive=>false
 
-  has_many :turmas,:include=>:ano_letivo,:conditions=>['turmas.ano_letivo_id = ano_letivo_id']
+  has_many :turmas,:through=>:ano_letivo
   has_many :salas_ambiente,:class_name=>"Ambiente.salas_ambientes"
   has_many :settings
   has_many :ambientes,:dependent=>:destroy
-  has_many :funcionarios,:through=>:lotacoes,:include=>[:pessoa],:conditions=>["lotacaos.ativo = ?",true],:order=>"pessoas.nome asc"
-  has_many :comissionados,:conditions=>["ativo = ?",true]
+  has_many :funcionarios,:through=>:lotacoes
+  has_many :comissionados
   has_many :lotacoes,:class_name=>"Lotacao",:dependent=>:destroy,:as=>:destino
   has_many :especificacoes,:class_name=>'EspecificarLotacao',:dependent=>:destroy
   has_one :diretor_adjunto
@@ -36,12 +36,12 @@ class Escola < ActiveRecord::Base
   #scoped_search
 
   scope :busca, lambda { |q| where("codigo ilike ? or nome_da_escola ilike ?" ,"%#{q}%","%#{q}%") }
-  scope :municipal, where("rede ilike ?","municipal")
-  scope :efetivos, joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo")])
-  scope :federais, joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])
-  scope :contratos, joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Administrativo")])
-  scope :em_comissao, joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])
-  scope :estadual, where("rede ilike ?","estadual")
+  scope :municipal, -> {  where("rede ilike ?","municipal")}
+  scope :efetivos,  -> { joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo")])}
+  scope :federais,  -> { joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
+  scope :contratos,  -> { joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Administrativo")])}
+  scope :em_comissao,  -> { joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
+  scope :estadual,  -> { where("rede ilike ?","estadual")}
 
   ZONA=[["Urbana","Urbana"],["Rural","Rural"]]
 

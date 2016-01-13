@@ -43,7 +43,7 @@ module Siged20
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     config.assets.enabled = true
-    config.active_record.whitelist_attributes = false
+    #config.active_record.whitelist_attributes = false
 
 
     config.generators do |g|

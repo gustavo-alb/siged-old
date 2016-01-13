@@ -2,7 +2,7 @@
 class DisciplinaContratacao < ActiveRecord::Base
   #default_scope where('entidade_id in (?)',User.usuario_atual.entidade_ids)
 
-  set_table_name :descricao_cargos
+  self.table_name = "descricao_cargos"
   scope :busca, lambda { |q| where("codigo ilike ? or nome ilike ?" ,"%#{q}%","%#{q}%") }
   belongs_to :tipo
   belongs_to :nivel_cargo

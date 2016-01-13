@@ -258,6 +258,7 @@ Siged20::Application.routes.draw do
       get "boletins"
       get "exibir_boletim"
       resources :lotacoes do
+        get "destinos"
         get "devolver_funcionario"
         get "confirmar_lotacao"
         get "cancelar_lotacao"
@@ -283,28 +284,28 @@ Siged20::Application.routes.draw do
 
   # Sample of regular route:
   post 'administracao/tarefas/send_data'
-  match 'funcionarios/folha'
+  get 'funcionarios/folha'
   post 'funcionarios/cargo'
-  match 'pessoas/naturalidade'
-  match 'lotacoes/prolabore'
-  match 'lotacoes/especial',:controller=>"lotacoes",:action=>"lotacao_especial"
-  match 'lotacoes/destino'
-  match 'lotacoes/turmas'
-  match 'lotacoes/tipo_destino'
-  match 'funcionarios/distrito'
-  match 'pessoas/distrito'
-  match 'funcionarios/diretor'
-  match 'administracao/tarefas/atributos'
-  match 'administracao/tarefas/verificar_atributo'
-  match 'lotacoes/secretarias',:controller=>"lotacoes",:action=>"escolas_destino"
-  match 'folha/financeiro/auto_complete_for_folha_financeiro_funcionario_id',:controller=>"folha/financeiros",:action=>'auto_complete_for_folha_financeiro_funcionario_id'
-  match 'folha/financeiro/auto_complete_for_folha_financeiro_evento_id',:controller=>"folha/financeiros",:action=>'auto_complete_for_folha_financeiro_evento_id'
-  match 'lotacoes/verifica_lotacao/:funcionario_id', :controller=> 'lotacoes',:action=>"verifica_lotacao"
-  # match 'fotos/upload/:pessoa_id', :controller=> 'fotos',:action=>"upload"
+  get 'pessoas/naturalidade'
+  get 'lotacoes/prolabore'
+  get 'lotacoes/especial',:controller=>"lotacoes",:action=>"lotacao_especial"
+  get 'lotacoes/destino'
+  get 'lotacoes/turmas'
+  get 'lotacoes/tipo_destino'
+  get 'funcionarios/distrito'
+  get 'pessoas/distrito'
+  get 'funcionarios/diretor'
+  get 'administracao/tarefas/atributos'
+  get 'administracao/tarefas/verificar_atributo'
+  get 'lotacoes/secretarias',:controller=>"lotacoes",:action=>"escolas_destino"
+  get 'folha/financeiro/auto_complete_for_folha_financeiro_funcionario_id',:controller=>"folha/financeiros",:action=>'auto_complete_for_folha_financeiro_funcionario_id'
+  get 'folha/financeiro/auto_complete_for_folha_financeiro_evento_id',:controller=>"folha/financeiros",:action=>'auto_complete_for_folha_financeiro_evento_id'
+  get 'lotacoes/verifica_lotacao/:funcionario_id', :controller=> 'lotacoes',:action=>"verifica_lotacao"
+  # get 'fotos/upload/:pessoa_id', :controller=> 'fotos',:action=>"upload"
   # Keep in mind you can assign values other than :controller and :action
 
   # Sample of named route:
-  #  match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
+  #  get 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
@@ -345,9 +346,9 @@ Siged20::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}
-  root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}
-  root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}
+  # root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}
+  # root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}
+  # root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}
   root :to => "home#index"
 
 
@@ -355,5 +356,5 @@ Siged20::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  get ':controller(/:action(/:id(.:format)))'
 end

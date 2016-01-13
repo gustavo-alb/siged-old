@@ -2,8 +2,7 @@
 require "barby/barcode/code_39"
 require "barby/outputter/png_outputter"
 class Lotacao < ActiveRecord::Base
-  set_table_name :lotacaos
-  #escola_id sempre nil em lotacao especial
+  self.table_name = "lotacaos"
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
   validates_presence_of :usuario_id,:funcionario_id
   validates_presence_of :destino_id,:message=>"É necessário que o destino seja válido"
@@ -22,29 +21,32 @@ class Lotacao < ActiveRecord::Base
   has_many :status,:class_name=>"Status",:through=>:processos,:source=>"status"
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
 
-  scope :em_aberto, where("finalizada = ?",false)
-  scope :finalizada, where("finalizada = ?",true)
-  scope :atual,where("finalizada = ? and ativo = ? and complementar = ?",true,true,false)
-  scope :complementares,where("finalizada = ? and ativo = ? and complementar = ?",true,true,true)
-  scope :ativo, where("ativo = ?",true)
-  scope :inativa, where("ativo = ?",false)
-  scope :confirmada_fechada, where("finalizada = ? and ativo=?",true,true)
+  scope :em_aberto, -> { where("finalizada = ?",false)}
+  scope :finalizadas, -> { where("finalizada = ?",true)}
+  scope :atual,-> { where("finalizada = ? and ativo = ? and complementar = ?",true,true,false)}
+  scope :complementares,-> { where("finalizada = ? and ativo = ? and complementar = ?",true,true,true)}
+  def self.inativas
+    Lotacao.where("ativo = false")
+  end
+  #scope :inativa, -> { where("ativo = ?",false)}
+  scope :ativas, -> { where(:ativo=>true)}
+  scope :confirmada_fechada, -> { where("finalizada = ? and ativo=?",true,true)}
   scope :verifica, lambda {|func,escola| where("funcionario_id = ? and escola_id=?",func,escola)}
-  scope :pro_labore, where("tipo_lotacao = ?","PROLABORE")
-  scope :sumaria, where("tipo_lotacao = ?","SUMARIA")
-  scope :sumaria_especial, where("tipo_lotacao = ?","SUMARIA ESPECIAL")
-  scope :comissionada,where("tipo_lotacao = ?","COMISSÃO")
-  scope :especial, where("tipo_lotacao = ?","ESPECIAL")
-  scope :regular, where("tipo_lotacao = ?","REGULAR")
-  scope :a_convalidar, where(:convalidada=>false)
+  scope :pro_labore, -> { where("tipo_lotacao = ?","PROLABORE")}
+  scope :sumaria, -> { where("tipo_lotacao = ?","SUMARIA")}
+  scope :sumaria_especial, -> { where("tipo_lotacao = ?","SUMARIA ESPECIAL")}
+  scope :comissionada,-> { where("tipo_lotacao = ?","COMISSÃO")}
+  scope :especial, -> { where("tipo_lotacao = ?","ESPECIAL")}
+  scope :regular, -> { where("tipo_lotacao = ?","REGULAR")}
+  scope :a_convalidar, -> { where(:convalidada=>false)}
   scope :da_escola,lambda{|esc|where("escola_id = ?",esc)}
-  scope :em_escolas_urbanas, where("destino_id in (?) and destino_type = 'Escola'",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Urbana'"))
-  scope :interiorizacao_urbana,joins(:funcionario).where("funcionarios.interiorizacao = true and destino_type = 'Escola' and lotacaos.destino_id in (?)",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Urbana'"))
-  scope :em_escolas_rurais, where("destino_id in (?) and destino_type = 'Escola'",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Rural'"))
-  scope :em_prefeituras, where("destino_id in (?) and destino_type = 'Orgao'",Orgao.where("nome ilike 'Prefeitura%'"))
-  scope :em_orgaos, where("destino_type = 'Orgao'")
-  scope :em_setoriais, where("destino_type = 'Departamento'")
-  scope :com_interiorizacao,joins(:funcionario).where("funcionarios.interiorizacao = true")
+  scope :em_escolas_urbanas, -> { where("destino_id in (?) and destino_type = 'Escola'",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Urbana'"))}
+  scope :interiorizacao_urbana, -> { joins(:funcionario).where("funcionarios.interiorizacao = true and destino_type = 'Escola' and lotacaos.destino_id in (?)",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Urbana'"))}
+  scope :em_escolas_rurais, -> { where("destino_id in (?) and destino_type = 'Escola'",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Rural'"))}
+  scope :em_prefeituras, -> { where("destino_id in (?) and destino_type = 'Orgao'",Orgao.where("nome ilike 'Prefeitura%'"))}
+  scope :em_orgaos, -> { where("destino_type = 'Orgao'")}
+  scope :em_setoriais, -> { where("destino_type = 'Departamento'")}
+  scope :com_interiorizacao, -> { joins(:funcionario).where("funcionarios.interiorizacao = true")}
   attr_accessor :destino_nome
   #delegate :nome,:to=>:destino
   after_create :codigo
