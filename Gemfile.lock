@@ -107,6 +107,7 @@ GEM
       responders
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    devise-bootstrap-views (0.0.7)
     erubis (2.7.0)
     eventmachine (1.0.8)
     execjs (2.6.0)
@@ -283,6 +284,7 @@ DEPENDENCIES
   cocoon
   combine_pdf
   devise
+  devise-bootstrap-views
   friendly_id
   iconv
   jquery-historyjs

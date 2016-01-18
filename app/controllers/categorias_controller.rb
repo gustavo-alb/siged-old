@@ -5,7 +5,7 @@ class CategoriasController < ApplicationController
   # GET /categorias.xml
   def index
     @q = Categoria.ransack(params[:q])
-    @categorias = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @categorias = @q.result.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb

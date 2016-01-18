@@ -4,7 +4,7 @@ class DisciplinaContratacoesController < ApplicationController
   # GET /disciplina_contratacoes.xml
   def index
     @q = DisciplinaContratacao.ransack(params[:q])
-    @disciplina_contratacoes = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @disciplina_contratacoes = @q.result.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb

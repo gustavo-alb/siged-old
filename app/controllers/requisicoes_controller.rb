@@ -7,7 +7,7 @@ class RequisicoesController < ApplicationController
   layout 'requisicoes'
   def index
     @funcionario = Funcionario.find(params[:funcionario])
-    @requisicoes = Requisicao.do_funcionario(@funcionario.id).order("created_at asc").paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @requisicoes = Requisicao.do_funcionario(@funcionario.id).order("created_at asc").paginate :page => params[:page], :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @requisicoes }
@@ -36,7 +36,7 @@ class RequisicoesController < ApplicationController
     end
   end
 
-   def requerimento
+  def requerimento
     @requisicao = Requisicao.find(params[:requisicao_id])
     @funcionario = @requisicao.funcionario
     @pessoa = @requisicao.funcionario.pessoa

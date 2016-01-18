@@ -5,9 +5,9 @@ class TextosController < ApplicationController
   load_and_authorize_resource
   before_filter :dados_essenciais,:categoria
   def index
-    @search = Texto.scoped_search(params[:search])  
-    @textos = @search.find(:all,:conditions=>["categoria_id = ?",@categoria.id]).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @search = Texto.scoped_search(params[:search])
+    @textos = @search.find(:all,:conditions=>["categoria_id = ?",@categoria.id]).paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @textos }
@@ -104,4 +104,3 @@ private
 def categoria
   @categoria = Categoria.find(params[:categoria_id])
 end
-

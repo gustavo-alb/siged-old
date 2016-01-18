@@ -6,7 +6,7 @@ class PontoAssinaturasController < ApplicationController
   before_filter :ponto_assinatura_dados
   def index
     @search = PontoAssinatura.scoped_search(params[:search])
-    @ponto_assinaturas = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @ponto_assinaturas = @search.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -89,9 +89,8 @@ class PontoAssinaturasController < ApplicationController
   end
   private
   def ponto_assinatura_dados
-   @pessoa = Pessoa.find(params[:pessoa_id])
-   @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
-   @ponto_diario = @funcionarios.ponto_diarios.find(params[:ponto_diario_id])
- end
+    @pessoa = Pessoa.find(params[:pessoa_id])
+    @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
+    @ponto_diario = @funcionarios.ponto_diarios.find(params[:ponto_diario_id])
+  end
 end
-

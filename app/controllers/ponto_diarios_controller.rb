@@ -6,7 +6,7 @@ class PontoDiariosController < ApplicationController
   before_filter :ponto_diarios_dados
   before_filter :ponto_assinatura_dados,:only=>[:assinar_ponto]
   def index
-    @ponto_diarios = PontoDiario.do_ano(Time.now.year).do_mes(Time.now.month).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @ponto_diarios = PontoDiario.do_ano(Time.now.year).do_mes(Time.now.month).all.paginate :page => params[:page], :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @ponto_diarios }
@@ -85,15 +85,14 @@ class PontoDiariosController < ApplicationController
       format.xml  { head :ok }
     end
   end
-private
+  private
   def ponto_diarios_dados
-   @pessoa = Pessoa.find(params[:pessoa_id])
-   @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
-   end
-   def ponto_assinatura_dados
-   @pessoa = Pessoa.find(params[:pessoa_id])
-   @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
-   @ponto_diario = @funcionario.ponto_diarios.find(params[:ponto_diario_id])
-   end
+    @pessoa = Pessoa.find(params[:pessoa_id])
+    @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
+  end
+  def ponto_assinatura_dados
+    @pessoa = Pessoa.find(params[:pessoa_id])
+    @funcionario = @pessoa.funcionarios.find(params[:funcionario_id])
+    @ponto_diario = @funcionario.ponto_diarios.find(params[:ponto_diario_id])
+  end
 end
-

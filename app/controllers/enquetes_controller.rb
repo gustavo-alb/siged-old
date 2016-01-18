@@ -3,8 +3,8 @@ class EnquetesController < ApplicationController
   # GET /enquetes
   # GET /enquetes.xml
   def index
-    @enquetes = Enquete.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @enquetes = Enquete.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @enquetes }
@@ -82,4 +82,3 @@ class EnquetesController < ApplicationController
     end
   end
 end
-

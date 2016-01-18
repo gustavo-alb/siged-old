@@ -6,7 +6,7 @@ class FormacoesController < ApplicationController
   before_filter :pessoa,:only=>[:new,:create,:edit,:update,:destroy,:show,:index]
   before_filter :dados_essenciais
   def index
-    @formacoes = Formacao.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @formacoes = Formacao.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -97,8 +97,7 @@ class FormacoesController < ApplicationController
     end
   end
 end
- private
-  def pessoa
+private
+def pessoa
   @pessoa = Pessoa.find(params[:pessoa_id])
-  end
-
+end

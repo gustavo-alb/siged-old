@@ -17,7 +17,7 @@ class OrgaosController < ApplicationController
 
   def agenda
     @orgao = Orgao.find(params[:orgao_id])
-    @departamentos = @orgao.departamentos.order(:hierarquia)#.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 20
+    @departamentos = @orgao.departamentos.order(:hierarquia)#.paginate :page => params[:page], :per_page => 20
     respond_to do |format|
       format.html # index.html.erb
       format.pdf do
@@ -43,7 +43,7 @@ class OrgaosController < ApplicationController
 
   def funcionarios
     @orgao = Orgao.find(params[:orgao_id])
-    @funcionarios = @orgao.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",true,true).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 8
+    @funcionarios = @orgao.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",true,true).paginate :page => params[:page], :per_page => 8
     #@cargos_principais = Cargo.where("id in (?)",[Cargo.find_by_nome("PEDAGOGO").id,Cargo.find_by_nome("PROFESSOR").id,Cargo.find_by_nome("ESPECIALISTA DE EDUCACAO").id,Cargo.find_by_nome("AUXILIAR EDUCACIONAL").id,Cargo.find_by_nome("CUIDADOR").id,Cargo.find_by_nome("INTERPRETE").id]).order(:nome)
     #@outros_cargos = Cargo.where("id not in (?)",@cargos_principais).order(:nome)
     #@funcionarios_cargos_principais = @orgao.funcionarios.where("cargo_id in (?)",@cargos_principais).group_by{|t|t.cargo}

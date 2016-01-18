@@ -5,7 +5,7 @@ class MunicipiosController < ApplicationController
   # GET /municipios.xml
   def index
     @search = Municipio.scoped_search(params[:search])
-    @municipios = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 16
+    @municipios = @search.all.paginate :page => params[:page], :per_page => 16
 
     respond_to do |format|
       format.html # index.html.erb
@@ -84,4 +84,3 @@ class MunicipiosController < ApplicationController
     end
   end
 end
-

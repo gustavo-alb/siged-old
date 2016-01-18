@@ -4,7 +4,7 @@ class Administracao::TarefasController < ApplicationController
   # GET /administracao/tarefas.xml
   def index
     #@search = Administracao::Tarefa.scoped_search(params[:search])
-    @administracao_tarefas =  Administracao::Tarefa.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @administracao_tarefas =  Administracao::Tarefa.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -41,22 +41,22 @@ class Administracao::TarefasController < ApplicationController
   end
 
   def atributos
-  $classe = params[:classe]
-  if !$classe.blank?
-  @atributos = Kernel.const_get($classe).new.attributes.collect{|a|a.first}
-  render :partial=>'atributos'
-  else
-  render :partial=>'blank'
-  end
+    $classe = params[:classe]
+    if !$classe.blank?
+      @atributos = Kernel.const_get($classe).new.attributes.collect{|a|a.first}
+      render :partial=>'atributos'
+    else
+      render :partial=>'blank'
+    end
   end
 
   def verificar_atributo
-     @classe = $classe
-     @atributo = params[:attrib]
-  if !@classe.blank?
-    if  Kernel.const_get($classe).testar_relacionamento(@atributo)
-      r = @atributo[0,@atributo.size-3]
-      relac = r.camelize
+    @classe = $classe
+    @atributo = params[:attrib]
+    if !@classe.blank?
+      if  Kernel.const_get($classe).testar_relacionamento(@atributo)
+        r = @atributo[0,@atributo.size-3]
+        relac = r.camelize
         if Kernel.const_get(relac).last.respond_to?('nome')
           @objetos = Kernel.const_get(relac).all.collect{|a|[a.nome,a.id]}
         elsif Kernel.const_get(relac).last.respond_to?('nome')
@@ -68,10 +68,10 @@ class Administracao::TarefasController < ApplicationController
 
         end
       end
-   render :partial=>'tipo'
-  else
-     render :partial=>'blank'
-  end
+      render :partial=>'tipo'
+    else
+      render :partial=>'blank'
+    end
 
   end
 
@@ -124,4 +124,3 @@ class Administracao::TarefasController < ApplicationController
     end
   end
 end
-

@@ -4,9 +4,9 @@ class Folha::CompetenciasController < ApplicationController
   # GET /folha/competencias
   # GET /folha/competencias.xml
   def index
-    @search = Folha::Competencia.scoped_search(params[:search])  
-    @folha_competencias = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @search = Folha::Competencia.scoped_search(params[:search])
+    @folha_competencias = @search.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @folha_competencias }
@@ -84,4 +84,3 @@ class Folha::CompetenciasController < ApplicationController
     end
   end
 end
-

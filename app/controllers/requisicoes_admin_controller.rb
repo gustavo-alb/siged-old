@@ -15,7 +15,7 @@ class RequisicoesAdminController < ApplicationController
 
   def index
     @q = Requisicao.ransack(params[:q])
-    @requisicoes = @q.result(distinct: true).accessible_by(current_ability).order("created_at asc").paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @requisicoes = @q.result(distinct: true).accessible_by(current_ability).order("created_at asc").paginate :page => params[:page], :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @requisicoes }

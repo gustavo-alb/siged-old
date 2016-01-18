@@ -1,137 +1,42 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<%= favicon_link_tag "favicon.ico" %>
-
-<head>
-	<meta charset="utf-8"/>
-	<title>SIGED 2.0::SECRETARIA DE ESTADO DA EDUCAÇÃO</title>
-	<!--[if lt IE 9]>
-	<link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" />
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-
-  <%= stylesheet_link_tag "facebox.css","ie.css","layout.css","pdf.css","tabs.css","verticalaccordion.css" %>
-  <%= javascript_include_tag :defaults %>
-  <%= javascript_include_tag "accordion" %>
-  <%= javascript_include_tag "facebox.js" %>
-  <%= javascript_include_tag "maskedinput.js" %>
-  <%=javascript_include_tag "tabs.js"%>
-  <%= csrf_meta_tag %>
-
-
-</head>
-
-
-<body>
-<%if user_signed_in? then%>
-	<header id="header">
-		<hgroup>
-
-			<h1 class="site_title"><a href="index.html">Painel do usuário </a></h1>
-
-			<h2 class="section_title">SIGED</h2>
-		</hgroup>
-	</header> <!-- end of header bar -->
-
-
-
-	<section id="secondary_bar">
-		<div class="user">
-
-			<p><%=current_user.name%></p>
-			<!-- <a class="logout_user" href="#" title="Logout">Logout</a> -->
-		</div>
-		<div class="breadcrumbs_container">
-
-			<article class="breadcrumbs"><a href="/">Início</a><div class="breadcrumb_divider"></div><%=yield :links%></article>
-		</div>
-	</section><!-- end of secondary bar -->
-
-	<aside id="sidebar" class="column">
-      <%=image_tag("logoSiged.png",:alt => "Sistema de Gerenciamento Educacional")%>
-		<hr/>
-  <% if current_user.role?("lotacao")==false%>
-		<h3>Principal</h3>
-
-		<ul class="toggle">
-			<li class="icn_new_article"><a href="/pessoas">Pessoas</a></li>
-			<li class="icn_escola"><a href="/escolas">Escolas</a></li>
- 			<li class="icn_edit_article"><%=link_to "Convalidar",lotacoes_convalidar_path%></li>
-
-	</ul><%if current_user.role?("admin")==true%>
-  <h3>Administração</h3>
-		<ul class="toggle">
-      <li class="icn_folder"><a href="/cargos">Cargos</a></li>
-      <li class="icn_photo"><a href="/orgaos">Orgãos</a></li>
-      <li class="icn_categories"><a href="/matrizes">Matrizes</a></li>
-      <li class="shoebox"><a href="/descricao_cargos">Descrição de Cargos</a></li>
-      <li class="icn_settings"><a href="/referencia_niveis">Níveis</a></li>
-      <li class="icn_security"><a href="/situacoes_juridicas">Situação Jurídica</a></li>
-	  <li class="icn_tags"><a href="/roles">Papéis</a></li>
-      <li class="icn_listas"><a href="/tipo_lista">Listas</a></li>
-      <li class="icn_profile"><a href="/usuarios">Usuários</a></li>
-	  </ul>
-  <%end%>
-  <%else%>
-  <h3>Principal</h3>
-
-		<ul class="toggle">
-			<li class="icn_new_article"><a href="/pessoas">Lotação e Movimentação</a></li>
-			<li class="icn_edit_article"><a href="#">Controle de Especificação</a></li>
-  <%end%>
-
-  <h3>Usuário</h3>
-
-		<ul class="toggle">
-			<li class="icn_edit_article"><%=link_to "Perfil", edit_user_registration_path %></li>
-			<li class="icn_new_article"><%=link_to "Sair", destroy_user_session_path %></li>
-
-	</ul>
-		<!--<h3>Media</h3>
-		<ul class="toggle">
-			<li class="icn_folder"><a href="#">File Manager</a></li>
-		<li class="icn_photo"><a href="#">Gallery</a></li>
-			<li class="icn_audio"><a href="#">Audio</a></li>
-			<li class="icn_video"><a href="#">Video</a></li>
-		</ul>
-		<h3>Admin</h3>
-		<ul class="toggle">
-			<li class="icn_settings"><a href="#">Options</a></li>
-			<li class="icn_security"><a href="#">Security</a></li>
-			<li class="icn_jump_back"><a href="#">Logout</a></li>
-		</ul>-->
-
-		<footer>
-			<hr />
-			<p><strong>Copyright &copy; 2011 AmapáOnRails</strong></p>
-		</footer>
-	</aside><!-- end of sidebar -->
-  <%end%>
-	<section id="main" class="column">
-
-    <%=yield%>
-    <div class="clear"></div>
-&nbsp;
- <div class="clear"></div>
-
-	</section>
-<script type="text/javascript" >
-  
-	//
-	// You can hide the accordions on page load like this, it maintains accessibility
-	//
-	// Special thanks go out to Will Shaver @ http://primedigit.com/
-	//
-	var verticalAccordions = $$('.accordion_toggle');
-	verticalAccordions.each(function(accordion) {
-		$(accordion.next(0)).setStyle({
-		  height: '0px'
-		});
-	});
-
-	
-</script>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="MALOHKA">
+    <link rel="icon" href="/assets/favicon.ico">
+    <title>SIGED 4</title>
+    <!-- Bootstrap core CSS -->
+    <%=stylesheet_link_tag "application.css"%>
+    <%=csrf_meta_tags%>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">SIGED 4</a>
+        </div>
+      </div>
+    </nav>
+    <div class="col-md-12 main">
+      <h1 class="page-header"><%=yield :titulo%></h1>
+      <%= yield%>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<%=javascript_include_tag "application.js"%>
 </body>
-
 </html>
-

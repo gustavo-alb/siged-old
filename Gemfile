@@ -64,3 +64,4 @@ gem "selectize-rails"
 gem 'simple_form_autocomplete'
 gem 'activerecord-session_store'
 gem "iconv"
+gem 'devise-bootstrap-views'

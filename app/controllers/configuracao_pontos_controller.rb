@@ -4,7 +4,7 @@ class ConfiguracaoPontosController < ApplicationController
   # GET /configuracao_pontos
   # GET /configuracao_pontos.xml
   def index
-    @configuracao_pontos = ConfiguracaoPonto.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @configuracao_pontos = ConfiguracaoPonto.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -83,4 +83,3 @@ class ConfiguracaoPontosController < ApplicationController
     end
   end
 end
-

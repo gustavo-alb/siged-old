@@ -4,9 +4,9 @@ class Folha::EventosController < ApplicationController
   # GET /folha/eventos
   # GET /folha/eventos.xml
   def index
-    @search = Folha::Evento.scoped_search(params[:search])  
-    @folha_eventos = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @search = Folha::Evento.scoped_search(params[:search])
+    @folha_eventos = @search.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @folha_eventos }
@@ -84,4 +84,3 @@ class Folha::EventosController < ApplicationController
     end
   end
 end
-

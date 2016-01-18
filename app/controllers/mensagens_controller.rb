@@ -4,8 +4,8 @@ class MensagensController < ApplicationController
   # GET /mensagens.xml
   before_filter :dados_essenciais
   def index
-    @mensagens = Mensagem.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @mensagens = Mensagem.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @mensagens }
@@ -50,15 +50,15 @@ class MensagensController < ApplicationController
     @usuario = User.usuario_atual
     @mensagens = Mensagem.entrada(@usuario)
 
-      if @mensagem.save
-       render :update do |page|
+    if @mensagem.save
+      render :update do |page|
         page.visual_effect :highlight,"form"
         page.replace_html "form", :partial=>"inbox"
       end
     else
-     redirect_to :back,:alert=>'Mensagem não pode ser enviada. Tente novamente.'
+      redirect_to :back,:alert=>'Mensagem não pode ser enviada. Tente novamente.'
+    end
   end
-end
 
 
   # PUT /mensagens/1
@@ -80,14 +80,13 @@ end
   # DELETE /mensagens/1
   # DELETE /mensagens/1.xml
   def destroy
-   @usuario = User.usuario_atual
-   @mensagens = Mensagem.entrada(@usuario)
-   @mensagem = Mensagem.find(params[:id])
-   @mensagem.destroy
-   render :update do |page|
-    page.visual_effect :highlight,"inbox"
-    page.replace_html "inbox", :partial=>"inbox"
+    @usuario = User.usuario_atual
+    @mensagens = Mensagem.entrada(@usuario)
+    @mensagem = Mensagem.find(params[:id])
+    @mensagem.destroy
+    render :update do |page|
+      page.visual_effect :highlight,"inbox"
+      page.replace_html "inbox", :partial=>"inbox"
+    end
   end
 end
-end
-

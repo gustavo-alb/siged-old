@@ -9,7 +9,7 @@ class SettingsController < ApplicationController
 
   def index
     #@search = .scoped_search(params[:search])
-    @settings = Setting.da_escola(@escola.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @settings = Setting.da_escola(@escola.id).all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb

@@ -23,8 +23,8 @@
             <td ALIGN=CENTER><%=(d.funcionarios.count*100)/@professores.count%></td>
             <td ALIGN=CENTER><%=d.funcionarios.joins(:lotacoes).where("lotacaos.ativo = true").count%></td>
             <td ALIGN=CENTER><%=(d.funcionarios.joins(:lotacoes).where("lotacaos.ativo = true").count*100)/d.funcionarios.count%></td>
-            <td ALIGN=CENTER><%=d.funcionarios.find(:all,:joins=>[:especificacoes]).count%></td>
-            <td ALIGN=CENTER><%=(d.funcionarios.find(:all,:joins=>[:especificacoes]).count*100)/d.funcionarios.count%></td>
+            <td ALIGN=CENTER><%=d.funcionarios.joins(:especificacoes).count%></td>
+            <td ALIGN=CENTER><%=(d.funcionarios.joins(:especificacoes).count*100)/d.funcionarios.count%></td>
           </tr>
         <%end%>
         <tr>

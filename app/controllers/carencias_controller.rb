@@ -6,7 +6,7 @@ class CarenciasController < ApplicationController
   load_and_authorize_resource
 
 
-  
+
 
   # def auto_complete_for_escola_nome
   #   @escolas = Escola.find(:all,
@@ -24,8 +24,8 @@ class CarenciasController < ApplicationController
   # end
 
   def index
-    
-    @carencias = @ano_letivo.carencias.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+
+    @carencias = @ano_letivo.carencias.all.paginate :page => params[:page], :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @carencias }
@@ -56,7 +56,7 @@ class CarenciasController < ApplicationController
   # GET /carencias/1/edit
   def edit
     @carencia = Carencia.find(params[:id])
-    
+
   end
 
   # POST /carencias
@@ -108,4 +108,3 @@ class CarenciasController < ApplicationController
     @ano_letivo = AnoLetivo.find_by_ano(Date.today.year)
   end
 end
-

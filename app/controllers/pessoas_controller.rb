@@ -86,7 +86,7 @@ class PessoasController < ApplicationController
 
   def boletins
     @pessoa = Pessoa.find(params[:pessoa_id])
-    @boletins = BoletimPessoal.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @boletins = BoletimPessoal.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :per_page => 10
   end
 
   def gerar_boletim

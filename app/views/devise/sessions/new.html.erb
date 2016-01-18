@@ -1,53 +1,27 @@
-<%= stylesheet_link_tag "screen.css" %>
-<body id="login-bg"> 
- 
-<!-- Start: login-holder -->
-<div id="login-holder">
-
-	<!-- start logo -->
-	<div id="logo-login">
-		<a><img src="../images/logoSiged.png" width="290" height="109" alt="" /></a>
-	</div>
-	 <!-- end logo -->
-	
-	<div class="clear"></div>
-			  <%=mensagens_login%>
-	<!--  start loginbox ................................................................................. -->
-	<div id="loginbox">
-
-	<!--  start login-inner -->
-	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-	<div id="login-inner">
-		<table border="0" cellpadding="0" cellspacing="0">
-		<tr>
-			<th><%= f.label :usuário %></th>
-			<td><%= f.text_field :username, :class=>"login-inp" %></td>
-		</tr>
-		<tr>
-			<th><%= f.label :senha %></th>
-			<td><%= f.password_field :password, :class=>"login-inp" %></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td valign="top">
-				<% if devise_mapping.rememberable? -%>
-			    <p><%= f.check_box :remember_me, :class=>"checkbox-size" %> <%= f.label :Lembrar? %></p>
-			  <% end -%></td>
-		</tr>
-		<tr>
-			<th></th>
-			<td><br/><%= f.submit "Entrar" %> </td>
-			
-		</tr>
-		</table> <% end %>
-		<br/>
-		
-
-	</div>
- <!--  end loginbox -->
-
-	
-
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= t('.sign_in', :default => "Sign in") %></h4>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }) do |f| %>
+      <div class="form-group">
+        <%= f.label "Usuário" %>
+        <%= f.text_field :username, autofocus: true, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label "Senha" %>
+        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+      </div>
+      <% if devise_mapping.rememberable? %>
+        <div class="checkbox">
+          <label>
+            <%= f.check_box :remember_me %>
+            <%= f.label "Lembrar?" %>
+          </label>
+        </div>
+      <% end %>
+      <%= f.submit  t('.sign_in', :default => "Sign in"), class: "btn btn-primary" %>
+    <% end %>
+  </div>
 </div>
-<!-- End: login-holder -->
-</body>
+<%#= render "devise/shared/links" %>

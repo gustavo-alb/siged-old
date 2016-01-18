@@ -9,7 +9,7 @@ class LotacoesController < ApplicationController
   def index
     @lotacaos = Lotacao.all
     @lotacao = Lotacao.new
-    @lotacao_aberta = @funcionario.lotacoes.em_aberto.find :all,:conditions=>['funcionario_id=?',@funcionario.id]
+    @lotacao_aberta = @funcionario.lotacoes.em_aberto.where('funcionario_id=?',@funcionario.id)
     @lotacoes = @funcionario.lotacoes.order("data_lotacao desc")
     @processos = @funcionario.processos.order("created_at ASC, processo ASC")
     respond_to do |format|

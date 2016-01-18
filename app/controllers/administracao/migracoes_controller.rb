@@ -4,8 +4,8 @@ class Administracao::MigracoesController < ApplicationController
   # GET /administracao/migracoes.xml
   def index
 
-    @administracao_migracoes = Administracao::Migracao.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @administracao_migracoes = Administracao::Migracao.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @administracao_migracoes }
@@ -96,75 +96,75 @@ class Administracao::MigracoesController < ApplicationController
 
 
   def salvar_arquivo
-  @sucesso = 0
-  @erros_count = 0
-  @erros = ""
-  @mensagem_erros = ""
-  @mensagem=""
-  @tipo_arquivo = params[:administracao_migracao][:arquivo]
-  file_name=@tipo_arquivo.original_filename
-  if @tipo_arquivo.content_type=="text/siged-migracao"
-   pasta = File.join(Rails.root.to_s, 'public', 'arquivos','migracao')
-#  Dir.mkdir(pasta)
+    @sucesso = 0
+    @erros_count = 0
+    @erros = ""
+    @mensagem_erros = ""
+    @mensagem=""
+    @tipo_arquivo = params[:administracao_migracao][:arquivo]
+    file_name=@tipo_arquivo.original_filename
+    if @tipo_arquivo.content_type=="text/siged-migracao"
+      pasta = File.join(Rails.root.to_s, 'public', 'arquivos','migracao')
+      #  Dir.mkdir(pasta)
 
-   if File.exist?(pasta)
-      arquivo = File.join(pasta, file_name)
-    elsif  !File.exist?(pasta)
-       Dir.mkdir(pasta)
-       arquivo = File.join(pasta, file_name)
-   end
+      if File.exist?(pasta)
+        arquivo = File.join(pasta, file_name)
+      elsif  !File.exist?(pasta)
+        Dir.mkdir(pasta)
+        arquivo = File.join(pasta, file_name)
+      end
 
-  @tipo_lista = TipoLista.find(params[:tipo_lista_id])
-  if @tipo_lista.update_attributes(params[:tipo_lista])
+      @tipo_lista = TipoLista.find(params[:tipo_lista_id])
+      if @tipo_lista.update_attributes(params[:tipo_lista])
         file = File.open(arquivo,'r')
         linhas = file.readlines
         @linha = linhas.first.gsub("\r","").gsub("\n","")
         @tamanho = @linha.size
         if @tamanho > 11
-            @tipo_lista.arquivo.destroy
-            redirect_to :back, :alert => "Este arquivo '#{@tipo_arquivo.original_filename}' não está no formato aceito pelo sistema! #{@linha}"
+          @tipo_lista.arquivo.destroy
+          redirect_to :back, :alert => "Este arquivo '#{@tipo_arquivo.original_filename}' não está no formato aceito pelo sistema! #{@linha}"
         else
 
           linhas.each do |l|
-             cpf=l.gsub("\r","").gsub("\n","")
-             pessoa = Pessoa.find_by_cpf(cpf)
-             lista = @tipo_lista.listas.new
-             if @tipo_lista.tipo_objeto =='Pessoa' and !pessoa.nil?
-                lista.pessoa_id = pessoa.id
+            cpf=l.gsub("\r","").gsub("\n","")
+            pessoa = Pessoa.find_by_cpf(cpf)
+            lista = @tipo_lista.listas.new
+            if @tipo_lista.tipo_objeto =='Pessoa' and !pessoa.nil?
+              lista.pessoa_id = pessoa.id
 
-             end
-             lista.motivo = params[:lista][:motivo]
-             lista.data_inclusao = Time.now.to_date
-             if lista.save
-               @sucesso+=1
-             else
-                @erros_count+=1
-                lista.errors.full_messages.each do |msg|
+            end
+            lista.motivo = params[:lista][:motivo]
+            lista.data_inclusao = Time.now.to_date
+            if lista.save
+              @sucesso+=1
+            else
+              @erros_count+=1
+              lista.errors.full_messages.each do |msg|
                 if pessoa
                   @erros+="#{pessoa.nome} #{msg}<br/>"
                 end
-               end
+              end
 
-             end
             end
-            if @sucesso>0
-              @mensagem+="#{@sucesso} #{@tipo_lista.tipo_objeto.pluralize} adicionadas à lista #{@tipo_lista.nome}\n"
-            else
-              @mensagem+="Nenhuma pessoa adicionada<br/>"
-            end
-            if @erros_count>0
-                 @mensagem_erros += " com #{@erros_count} erros, sendo eles:<br/>"
-                 @mensagem_erros += @erros
-            end
+          end
+          if @sucesso>0
+            @mensagem+="#{@sucesso} #{@tipo_lista.tipo_objeto.pluralize} adicionadas à lista #{@tipo_lista.nome}\n"
+          else
+            @mensagem+="Nenhuma pessoa adicionada<br/>"
+          end
+          if @erros_count>0
+            @mensagem_erros += " com #{@erros_count} erros, sendo eles:<br/>"
+            @mensagem_erros += @erros
+          end
 
-            redirect_to  tipo_lista_listar_url(@tipo_lista), :flash => { :notice => @mensagem,:alert=>@mensagem_erros}
+          redirect_to  tipo_lista_listar_url(@tipo_lista), :flash => { :notice => @mensagem,:alert=>@mensagem_erros}
 
 
         end
 
         file.close
 
-  end
+      end
 
     else
       redirect_to :back, :alert => "Este tipo de arquivo '#{@tipo_arquivo.content_type}' não é válido para esta ação. Favor inserir um arquivo de texto (*.txt)"
@@ -172,4 +172,3 @@ class Administracao::MigracoesController < ApplicationController
 
   end
 end
-

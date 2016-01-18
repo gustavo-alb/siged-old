@@ -7,7 +7,7 @@ class Folha::FolhasController < ApplicationController
   before_filter :fonte_recursos
   def index
     @search = Folha::Folha.scoped_search(params[:search])
-    @folha_folhas = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @folha_folhas = @search.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -28,9 +28,9 @@ class Folha::FolhasController < ApplicationController
 
   #impressão de Financeiro a Partir da Folha e alguns parametros
   def imprimir_financeiros
-  @folha = Folha::Folha.find(params[:folha_id])
-  @financeiros = @folha.financeiros.all
-  render :layout=>nil
+    @folha = Folha::Folha.find(params[:folha_id])
+    @financeiros = @folha.financeiros.all
+    render :layout=>nil
   end
   # GET /folha/folhas/new
   # GET /folha/folhas/new.xml
@@ -93,13 +93,12 @@ class Folha::FolhasController < ApplicationController
   end
 
 
- private
- def criar_atualizar
+  private
+  def criar_atualizar
     @competencias = Folha::Competencia.order(:nome).collect{|p|[p.nome,p.id]}
- end
+  end
 
- def fonte_recursos
-   @recursos = Folha::FonteRecurso.all.collect { |r|[r.nome,r.id]  }
+  def fonte_recursos
+    @recursos = Folha::FonteRecurso.all.collect { |r|[r.nome,r.id]  }
   end
 end
-

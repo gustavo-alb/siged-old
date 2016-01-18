@@ -6,8 +6,8 @@ class Folha::FonteRecursosController < ApplicationController
   before_filter :esferas
   def index
 
-    @folha_fonte_recursos = Folha::FonteRecurso.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @folha_fonte_recursos = Folha::FonteRecurso.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @folha_fonte_recursos }
@@ -86,7 +86,6 @@ class Folha::FonteRecursosController < ApplicationController
   end
   private
   def esferas
-    @esferas = Esfera.all.collect { |e| [e.nome,e.id]  } 
+    @esferas = Esfera.all.collect { |e| [e.nome,e.id]  }
   end
 end
-

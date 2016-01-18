@@ -4,8 +4,8 @@ class RolesController < ApplicationController
   # GET /roles.xml
   def index
     @q = Role.ransack(params[:q])
-    @roles = @q.result.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @roles = @q.result.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @roles }
@@ -83,4 +83,3 @@ class RolesController < ApplicationController
     end
   end
 end
-

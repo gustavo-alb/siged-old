@@ -3,8 +3,8 @@ class PeriodosController < ApplicationController
   # GET /periodos
   # GET /periodos.xml
   def index
-    @periodos = Periodo.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @periodos = Periodo.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @periodos }
@@ -82,4 +82,3 @@ class PeriodosController < ApplicationController
     end
   end
 end
-

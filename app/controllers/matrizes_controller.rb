@@ -5,7 +5,7 @@ class MatrizesController < ApplicationController
   # GET /matrizes.xml
   def index
     @q = Matriz.ransack(params[:q])
-    @matrizes = @q.result.order(:codigo).paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @matrizes = @q.result.order(:codigo).paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb

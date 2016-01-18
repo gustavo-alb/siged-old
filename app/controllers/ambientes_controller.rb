@@ -6,7 +6,7 @@ class AmbientesController < ApplicationController
   before_filter :dados_essenciais,:except=>[:matrizes]
   def index
     @escola = Escola.find_by_slug(params[:escola_id])
-    @ambientes = @escola.ambientes.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @ambientes = @escola.ambientes.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -124,71 +124,70 @@ class AmbientesController < ApplicationController
     @ambiente = @escola.ambientes.find params[:ambiente_id]
     @ambiente_fisico = @ambiente.ambientes_fisicos.new(params[:ambiente_fisico])
     if @ambiente_fisico.save
-     @ambientes_fisicos = @ambiente.ambientes_fisicos.all
-     render :update do |page|
-      page.replace_html "turma", :partial=>"listar_ambientes_fisicos", :notice => 'Ambiente atualizado com sucesso.'
+      @ambientes_fisicos = @ambiente.ambientes_fisicos.all
+      render :update do |page|
+        page.replace_html "turma", :partial=>"listar_ambientes_fisicos", :notice => 'Ambiente atualizado com sucesso.'
+      end
     end
   end
-end
 
-def excluir_turma
-  @escola = Escola.find params[:escola_id]
-  @ambiente = @escola.ambientes.find params[:ambiente_id]
-  @turma = @ambiente.turmas.find(params[:turma_id])
-  @turmas = @ambiente.turmas.all
-  if @turma.destroy
+  def excluir_turma
+    @escola = Escola.find params[:escola_id]
+    @ambiente = @escola.ambientes.find params[:ambiente_id]
+    @turma = @ambiente.turmas.find(params[:turma_id])
+    @turmas = @ambiente.turmas.all
+    if @turma.destroy
+      render :update do |page|
+        page.reload()
+      end
+    end
+  end
+
+  def excluir_ambiente_fisico
+    @escola = Escola.find params[:escola_id]
+    @ambiente = @escola.ambientes.find params[:ambiente_id]
+    @ambiente_fisico = @ambiente.ambientes_fisicos.new(params[:ambiente_fisico])
+    @turmas = @ambiente.ambientes_fisicos.all
     render :update do |page|
       page.reload()
     end
   end
-end
 
-def excluir_ambiente_fisico
-  @escola = Escola.find params[:escola_id]
-  @ambiente = @escola.ambientes.find params[:ambiente_id]
-  @ambiente_fisico = @ambiente.ambientes_fisicos.new(params[:ambiente_fisico])
-  @turmas = @ambiente.ambientes_fisicos.all
-  render :update do |page|
-    page.reload()
+
+
+  def matrizes
+    @escola = Escola.find(params[:escola_id])
+    if !params[:matrix].blank?
+      @matriz = Matriz.find(params[:matrix])
+      @series = @matriz.series.order(:nome).collect{|s|[s.nome,s.id]}
+      render :partial=>"matriz"
+    else
+      render :nothing=>true
+    end
+  end
+
+  def configurar_ambiente
+    @escola = Escola.find params[:escola_id]
+    @ambiente = @escola.ambientes.find params[:ambiente_id]
+    @turmas = Turma.find(:all,:joins=>[:serie],:conditions=>["ambiente_id= ? and escola_id = ?",@ambiente.id,@escola.id],:order => 'turno,series.nome')
+    #@turmas = @ambiente.turmas.join(:serie).order("serie.nome").all
+  end
+
+  def configurar_ambiente_fisico
+    @escola = Escola.find params[:escola_id]
+    @ambiente = @escola.ambientes.find params[:ambiente_id]
+    @ambientes_fisicos = @ambiente.ambientes_fisicos.all
+  end
+  # DELETE /ambientes/1
+  # DELETE /ambientes/1.xml
+  def destroy
+    @escola = Escola.find params[:escola_id]
+    @ambiente = @escola.ambientes.find(params[:id])
+    @ambiente.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(escola_ambientes_url(@escola)) }
+      format.xml  { head :ok }
+    end
   end
 end
-
-
-
-def matrizes
- @escola = Escola.find(params[:escola_id])
- if !params[:matrix].blank?
-  @matriz = Matriz.find(params[:matrix])
-  @series = @matriz.series.order(:nome).collect{|s|[s.nome,s.id]}
-  render :partial=>"matriz"
-else
- render :nothing=>true
-end
-end
-
-def configurar_ambiente
-  @escola = Escola.find params[:escola_id]
-  @ambiente = @escola.ambientes.find params[:ambiente_id]
-  @turmas = Turma.find(:all,:joins=>[:serie],:conditions=>["ambiente_id= ? and escola_id = ?",@ambiente.id,@escola.id],:order => 'turno,series.nome')
-  #@turmas = @ambiente.turmas.join(:serie).order("serie.nome").all
-end
-
-def configurar_ambiente_fisico
-  @escola = Escola.find params[:escola_id]
-  @ambiente = @escola.ambientes.find params[:ambiente_id]
-  @ambientes_fisicos = @ambiente.ambientes_fisicos.all
-end
-# DELETE /ambientes/1
-# DELETE /ambientes/1.xml
-def destroy
-  @escola = Escola.find params[:escola_id]
-  @ambiente = @escola.ambientes.find(params[:id])
-  @ambiente.destroy
-
-  respond_to do |format|
-    format.html { redirect_to(escola_ambientes_url(@escola)) }
-    format.xml  { head :ok }
-  end
-end
-end
-

@@ -1,5 +1,5 @@
 <%= simple_form_for @lotacao,:url=>@url, :html => { :class => 'form-horizontal' } do |f| %>
   <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data"} if current_user.role?(:chefia_ucolom)%>
-  <%= f.input :destino_id,:as=>:autocomplete,:source=>:lotacao_destinos_path%>
+  <%= f.input :destino_id,:source=>:lotacao_destinos_path%>
   <%= f.button :submit, :class => 'btn-primary' %>
 <% end %>

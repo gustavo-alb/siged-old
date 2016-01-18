@@ -4,10 +4,10 @@ class QuadrosController < ApplicationController
   # GET /quadros
   # GET /quadros.xml
 
- before_filter :dados_essenciais
+  before_filter :dados_essenciais
   def index
     @search = Quadro.scoped_search(params[:search])
-    @quadros = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @quadros = @search.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -86,4 +86,3 @@ class QuadrosController < ApplicationController
     end
   end
 end
-

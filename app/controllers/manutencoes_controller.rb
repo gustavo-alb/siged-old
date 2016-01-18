@@ -5,7 +5,7 @@ class ManutencoesController < ApplicationController
   # GET /manutencoes.xml
   def index
     #@search = Manutencao.scoped_search(params[:search])
-    @manutencoes = Manutencao.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @manutencoes = Manutencao.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -44,7 +44,7 @@ class ManutencoesController < ApplicationController
 
     respond_to do |format|
       if @manutencao.save
-         @manutencao.colocar_em_manutencao
+        @manutencao.colocar_em_manutencao
         format.html { redirect_to(@manutencao, :notice => 'Manutencao cadastrado com sucesso.') }
         format.xml  { render :xml => @manutencao, :status => :created, :location => @manutencao }
       else
@@ -82,4 +82,3 @@ class ManutencoesController < ApplicationController
     end
   end
 end
-

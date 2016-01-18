@@ -1,49 +1,31 @@
-<%content_for :links do%>
-        <a class="current">Editando Perfil</a>
-<%end%>
-<article class="module width_full">
-<header><h3></h3></header>
-<div class="module_content">
-<h2>Editar perfil de <%=current_user.name %></h2>
+<%= bootstrap_devise_error_messages! %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h4><%= t('.title', :resource => resource_class.model_name.human , :default => "Edit #{resource_name.to_s.humanize}") %></h4>
+  </div>
+  <div class="panel-body">
+    <%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.email_field :email, autofocus: true, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password %> <i>(<%= t('.leave_blank_if_you_don_t_want_to_change_it', :default => "leave blank if you don't want to change it") %>)</i><br />
+        <%= f.password_field :password, :autocomplete => "off", class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, class: "form-control"  %>
+      </div>
+      <div class="form-group">
+        <%= f.label :current_password %> <i>(<%= t('.we_need_your_current_password_to_confirm_your_changes', :default => 'we need your current password to confirm your changes') %>)</i>
+        <%= f.password_field :current_password, class: "form-control" %>
+      </div>
+      <%= f.submit t('.update', :default => "Update"), class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
 
-<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <p><%= f.label :nome %><br />
-  <%= f.text_field :name %></p>
-  
-  <p><%= f.label :usuario %><br />
-  <%= f.text_field :username %></p>
+<p><%= t('.unhappy', :default => 'Unhappy') %>? <%= link_to t('.cancel_my_account', :default => "Cancel my account"), registration_path(resource_name), :data => { :confirm => t('.are_you_sure', :default => "Are you sure?") }, :method => :delete %>.</p>
 
-  <p><%= f.label :email %><br />
-  <%= f.email_field :email %></p>
-
-  <p><%= f.label :senha %> <i>(Deixe em branco caso não queira alterar)</i><br />
-  <%= f.password_field :password %></p>
-
-  <p><%= f.label :confirmar_senha %><br />
-  <%= f.password_field :password_confirmation %></p>
-
-  <p><%= f.label :senha_atual %> <i>(Precisamos da senha atual para confirmar as alterações)</i><br />
-  <%= f.password_field :current_password %></p>
-
-<%if current_user.role? :admin %>
- <% for role in Role.find(:all) %>
-    <div>
-      <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
-      <%= role.name %>
-    </div>
-  <% end %>
-  
-<% end %>
-
-<p><%= f.submit "Salvar" %></p>
-<%end%>
-
-
-
-<h3>Cancelar conta</h3>
-
-<p><%= link_to "Cancelar conta", registration_path(resource_name), :confirm => "Deseja cancelar a conta?", :method => :delete %>.</p>
-
-<%= link_to "Voltar", :back %>
-</div></article>
+<%= link_to t('.back', :default => 'Back'), :back %>

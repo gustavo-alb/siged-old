@@ -3,9 +3,9 @@ class Arquivo::DocumentosController < ApplicationController
   # GET /arquivo/documentos
   # GET /arquivo/documentos.xml
   def index
-    @search = Arquivo::Documento.scoped_search(params[:search])  
-    @arquivo_documentos = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
-    
+    @search = Arquivo::Documento.scoped_search(params[:search])
+    @arquivo_documentos = @search.all.paginate :page => params[:page], :per_page => 10
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @arquivo_documentos }
@@ -83,4 +83,3 @@ class Arquivo::DocumentosController < ApplicationController
     end
   end
 end
-

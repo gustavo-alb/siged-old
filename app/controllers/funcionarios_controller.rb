@@ -6,7 +6,7 @@ class FuncionariosController < ApplicationController
   before_filter :dados_essenciais,:except=>[:comissionados]
   def index
     #@search = Funcionario.da_pessoa(params[:pessoa_id]).scoped_search(params[:search])
-    @funcionarios = Funcionario.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @funcionarios = Funcionario.da_pessoa(@pessoa.id).all.paginate :page => params[:page], :per_page => 10
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @funcionarios }
@@ -238,7 +238,7 @@ class FuncionariosController < ApplicationController
 
   def boletins
     @funcionario = Funcionario.find(params[:funcionario_id])
-    @boletins = BoletimFuncional.do_func(@funcionario.id).all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @boletins = BoletimFuncional.do_func(@funcionario.id).all.paginate :page => params[:page], :per_page => 10
   end
 
   def gerar_boletim

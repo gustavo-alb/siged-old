@@ -6,7 +6,7 @@ class ComissionadosController < ApplicationController
 
   def index
     @search = Comissionado.scoped_search(params[:search])
-    @comissionados = @search.all.paginate :page => params[:page], :order => 'created_at DESC', :per_page => 10
+    @comissionados = @search.all.paginate :page => params[:page], :per_page => 10
 
     respond_to do |format|
       format.html # index.html.erb
@@ -29,22 +29,22 @@ class ComissionadosController < ApplicationController
         render :partial=>'departamento'
       end
     else
-      render :partial=>'blank'    
+      render :partial=>'blank'
     end
   end
 
   def auto_complete_for_escola_nome
     @escolas = Escola.find(:all,
-      :conditions => [ 'LOWER(nome) iLIKE ?',
-        '%' + params[:escola][:nome].downcase + '%' ])
+                           :conditions => [ 'LOWER(nome) iLIKE ?',
+                                            '%' + params[:escola][:nome].downcase + '%' ])
     render :partial => "busca_escolas"
 
   end
 
   def auto_complete_for_departamento_nome
     @departamentos = Departamento.find(:all,
-      :conditions => [ 'LOWER(nome) iLIKE ?',
-        '%' + params[:departamento][:nome].downcase + '%' ])
+                                       :conditions => [ 'LOWER(nome) iLIKE ?',
+                                                        '%' + params[:departamento][:nome].downcase + '%' ])
     render :partial => "busca_departamentos"
 
   end
@@ -156,4 +156,3 @@ class ComissionadosController < ApplicationController
     @escolas = Escola.all.collect{|p| [p.nome,p.id]}
   end
 end
-
