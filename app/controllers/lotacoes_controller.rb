@@ -2,6 +2,9 @@
 class LotacoesController < ApplicationController
   # GET /lotacaos
   # GET /lotacaos.xml
+  autocomplete :escola, :nome, :full => true
+  autocomplete :departamento, :nome, :full => true
+  autocomplete :orgao, :nome, :full => true
   load_and_authorize_resource
   before_filter :funcionario,:except=>[:escolas_destino,:complementar_esp,:complementar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome,:fator_lotacao_fisico,:disciplinas_especificacao,:sumesp,:convalidar,:salvar_especificacao,:fator_lotacao,:verifica_lotacao,:regencia,:destino,:lotacao_especial,:tipo_destino,:tipo_especificacao,:fator_lotacao_fisico,:destinos]
   before_filter :dados_essenciais,:except=>[:convalidar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome]
@@ -12,6 +15,7 @@ class LotacoesController < ApplicationController
     @lotacao_aberta = @funcionario.lotacoes.em_aberto.where('funcionario_id=?',@funcionario.id)
     @lotacoes = @funcionario.lotacoes.order("data_lotacao desc")
     @processos = @funcionario.processos.order("created_at ASC, processo ASC")
+    @url = pessoa_funcionario_lotacoes_path(@pessoa,@funcionario)
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @lotacaos }

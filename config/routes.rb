@@ -201,7 +201,6 @@ Siged20::Application.routes.draw do
   get 'lotacoes/convalidar'
   get 'lotacoes/gerar_relatorio'
   get 'lotacoes/gerar_arquivo'
-  resources :lotacoes
 
   get 'relatorios/funcionarios_por_disciplina',:controller=>"funcionarios",:action=>'relatorio_por_disciplina'
   resources :anos_letivos,:controller=>'ano_letivos' do
@@ -270,6 +269,9 @@ Siged20::Application.routes.draw do
         post "salvar_convalidacao"
         post "salvar_especificacao"
         get  "apagar_especificacao"
+        get "autocomplete_escola_nome",:on=>:collection
+        get "autocomplete_departamento_nome",:on=>:collection
+        get "autocomplete_orgao_nome",:on=>:collection
         #get "turmas"
         resources :pontos do
           get 'gerar_arquivo'

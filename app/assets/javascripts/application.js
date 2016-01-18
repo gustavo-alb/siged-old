@@ -16,7 +16,7 @@
 // require loading_notice
 //= require ie10-viewport-bug-workaround
 //= require ie-emulation-modes-warning
-//= require selectize
+//= require autocomplete-rails
 
 jQuery(function() {
     // Executes a callback detecting changes
