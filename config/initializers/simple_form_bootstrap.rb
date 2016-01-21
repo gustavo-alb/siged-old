@@ -26,47 +26,47 @@ inputs.each do |input_type|
 end
 
 SimpleForm.setup do |config|
-  config.boolean_style = :nested
+  config.boolean_style = :inline
 
   config.wrappers :bootstrap3, tag: 'div', class: 'form-group', error_class: 'has-error',
   defaults: { input_html: { class: 'default_class' } } do |b|
 
-                                b.use :html5
-                                b.use :min_max
-                                b.use :maxlength
-                                b.use :placeholder
-                                b.optional :pattern
-                                b.optional :readonly
+    b.use :html5
+    b.use :min_max
+    b.use :maxlength
+    b.use :placeholder
+    b.optional :pattern
+    b.optional :readonly
 
-                                b.use :label_input
-                                b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
-                                b.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
-                              end
+    b.use :label_input
+    b.use :hint,  wrap_with: { tag: 'p', class: 'help-block' }
+    b.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+  end
 
-                              config.wrappers :prepend, tag: 'div', class: "form-group", error_class: 'error' do |b|
-                                b.use :html5
-                                b.use :placeholder
-                                b.use :label
-                                b.wrapper tag: 'div', class: 'controls' do |input|
-                                  input.wrapper tag: 'div', class: 'input-prepend' do |prepend|
-                                    prepend.use :input
-                                  end
-                                  input.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
-                                  input.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
-                                end
-                              end
+  config.wrappers :prepend, tag: 'div', class: "form-group", error_class: 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label
+    b.wrapper tag: 'div', class: 'controls' do |input|
+      input.wrapper tag: 'div', class: 'input-prepend' do |prepend|
+        prepend.use :input
+      end
+      input.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
+      input.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+    end
+  end
 
-                              config.wrappers :append, tag: 'div', class: "control-group", error_class: 'error' do |b|
-                                b.use :html5
-                                b.use :placeholder
-                                b.use :label
-                                b.wrapper tag: 'div', class: 'controls' do |input|
-                                  input.wrapper tag: 'div', class: 'input-append' do |append|
-                                    append.use :input
-                                  end
-                                  input.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
-                                  input.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
-                                end
-                              end
-                              config.default_wrapper = :bootstrap3
-                            end
+  config.wrappers :append, tag: 'div', class: "control-group", error_class: 'error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label
+    b.wrapper tag: 'div', class: 'controls' do |input|
+      input.wrapper tag: 'div', class: 'input-append' do |append|
+        append.use :input
+      end
+      input.use :hint,  wrap_with: { tag: 'span', class: 'help-block' }
+      input.use :error, wrap_with: { tag: 'span', class: 'help-inline' }
+    end
+  end
+  config.default_wrapper = :bootstrap3
+end

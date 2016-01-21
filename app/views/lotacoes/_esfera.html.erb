@@ -1,5 +1,4 @@
-<%= fields_for :lotacao do |l|%>
-<%= l.autocomplete_field :destino_nome, autocomplete_departamento_nome_departamentos_path,:update_elements=>{:id=>'#lotacao_destino_id'}%>
-<%= l.hidden_field :destino_id %>
-<%= l.hidden_field :destino_type,:value=>"Departamento" %>
+<%= simple_fields_for :lotacao do |l|%>
+  <%= l.input :destino_nome,:label=>"Setorial",:as=>:autocomplete,:url=>lotacoes_autocomplete_departamento_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
+  <%= l.hidden_field :destino_id %>
 <% end %>

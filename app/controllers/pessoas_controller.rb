@@ -20,7 +20,7 @@ class PessoasController < ApplicationController
         @pessoas = @q.result(distinct: true).order('nome ASC').paginate :page => params[:page], :per_page => 10
       end
     else
-      @pessoas = Pessoa.all.order("nome asc").paginate :page => params[:page], :per_page => 10
+      @pessoas = Pessoa.order("nome asc").paginate :page => params[:page], :per_page => 10
     end
     respond_to do |format|
       format.html # index.html.erb
@@ -91,7 +91,7 @@ class PessoasController < ApplicationController
 
   def gerar_boletim
     @pessoa = Pessoa.find(params[:pessoa_id])
-    @boletim = BoletimPessoal.new(params[:pessoa])
+    @boletim = BoletimPessoa(params[:pessoa])
   end
 
   def boletim_pessoal
@@ -276,5 +276,9 @@ class PessoasController < ApplicationController
   end
 
 
+
+  # def pessoa_params
+  #   params.require(:pessoa).permit!
+  # end
 
 end

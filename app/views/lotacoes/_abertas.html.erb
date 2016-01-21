@@ -1,0 +1,25 @@
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>Destino</th>
+      <th>Data</th>
+      <th>Estafeta</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @lotacoes_abertas.each do |l| %>
+      <tr>
+        <td><%= detalhes(l.destino) %></td>
+        <td><%= l.data_lotacao.to_s_br%></td>
+        <td><%= detalhes(l.usuario)%></td>
+        <td><%= status_lotacao(l.status.first.status)%></td>
+        <td>
+          <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>l.id),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,l),:method=>:delete,:class=>"btn btn-primary btn-xs",:'data-confirm'=>"Tem certeza?"%>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
+</table>

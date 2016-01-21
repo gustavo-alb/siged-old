@@ -5,6 +5,7 @@ class Lotacao < ActiveRecord::Base
   self.table_name = "lotacaos"
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
   validates_presence_of :usuario_id,:funcionario_id
+  validates_presence_of :tipo_lotacao
   validates_presence_of :destino_id,:message=>"É necessário que o destino seja válido"
   validates :motivo, :length => {:maximum => 230, :message => "Observaçao/Motivo até 230 caracteres" }
   validates_date :data_lotacao,:message=>"Data da Lotação Inválida"
@@ -279,7 +280,7 @@ class Lotacao < ActiveRecord::Base
         status.status="ENCAMINHADO"
       end
       if self.complementar==false
-        lotacoes = Lotacao.confirmada_fechada.ativo.find :all,:conditions=>["funcionario_id = ? and id<>?",self.funcionario_id,self.id]
+        lotacoes = Lotacao.confirmada_fechada.ativas.find :all,:conditions=>["funcionario_id = ? and id<>?",self.funcionario_id,self.id]
         lotacoes.each do |l|
           l.ativo = false
           l.save

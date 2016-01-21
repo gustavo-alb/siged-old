@@ -6,8 +6,7 @@ class EscolasController < ApplicationController
     escolas = Escola.where('nome ilike ? or codigo ilike ?', "%#{term}%","%#{term}%").order(:nome).all
     render :json => escolas.map { |escola| {:id => escola.id, :label => "#{escola.nome} - #{escola.municipio_nome}", :value => escola.nome, :tipo=>"Escola"} }
   end
-  caches_page :ctrl_ch_resumido
-  cache_sweeper :escola_sweeper
+
   # GET /escolas
   # GET /escolas.xml
   before_filter :dados_essenciais#,:funcionarios

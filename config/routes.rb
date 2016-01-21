@@ -269,9 +269,6 @@ Siged20::Application.routes.draw do
         post "salvar_convalidacao"
         post "salvar_especificacao"
         get  "apagar_especificacao"
-        get "autocomplete_escola_nome",:on=>:collection
-        get "autocomplete_departamento_nome",:on=>:collection
-        get "autocomplete_orgao_nome",:on=>:collection
         #get "turmas"
         resources :pontos do
           get 'gerar_arquivo'
@@ -281,10 +278,14 @@ Siged20::Application.routes.draw do
 
   end
 
+
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
   # Sample of regular route:
+  get 'lotacoes/autocomplete_escola_nome'
+  get 'lotacoes/autocomplete_departamento_nome'
   post 'administracao/tarefas/send_data'
   get 'funcionarios/folha'
   post 'funcionarios/cargo'

@@ -45,7 +45,7 @@ module PessoasHelper
     if func and func.lotacoes.inativas.none?
       return "NADA CADASTRADO"
     else
-      return detalhes(func.lotacoes.inativas('data_lotacao desc').first.destino)
+      return detalhes(func.lotacoes.inativas.order('data_lotacao desc').first.destino)
     end
   end
 

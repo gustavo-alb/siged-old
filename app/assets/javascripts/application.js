@@ -31,7 +31,14 @@ jQuery(function() {
   })});});
 
 
-jQuery('#lotacao_destino_id').selectize({
-    delimiter: ',',
-    persist: false
-});
+jQuery(function() {
+    // Executes a callback detecting changes
+    jQuery("#lotacao_tipo_lotacao_regular").change(function(){
+    jQuery.ajax({data:'tp_lotacao=' + this.value, success:function(request){jQuery('#destino').html(request);}, url:"/lotacoes/lotacao_especial"
+  })});});
+
+jQuery(function() {
+    // Executes a callback detecting changes
+    jQuery("#lotacao_tipo_lotacao_especial").change(function(){
+    jQuery.ajax({data:'tp_lotacao=' + this.value, success:function(request){jQuery('#destino').html(request);}, url:"/lotacoes/lotacao_especial"
+  })});});

@@ -132,17 +132,17 @@ module ApplicationHelper
   def status_lotacao(status)
     message=""
     if status=='ENCAMINHADO'
-      message+="<h7 class='mess_warning'>#{status}</h7>"
+      message+="<span class='label label-warning'>#{status}</span>"
     elsif status=='À DISPOSIÇÃO DO NUPES'
-      message+="<h7 class='mess_warning'>#{status}</h7>"
+      message+="<span class='label label-warning'>#{status}</span>"
     elsif status=='CANCELADO'
-      message+="<h7 class='mess_error'>#{status}</h7>"
+      message+="<span class='label label-important'>#{status}</span>"
     elsif status=='LOTADO'
-      message+="<h7 class='mess_success'>#{status}</h7> "
+      message+="<span class='label label-success'>#{status}</span> "
     elsif status=='NÃO LOTADO'
-      message+="<h7 class='mess_error'>#{status}</h7>"
+      message+="<span class='label label-important'>#{status}</span>"
     elsif status=='EM TRÂNSITO'
-      message+="<h7 class='mess_warning'>#{status}</h7>"
+      message+="<span class='label label-warning'>#{status}</span>"
 
     else
       message=status

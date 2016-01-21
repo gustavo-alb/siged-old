@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 source 'http://rubygems.org'
 
-gem 'rails', '4.2.2'
+gem 'rails', '3.2.22'
 
 gem "rake", "~> 0.9.2"
 gem 'thor'
@@ -49,7 +49,7 @@ gem "cocoon"
 gem 'rails-jquery-autocomplete'
 gem 'puma', '2.7.1'
 gem 'thin'
-gem 'validates_timeliness'
+gem 'validates_timeliness','3.0.14'
 gem 'nested_form'
 gem 'combine_pdf'
 gem 'ajax_pagination'
@@ -60,10 +60,6 @@ gem 'simple_form'
 gem 'less-rails'
 gem 'therubyracer'
 gem 'simple_enum', '1.6.9'
-gem "selectize-rails"
-gem 'simple_form_extension'
-gem 'activerecord-session_store'
+#gem 'activerecord-session_store'
 gem "iconv"
 gem 'devise-bootstrap-views'
-gem 'coffee-rails'
-gem 'redactor-rails', github: 'glyph-fr/redactor-rails'

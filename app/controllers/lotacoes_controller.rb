@@ -3,16 +3,25 @@ class LotacoesController < ApplicationController
   # GET /lotacaos
   # GET /lotacaos.xml
   autocomplete :escola, :nome, :full => true
-  autocomplete :departamento, :nome, :full => true
-  autocomplete :orgao, :nome, :full => true
+  #autocomplete :departamento, :nome, :full => true
+  #autocomplete :orgao, :nome, :full => true
   load_and_authorize_resource
   before_filter :funcionario,:except=>[:escolas_destino,:complementar_esp,:complementar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome,:fator_lotacao_fisico,:disciplinas_especificacao,:sumesp,:convalidar,:salvar_especificacao,:fator_lotacao,:verifica_lotacao,:regencia,:destino,:lotacao_especial,:tipo_destino,:tipo_especificacao,:fator_lotacao_fisico,:destinos]
   before_filter :dados_essenciais,:except=>[:convalidar,:auto_complete_for_escola_nome,:auto_complete_for_departamento_nome]
 
+  def autocomplete_departamento_nome
+    term = params[:term]
+    departamentos = Departamento.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
+    orgaos = Orgao.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
+    setoriais = orgaos+departamentos
+    render :json => setoriais.map { |setorial| {:id => setorial.id, :label => setorial.nome, :value => setorial.nome} }
+  end
+
   def index
     @lotacaos = Lotacao.all
     @lotacao = Lotacao.new
-    @lotacao_aberta = @funcionario.lotacoes.em_aberto.where('funcionario_id=?',@funcionario.id)
+    @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+    @lotacoes_abertas = @funcionario.lotacoes.em_aberto.where('funcionario_id=?',@funcionario.id)
     @lotacoes = @funcionario.lotacoes.order("data_lotacao desc")
     @processos = @funcionario.processos.order("created_at ASC, processo ASC")
     @url = pessoa_funcionario_lotacoes_path(@pessoa,@funcionario)
@@ -63,14 +72,6 @@ class LotacoesController < ApplicationController
     end
   end
 
-  def sumesp
-    if params[:tp_lotacao]=='SUMARIA ESPECIAL'
-      render :partial=>"esfera"
-    else
-      render :partial=>"orgao_regular"
-    end
-  end
-
   def complementar
     if params[:complemento]=='1'
       render :partial=>"prolabore"
@@ -80,7 +81,7 @@ class LotacoesController < ApplicationController
   end
 
   def lotacao_especial
-    if params[:tp_lotacao]=='ESPECIAL'
+    if params[:tp_lotacao]=='ESPECIAL' or params[:tp_lotacao]=='SUMARIA ESPECIAL'
       render :partial=>"esfera"
     else
       render :partial=>"orgao_regular"
@@ -335,6 +336,12 @@ class LotacoesController < ApplicationController
   # POST /lotacaos
   # POST /lotacaos.xml
   def create
+    @lotacaos = Lotacao.all
+    @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+    @lotacoes_abertas = @funcionario.lotacoes.em_aberto.where('funcionario_id=?',@funcionario.id)
+    @lotacoes = @funcionario.lotacoes.order("data_lotacao desc")
+    @processos = @funcionario.processos.order("created_at ASC, processo ASC")
+    @url = pessoa_funcionario_lotacoes_path(@pessoa,@funcionario)
     @lotacao = Lotacao.new(params[:lotacao])
     if @lotacao.tipo_lotacao=="ESPECIAL" or @lotacao.tipo_lotacao=="SUMARIA ESPECIAL"
       @orgao  = Orgao.where(:nome=>params[:lotacao][:destino_nome]).first
@@ -348,16 +355,10 @@ class LotacoesController < ApplicationController
     respond_to do |format|
       if @lotacao.save
         format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.
-            Destino: ") }
+          Destino: ") }
         format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
       else
-        html="<ul>"
-        @lotacao.errors.each do |atributo,msg|
-          html+="<li>#{msg}</li>"
-        end
-        html+="</ul>"
-
-        format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :alert => "Lotação não Efetuada, Motivos: #{html}") }
+        format.html { render :action => "index" }
         format.xml  { render :xml => @lotacao.errors, :status => :unprocessable_entity }
       end
     end
