@@ -9,17 +9,19 @@
     </tr>
   </thead>
   <tbody>
-    <% @lotacoes_abertas.each do |l| %>
+    <% @lotacoes_abertas.each do |lot| %>
       <tr>
-        <td><%= detalhes(l.destino) %></td>
-        <td><%= l.data_lotacao.to_s_br%></td>
-        <td><%= detalhes(l.usuario)%></td>
-        <td><%= status_lotacao(l.status.first.status)%></td>
+        <td><%= detalhes(lot.destino) %></td>
+        <td><%= lot.data_lotacao.to_s_br%></td>
+        <td><%= detalhes(lot.usuario)%></td>
+        <td><%= status_lotacao(lot.status.first.status)%></td>
         <td>
-          <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>l.id),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,l),:method=>:delete,:class=>"btn btn-primary btn-xs",:'data-confirm'=>"Tem certeza?"%>
+          <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,lot),:method=>:delete,:class=>"btn btn-danger btn-xs",:'data-confirm'=>"Tem certeza?"%>
+          <%= link_to "Confirmar Lotação", "#",:class=>"btn btn-success btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#confirmacao-#{lot.id}"%>
         </td>
       </tr>
+      <%= render :partial=>"confirmar_lotacao",:locals=>{:lot=>lot}%>
     <% end%>
   </tbody>
 </table>

@@ -1,0 +1,20 @@
+<!-- Modal -->
+<div class="modal fade" id="confirmacao-<%=lot.id%>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Confirmar Lotação</h4>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :confirmacao,:url=>pessoa_funcionario_lotacao_salvar_confirmacao_url(@pessoa,@funcionario,lot), :html => { :class => 'form-vertical' } do |f|%>
+          <%= f.input :codigo_barra,:autofocus=>true,:placeholder=>"Escaneie o código de barras"%>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          <%= f.button :submit, :class => 'btn-primary' %>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>
