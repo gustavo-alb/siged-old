@@ -129,7 +129,7 @@ class Escola < ActiveRecord::Base
 
   def municipio_nome
     if self.municipio
-      return self.municipio.nome
+      return self.municipio.nome.upcase
     end
   end
 
