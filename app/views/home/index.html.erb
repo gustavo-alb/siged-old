@@ -2,12 +2,12 @@
 	<header><h3>SIGED 2.5</h3></header>
 	<div class="module_content">
 		<center>
-			<%if current_user.role?("lotacao") %>
-			<%= render :partial=>"geral"%>
-			<% elsif current_user.role?("ucada")%>
+			<%if current_user and current_user.role?("lotacao") %>
+			<%= render :partial=>"disciplinas"%>
+			<% elsif current_user and current_user.role?("ucada")%>
 			<%= render :partial=>"ucada"%> 
 			<% else %>
-			<%= render :partial=>"disciplinas" %>
+			<%= render :partial=>"geral" %>
 			<% end %>
 		</center>
 	</div>
