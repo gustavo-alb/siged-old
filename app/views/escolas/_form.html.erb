@@ -1,141 +1,32 @@
-<script type="text/javascript">
+<%= simple_form_for @escola, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :codigo %>
+<%= f.input :tipologia %>
+<%= f.input :rede %>
+<%= f.input :zona %>
+<%= f.input :endereco %>
+<%= f.input :telefone %>
+<%= f.input :fax %>
+<%= f.input :email %>
+<%= f.input :celular %>
+<%= f.input :numero %>
+<%= f.input :complemento %>
+<%= f.input :bairro %>
+<%= f.input :gt_id %>
+<%= f.input :diretor %>
+<%= f.input :orgao_id %>
+<%= f.input :lotacao_id %>
+<%= f.input :cep %>
+<%= f.input :cnpj %>
+<%= f.input :tipo_destino_id %>
+<%= f.input :municipio_id %>
+<%= f.input :esfera_id %>
+<%= f.input :entidade_id %>
+<%= f.input :slug %>
+<%= f.input :ano_letivo_id %>
+<%= f.input :nome %>
+<%= f.input :distrito %>
 
-    Event.observe(window, 'load', function() {
-
-        new MaskedInput('#date', '99/99/9999');
-        new MaskedInput("#escola_celular", '(99) 9999-9999');
-new MaskedInput('#escola_telefone', '(99) 9999-9999');
-new MaskedInput('#pessoa_cpf', '999.999.999-99');
-new MaskedInput('#ssn', '999-99-9999');
-new MaskedInput('#product', 'a*-999-a999');
-
-new MaskedInput('#eyescript', '~9.99 ~9.99 999', {
-completed: function(){
-alert("You typed the following: " + this.getValue());
-}
-});
-
-MaskedInput.definitions['~']='[+-]';
-
-new MaskedInput('#eyescript2', '~9.99 ~9.99 999', {
-completed: function(){
-alert("You typed the following: " + this.getValue());
-}
-});
-    });
-    </script>
-
-<article class="module width_full">
-  <header><h3><%=legenda%></h3></header>
-  <div class="module_content"><%= form_for(@escola) do |f| %>
-  <% if @escola.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@escola.errors.count, "error") %> prohibited this escola from being saved:</h2>
-
-      <ul>
-      <% @escola.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <%=f.hidden_field :entidade_id,:value=>current_user.entidade_id%>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :código %><br />
-        <%= f.text_field :codigo,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nome %><br />
-        <%= f.text_field :nome,:style=>"width:92%;" %>
-
-
-  </fieldset>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :rede %><br />
-        <%= f.select :esfera_id,@esferas,:prompt=>true,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :tipologia %><br />
-        <%= f.text_field :tipologia,:style=>"width:92%;" %>
-
-
-
-  </fieldset>
-  <!--<fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :nae_id %><br />
-        <%= f.text_field :nae_id,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :gt_id %><br />
-        <%= f.select :gt_id,:style=>"width:92%;" %>
-<br /><br />
-  </fieldset>-->
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :endereço %><br />
-        <%= f.text_field :endereco,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :número %><br />
-        <%= f.text_field :numero,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :bairro %><br />
-        <%= f.text_field :bairro,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :complemento %><br />
-        <%= f.text_field :complemento,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :cidade %><br />
-        <%= f.select :municipio_id,@municipios,:style=>"width:92%;",:prompt=>"Selecione a cidade" %><br /><br />
-
-  </fieldset>
-
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :zona %><br />
-        <%= f.select :zona,Escola::ZONA,:style=>"width:92%;",:prompt=>true %><br /><br />
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :telefone %><br />
-        <%= f.text_field :telefone,:style=>"width:92%;" %>
-<br /><br />
-  </fieldset>
- <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :celular %><br />
-        <%= f.text_field :celular,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :fax %><br />
-        <%= f.text_field :fax,:style=>"width:92%;" %>
-
-  </fieldset>
-  <fieldset style="width:48%; float:left; margin-right: 1%;">
-    <%= f.label :email %><br />
-        <%= f.text_field :email,:style=>"width:92%;" %>
-
-  </fieldset>
-
-
-<div class="clear"></div>
-</div>
-        <footer>
-				<div class="submit_link">
-					<%=f.submit "Salvar",:class=>"alt_btn" %> ou <%=link_to 'Cancelar',:back%>
-				</div>
-			</footer>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+escolas_path, :class => 'btn btn-default' %>
 <% end %>
-</article>

@@ -1,135 +1,66 @@
-<div id='loadingmessage' style="position: fixed;left: 50%;top: 0">
-  <div id="loading_notice">
-    <h4 class="alert_warning">Carregando...</h1>
-  </div>
-</div>
-<%content_for :links do%>
-  <%=link_to "Escolas",escolas_path%>
-  <div class="breadcrumb_divider"></div>
-  <a class="current">Detalhes</a>
-<%end%>
-<article class="module width_full">
-  <header>
-    <h3>Detalhes da Escola: <%= @escola.nome.titleize%><%= link_to image_tag('icn_config.png',:title=>'Configurações'), escola_configuracoes_path(@escola),:rel=>'facebox',:rev=>"height:300px;width:500px" if can?(:configuracoes,Escola)%></h3>
-  </header>
-  <div class="module_content">
-    <div id="tabs1" class="tabset">
-      <% if can? :manage,Escola,:id=>current_user.escola_id%>
-        <ul class="tabset_tabs">
-          <li><a href="#resum">Resumo</a></li>
-          <li><a href="#tab-um">Detalhes</a></li>
-          <li><a href="#tab-dois">Quadro funcional</a></li>
-          <li><a href="#tab-tres">Turmas</a></li>
-          <li><a href="#tab-quatro">Ambientes</a></li>
-          <li><a href="#tab-cinco">Lotações à confirmar</a></li>
-          <li><a href="#tab-seis">Controle de CH</a></li>
-        </ul>
-      <%end%>
-      <div class="tabset_content_container">
-        <div id="resumo" class="tabset_content">
-          <%= render :partial=>"resumo_da_escola" %>
-        </div>
-        <div id="tab-one" class="tabset_content">
-          <p>
-            <b>Código:</b>
-            <%= @escola.codigo %>
-          </p>
-          <p>
-            <b>Nome:</b>
-            <%= @escola.nome %>
-          </p>
-          <p>
-            <b>Diretor:</b>
-            <%= detalhes(@escola.diretor) %>
-          </p>
-          <%if !@escola.secretario.nil?%>
-            <p>
-              <b>Secretário:</b>
-              <%= detalhes(@escola.secretario) %>
-            </p>
-          <%end%>
-          <%if !@escola.diretor_adjunto.nil?%>
-            <p>
-              <b>Diretor Adjunto:</b>
-              <%= detalhes(@escola.diretor_adjunto) %>
-            </p>
-          <%end%>
-          <p>
-            <b>Tipologia:</b>
-            <%= @escola.tipologia %>
-          </p>
-          <p>
-            <b>Rede:</b>
-            <%= detalhes(@escola.esfera) %>
-          </p>
-          <p>
-            <b>Zona:</b>
-            <%= @escola.zona %>
-          </p>
-          <p>
-            <b>Endereço:</b>
-            <%= @escola.endereco %>
-          </p>
-          <p>
-            <b>Cidade:</b>
-            <%= @escola.municipio.nome %>
-          </p>
-          <p>
-            <b>Telefone:</b>
-            <%= @escola.telefone %>
-          </p>
-          <p>
-            <b>Fax:</b>
-            <%= @escola.fax %>
-          </p>
-          <p>
-            <b>Email:</b>
-            <%= @escola.email %>
-          </p>
-          <p>
-            <b>Funcionários Lotados e Confirmados:</b>
-            <%= @funcionarios.count %>
-          </p>
-          <p>
-            <b>Funcionários Lotados e Aguardando Confirmação de Apresentação:</b>
-            <%= @encaminhados.count %>
-          </p>
-        </div>
-        <div id="tab-two" class="tabset_content" style='overflow-y: scroll; height: 340px;'>
-          <%= render :partial=>"quadro_funcional" %>
-        </div>
-        <div id="tab-three" class="tabset_content" style='overflow-y: scroll; height: 340px;'>
-          <%=render :partial=>'turmas'%>
-        </div>
-        <div id="tab-six" class="tabset_content" style='overflow-y: scroll; height: 340px;'>
-          <%=render :partial=>'ambientes'%>
-        </div>
-        <div id="tab-four" class="tabset_content" style='overflow-y: scroll; height: 340px;'>
-          <%=render :partial=>'lotacao'%>
-        </div>
-        <div id="tab-five" class="tabset_content" style='overflow-y: scroll; height: 340px;'>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-          <center><%= button_to "Clique aqui para gerar o relatório",escola_gerar_controle_ch_path(@escola),:remote=>true,:method=>:get,:class=>'alt_btn'%></center>
-        </div>
-      </div>
-    </div>
-  </div>
-  <footer>
-    <div class="submit_link">
-      <%if can? :especificar_lotacao,Lotacao%>
-        <%= link_to "Incluir Turma", escola_incluir_turma_path(@escola),:rel=>"facebox",:rev=>"height:100px;width:600px"%>, 
-      <%= link_to 'Editar Escola', edit_escola_path(@escola),:class=>"alt_btn",:type=>"submit"%> ou
-      <% end %>
-      <%= link_to 'Voltar', escolas_path,:type=>"submit" %>
-    </div>
-  </footer>
-</article>
+<%model_class = Escola%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Codigo:</strong></dt>
+      <dd><%= @escola.codigo %></dd>
+          <dt><strong>Tipologia:</strong></dt>
+      <dd><%= @escola.tipologia %></dd>
+          <dt><strong>Rede:</strong></dt>
+      <dd><%= @escola.rede %></dd>
+          <dt><strong>Zona:</strong></dt>
+      <dd><%= @escola.zona %></dd>
+          <dt><strong>Endereco:</strong></dt>
+      <dd><%= @escola.endereco %></dd>
+          <dt><strong>Telefone:</strong></dt>
+      <dd><%= @escola.telefone %></dd>
+          <dt><strong>Fax:</strong></dt>
+      <dd><%= @escola.fax %></dd>
+          <dt><strong>Email:</strong></dt>
+      <dd><%= @escola.email %></dd>
+          <dt><strong>Celular:</strong></dt>
+      <dd><%= @escola.celular %></dd>
+          <dt><strong>Numero:</strong></dt>
+      <dd><%= @escola.numero %></dd>
+          <dt><strong>Complemento:</strong></dt>
+      <dd><%= @escola.complemento %></dd>
+          <dt><strong>Bairro:</strong></dt>
+      <dd><%= @escola.bairro %></dd>
+          <dt><strong>Gt:</strong></dt>
+      <dd><%= @escola.gt_id %></dd>
+          <dt><strong>Diretor:</strong></dt>
+      <dd><%= @escola.diretor %></dd>
+          <dt><strong>Orgao:</strong></dt>
+      <dd><%= @escola.orgao_id %></dd>
+          <dt><strong>Lotacao:</strong></dt>
+      <dd><%= @escola.lotacao_id %></dd>
+          <dt><strong>Cep:</strong></dt>
+      <dd><%= @escola.cep %></dd>
+          <dt><strong>Cnpj:</strong></dt>
+      <dd><%= @escola.cnpj %></dd>
+          <dt><strong>Tipo destino:</strong></dt>
+      <dd><%= @escola.tipo_destino_id %></dd>
+          <dt><strong>Municipio:</strong></dt>
+      <dd><%= @escola.municipio_id %></dd>
+          <dt><strong>Esfera:</strong></dt>
+      <dd><%= @escola.esfera_id %></dd>
+          <dt><strong>Entidade:</strong></dt>
+      <dd><%= @escola.entidade_id %></dd>
+          <dt><strong>Slug:</strong></dt>
+      <dd><%= @escola.slug %></dd>
+          <dt><strong>Ano letivo:</strong></dt>
+      <dd><%= @escola.ano_letivo_id %></dd>
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @escola.nome %></dd>
+          <dt><strong>Distrito:</strong></dt>
+      <dd><%= @escola.distrito %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', escolas_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_escola_path(@escola), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              escola_path(@escola),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

@@ -3,6 +3,9 @@ Siged20::Application.routes.draw do
 
 
 
+  resources :escolas
+
+
   resources :requisicoes do
     get :definir_funcionario,:on=>:collection
     post :gerar_links,:on=>:collection
