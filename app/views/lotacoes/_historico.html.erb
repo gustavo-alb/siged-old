@@ -14,7 +14,7 @@
         <td><%= detalhes(lot.destino) %></td>
         <td><%= lot.data_lotacao.to_s_br%></td>
         <td><%= detalhes(lot.usuario)%></td>
-        <td><%= status_lotacao(lot.status.first.status)%></td>
+        <td><%= status_lotacao(lot.status.last.status)%></td>
         <td>
           <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
           <%= link_to "Devolver Funcionário", "#",:class=>"btn btn-danger btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%>

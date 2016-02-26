@@ -17,63 +17,68 @@ class Ability
 
     if user.role? :admin
       can :manage, :all
-      #elsif !user.roles.none?
+      #if !user.roles.none?
       #  can :manage,TipoLista,:privada=>false
       #  cannot :destroy,TipoLista,:privada=>false
       #  can :manage,TipoLista,TipoLista.privadas do |l|
       #    !(l.role_ids & user.role_ids).none?
       #  end
+    end
 
 
-    elsif user.role? :chefia_ucada
-      can :manage,Funcionario
-      cannot :destroy,Funcionario
-      can :manage,Pessoa
-      cannot :destroy,Pessoa
-      can :manage,Departamento
-      cannot :update,Departamento
-      cannot :create,Departamento
-      cannot :destroy,Departamento
-      can :read,Orgao
-      can :agenda,Orgao
-      can :read,Lotacao
-      can :qualificar_funcionario, Pessoa
-
-    elsif user.role? :ucada
-      can :manage,Funcionario
-      cannot :destroy,Funcionario
-      can :manage,Pessoa
-      cannot :destroy,Pessoa
-      cannot :destroy,TipoLista,:privada=>false
-      can :manage,TipoLista
-      cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
-        l.privada==true and (l.role_ids & user.role_ids).none?
+      if user.role? :chefia_ucada
+        can :manage,Funcionario
+        cannot :destroy,Funcionario
+        can :manage,Pessoa
+        cannot :destroy,Pessoa
+        can :manage,Departamento
+        cannot :update,Departamento
+        cannot :create,Departamento
+        cannot :destroy,Departamento
+        can :read,Orgao
+        can :agenda,Orgao
+        can :read,Lotacao
+        can :qualificar_funcionario, Pessoa
       end
-      can :qualificar_funcionario, Pessoa
 
-    elsif user.role? :ucada_alt
-      can :manage,Funcionario
-      can :manage,Pessoa
-      cannot :destroy,TipoLista,:privada=>false
-      can :manage,TipoLista
-      cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
-        l.privada==true and (l.role_ids & user.role_ids).none?
+      if user.role? :ucada
+        can :manage,Funcionario
+        cannot :destroy,Funcionario
+        can :manage,Pessoa
+        cannot :destroy,Pessoa
+        cannot :destroy,TipoLista,:privada=>false
+        can :manage,TipoLista
+        cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
+          l.privada==true and (l.role_ids & user.role_ids).none?
+        end
+        can :qualificar_funcionario, Pessoa
       end
-      can :qualificar_funcionario, Pessoa
 
-    elsif user.role? :diretores
-      can :manage,Lotacao,:escola_id=>user.escola_id
-      cannot :create,Lotacao
-      can :manage,Turma,:escola_id=>user.escola_id
-      can :manage,Ambiente,:escola_id=>user.escola_id
-      can :manage,Escola,:id=>user.escola_id
-      cannot :destroy,Escola
-      cannot :destroy,Turma
-      can :read,Pessoa
+      if user.role? :ucada_alt
+        can :manage,Funcionario
+        can :manage,Pessoa
+        cannot :destroy,TipoLista,:privada=>false
+        can :manage,TipoLista
+        cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
+          l.privada==true and (l.role_ids & user.role_ids).none?
+        end
+        can :qualificar_funcionario, Pessoa
+      end
+
+      if user.role? :diretores
+        can :manage,Lotacao,:escola_id=>user.escola_id
+        cannot :create,Lotacao
+        can :manage,Turma,:escola_id=>user.escola_id
+        can :manage,Ambiente,:escola_id=>user.escola_id
+        can :manage,Escola,:id=>user.escola_id
+        cannot :destroy,Escola
+        cannot :destroy,Turma
+        can :read,Pessoa
       #can :read,Requisicao,:lotacao_id=>user.unidade_organizacional_id,:lotacao_type=>user.unidade_organizacional_type
       can :manage,Requisicao,:lotacao_id=>user.unidade_organizacional_id,:lotacao_type=>user.unidade_organizacional_type
+    end
 
-    elsif user.role? :enquete
+    if user.role? :enquete
       can :read,Pessoa
       cannot :show,Pessoa
       can :read,Orgao
@@ -82,8 +87,9 @@ class Ability
       can :read,Funcionario
       can :read,Lotacao
       can :manage,Enquete
+    end
 
-    elsif user.role? :sage
+    if user.role? :sage
       can :read,Pessoa
       can :show,Pessoa
       can :read,Orgao
@@ -93,13 +99,15 @@ class Ability
       can :read,Funcionario
       can :read,Lotacao
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :chefia_cad
+    if user.role? :chefia_cad
       can :read,Pessoa
       can :read,Funcionario
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :chefia_cebep
+    if user.role? :chefia_cebep
       can :manage,Pessoa
       cannot :update,Pessoa
       cannot :destroy,Pessoa
@@ -107,8 +115,9 @@ class Ability
       cannot :update,Funcionario
       cannot :destroy,Pessoa
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :cebep
+    if user.role? :cebep
       can :manage,Pessoa
       cannot :update,Pessoa
       cannot :destroy,Pessoa
@@ -118,8 +127,9 @@ class Ability
       can :manage, Comissionado
       cannot :destroy,Comissionado
       can [:read,:update],Escola
+    end
 
-    elsif user.role? :chefia_nupes
+    if user.role? :chefia_nupes
       can :manage, Lotacao
       can :manage, Pessoa
       can :manage, Funcionario
@@ -129,12 +139,14 @@ class Ability
       cannot :edit, Funcionario
       cannot :destroy, Lotacao
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :nupes
+    if user.role? :nupes
       can :read,Pessoa
       can :read,Funcionario
+    end
 
-    elsif user.role? :chefia_upag
+    if user.role? :chefia_upag
       can :read,Pessoa
       can :read,Funcionario
       can :manage,Folha
@@ -150,23 +162,26 @@ class Ability
       can :manage,ReferenciaNivel
       cannot :destroy,ReferenciaNivel
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :ponto
+    if user.role? :ponto
       can :manage,Departamento
       cannot :update,Departamento
       cannot :create,Departamento
       cannot :destroy,Departamento
       can :manage,Ponto
       cannot :destroy,Ponto
+    end
 
-    elsif user.role? :qualificacao
+    if user.role? :qualificacao
       can :qualificar_funcionario, Pessoa
+    end
 
-    elsif user.role? :relatorios
+    if user.role? :relatorios
       can :emitir_relatorios, :all
+    end
 
-
-    elsif user.role? :upag
+    if user.role? :upag
       can :read,Pessoa
       can :read,Funcionario
       can :manage,Folha
@@ -181,9 +196,9 @@ class Ability
       cannot :destroy,Folha::Evento
       can :manage,ReferenciaNivel
       cannot :destroy,ReferenciaNivel
+    end
 
-
-    elsif user.role? :lotacao
+    if user.role? :lotacao
       can :manage, Lotacao
       cannot :convalidar,Lotacao
       can :read,Funcionario
@@ -204,9 +219,9 @@ class Ability
       can :inspecionar, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola
       cannot :especificar_lotacao,Lotacao
+    end
 
-
-    elsif user.role? :chefia_ucolom
+    if user.role? :chefia_ucolom
       can :manage, Lotacao
       cannot :convalidar,Lotacao
       cannot :create, Lotacao
@@ -223,9 +238,9 @@ class Ability
       can :manage, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola
       cannot :especificar_lotacao,Lotacao
+    end
 
-
-    elsif user.role? :crh
+    if user.role? :crh
       can :read,Pessoa
       can :adicionar_a_lista,Pessoa
       can :salvar_lista,Pessoa
@@ -236,25 +251,26 @@ class Ability
       can :agenda,Orgao
       can :manage,TipoLista,:privada=>false
       cannot :remover_pessoa,TipoLista,:privada=>false
+    end
 
-
-    elsif user.role? :chefia_crh
+    if user.role? :chefia_crh
       can :read,Pessoa
       can :read,Funcionario
       can :manage,Formacao
       cannot :destroy,Formacao
       can :read,Orgao
       can :agenda,Orgao
+    end
 
-    elsif user.role? :recad
+    if user.role? :recad
       can :manage,Funcionario
       cannot :destroy,Funcionario
       can :manage,Pessoa
       cannot :destroy,Pessoa
       can :manage,Lotacao
+    end
 
-
-    elsif user.role? :revisao_carga_horaria
+    if user.role? :revisao_carga_horaria
       can :manage,Funcionario
       cannot :destroy,Funcionario
       cannot :edit,Funcionario
@@ -264,38 +280,14 @@ class Ability
       can :manage,Lotacao
       cannot :destroy,Lotacao
       cannot :convalidar,Lotacao
+    end
 
-    elsif user.role? :codnope
+    if user.role? :codnope
       can :read,Escola
       can :manage, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola
       can :manage,Matriz
-
-    else
-      can :read, Pessoa
-      can :read, Cidade
-      can :read, Estado
-      can :read, SituacoesJuridica
-      can :read, ReferenciaNivel
-      can :read, Municipio
-      can :read, TipoAmbiente
-      can :read, Poder
-      can :read, Distrito
-      can :read, Diretor
-      can :read, Cargo
-      can :read, Orgao
-      can :read, Municipio
-      can :read, SituacoesJuridica
-      can :read, Esfera
-      #can :read, Escola
-      can :read, Quadro
-      can :read, Folha
-      can :read, Tipo
-      can :read, NivelCargo
-      can :read, Departamento
-      can :read, Serie
-
-
     end
+
   end
 end
