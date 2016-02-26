@@ -35,6 +35,8 @@ GEM
     arel (3.0.3)
     barby (0.6.2)
     bcrypt (3.1.10)
+    bootstrap-will_paginate (0.0.10)
+      will_paginate
     brI18n (3.1.0)
       actionpack (>= 3.0.0)
       activerecord (>= 3.0.0)
@@ -241,8 +243,6 @@ GEM
       rack (>= 1.0)
     wicked_pdf (1.0.3)
     will_paginate (3.1.0)
-    will_paginate-bootstrap (1.0.1)
-      will_paginate (>= 3.0.3)
     wkhtmltopdf (0.1.2)
 
 PLATFORMS
@@ -251,6 +251,7 @@ PLATFORMS
 DEPENDENCIES
   ajax_pagination
   barby
+  bootstrap-will_paginate (= 0.0.10)
   brazilian-rails (= 3.1.0)
   calendar_date_select
   cancan
@@ -295,8 +296,7 @@ DEPENDENCIES
   validates_timeliness (= 3.0.14)
   wicked_pdf
   will_paginate
-  will_paginate-bootstrap
   wkhtmltopdf (~> 0.1.2)
 
 BUNDLED WITH
-   1.10.6
+   1.11.2
