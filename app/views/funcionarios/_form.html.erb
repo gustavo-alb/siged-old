@@ -1,21 +1,21 @@
 <%= simple_form_for @funcionario,:url=>@url, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :matricula %>
+  <%= f.input :matricula,:label=>"Matrícula"%>
   <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
-  <%= f.input :entidade_id,as: :select, :collection=>@entidades %>
+  <%= f.input :entidade_id,as: :select, :collection=>@entidades ,:label=>"Quadro"%>
   <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
   <div id='disc'>
     <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
   </div>
-  <%= f.input :nivel_id,as: :select, :collection=>@niveis %>
-  <%= f.input :decreto_nomeacao %>
-  <%= f.input :termo_posse %>
-  <%= f.input :orgao_id,as: :select, :collection=>@orgaos%>
-  <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: @funcionario.data_nomeacao.strftime("%d/%m/%Y")}%>
-  <%= f.input :municipio_id,as: :select, :collection=>@municipios %>
+  <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
+  <%= f.input :decreto_nomeacao,:label=>"Decreto de Nomeação" %>
+  <%= f.input :termo_posse ,:label=>"Termo de Posse"%>
+  <%= f.input :orgao_id,as: :select, :collection=>@orgaos,:label=>"Orgão de Origem"%>
+  <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record?)},:label=>"Admissão"%>
+  <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção"%>
   <div id='dist'>
-    <%= f.input :distrito_id,as: :select, :collection=>@distritos  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+    <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
   </div>
-  <%= f.input :observacao,as: :text,input_html: {size: "3x3"} %>
+  <%= f.input :observacao,as: :text,input_html: {size: "3x3"},:label=>"Observação" %>
   <%= f.button :submit, :class => 'btn-primary' %>
   <%= link_to "Cancelar",
 pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default' %>
