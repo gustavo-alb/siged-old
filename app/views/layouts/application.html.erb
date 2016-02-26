@@ -106,7 +106,7 @@
               <% if can?(:read,Orgao)%>
                 <li><%=link_to "Orgãos", orgaos_path%></li>
               <%end%>
-              <% if can?(:read,Departamento)%>
+              <% if can?(:read,Departamento) and current_user.unidade_organizacional%>
                 <li><%=link_to "Departamentos do seu Orgão", orgao_departamentos_path(current_user.unidade_organizacional.orgao)%></li>
               <%end%>
             </ul>
