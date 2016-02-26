@@ -1,5 +1,5 @@
   <%= simple_form_for @lotacao,:url=>@url, :html => { :class => 'form-vertical' } do |f| %>
-  <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today} if current_user.role? :chefia_ucolom%>
+  <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today} if current_user.role? :chefia_ucolom or current_user.role? :admin%>
   <%= f.input :data_lotacao,:as=>:hidden,:input_html=>{:class=>"data",:value=>Date.today} if !current_user.role?(:chefia_ucolom)%>
   <%= f.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
   <div id="destino">
