@@ -65,44 +65,44 @@ Siged20::Application.routes.draw do
 
   namespace :folha do resources :fonte_recursos end
 
-  namespace :arquivo do resources :documentos end
+    namespace :arquivo do resources :documentos end
 
-  namespace :administracao do
-    resources :migracoes
-  end
-
-  resources :categorias do
-    resources :textos
-  end
-
-
-  resources :configuracao_pontos
-
-  resources :entidades
-  get "administracao/tarefas/funcionarios"
-  namespace :administracao do resources :tarefas end
-
-  get "administracao/index"
-
-
-  get "administracao/atualizar_informacao"
-
-  namespace :folha do resources :competencias end
-  namespace :folha do
-    resources :financeiros do
-      get "validar_matricula"
-      get "validar_evento"
-    end
-  end
-  resources :vencimentos
-
-
-  namespace :folha do
-    resources :folhas do
-      get "imprimir_financeiros"
-      resources :financeiros do
-
+      namespace :administracao do
+        resources :migracoes
       end
+
+      resources :categorias do
+        resources :textos
+      end
+
+
+      resources :configuracao_pontos
+
+      resources :entidades
+      get "administracao/tarefas/funcionarios"
+      namespace :administracao do resources :tarefas end
+
+        get "administracao/index"
+
+
+        get "administracao/atualizar_informacao"
+
+        namespace :folha do resources :competencias end
+          namespace :folha do
+            resources :financeiros do
+              get "validar_matricula"
+              get "validar_evento"
+            end
+          end
+          resources :vencimentos
+
+
+          namespace :folha do
+            resources :folhas do
+              get "imprimir_financeiros"
+              resources :financeiros do
+
+              end
 
       #fim do resource folhas
     end
@@ -128,46 +128,46 @@ Siged20::Application.routes.draw do
   namespace :folha do resources :eventos end
 
 
-  resources :categoria
+    resources :categoria
 
-  resources :tipo_listas do
-    get :adicionar_de_arquivo
-    get :detalhes_pessoa
-    post :salvar_arquivo
-    get :listar
-    get :relatorio
-  end
+    resources :tipo_listas do
+      get :adicionar_de_arquivo
+      get :detalhes_pessoa
+      post :salvar_arquivo
+      get :listar
+      get :relatorio
+    end
 
-  resources :ambientes
-
-
-  resources :matrizes do
-    get :configurar_curriculos
-    put :salvar_curriculo
-    resources :curriculos
-  end
-
-  resources :settings
+    resources :ambientes
 
 
+    resources :matrizes do
+      get :configurar_curriculos
+      put :salvar_curriculo
+      resources :curriculos
+    end
 
-  resources :disciplina_contratacoes
-
-  resources :folhas
+    resources :settings
 
 
 
-  resources :quadros do
+    resources :disciplina_contratacoes
+
     resources :folhas
-  end
-
-  resources :roles
 
 
 
+    resources :quadros do
+      resources :folhas
+    end
 
-  devise_for :users
-  resources :usuarios
+    resources :roles
+
+
+
+
+    devise_for :users
+    resources :usuarios
 
   # add another lines as you need...
 
@@ -352,9 +352,12 @@ Siged20::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  # root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}
-  # root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}
-  # root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}
+  
+  authenticated :user do
+    root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}, as: :ucolom_root
+    root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}, as: :ucada_root
+    root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}, as: :chefia_ucolom_root
+  end
   root :to => "home#index"
 
 
