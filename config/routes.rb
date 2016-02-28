@@ -215,6 +215,12 @@ Siged20::Application.routes.draw do
   end
 
   resources :pessoas do
+    get "contratos",:on=>:collection
+    get "novo_contrato",:on=>:collection
+    post "salvar_contrato",:on=>:collection
+    get "detalhes_contrato",:on=>:collection
+    get "editar_contrato",:on=>:collection
+    get "atualizar_contrato",:on=>:collection
     get "gerar_relatorio"
     get "nao_lotados",:on=>:collection
     resources :fotos,:only => [:index, :show, :novo, :create,:new] do

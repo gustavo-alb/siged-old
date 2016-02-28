@@ -234,6 +234,7 @@ class Ability
       cannot :create,Funcionario
       cannot :destroy,Funcionario
       cannot :edit,Funcionario
+      cannot :update,Funcionario
       can :emitir_relatorios,[Lotacao,Pessoa,Funcionario,Escola]
       can :manage, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola

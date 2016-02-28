@@ -10,9 +10,9 @@ development:
 production:
   adapter: postgresql
   encoding: unicode
-  database: dbf712nqp7fu4b
+  database: siged20_development
   pool: 5
-  host: ec2-107-20-242-191.compute-1.amazonaws.com
-  username: rbtneirzriigwl
-  password: hk-P5lvayw_PIatPhv6oYPRY2a
+  host: localhost
+  username: postgres
+  password: malocasoft
 

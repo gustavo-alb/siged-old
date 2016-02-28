@@ -1,0 +1,95 @@
+<%content_for :titulo do%>
+Contratos Administrativos
+
+<div class="input-group col-md-3 pull-right" style="margin-right: 30px;">
+  <%= search_form_for @q do |f|%>
+
+  <div class="input-append">
+    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-md"%> 
+    <%= button_tag(type: 'submit', class: "btn btn-info btn-md") do %>
+    <span class="glyphicon glyphicon-search"></span>
+    <% end %>
+  </div>
+</div>
+<%end%>
+<%=link_to "Criar",novo_contrato_pessoas_path,:class=>"btn btn-primary"%>
+<%end%>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>NOME</th>
+      <th>CPF</th>
+      <th>RG</th>
+      <th>NASCIMENTO</th>
+      <th>Nº DE FUNC.</th>
+      <th>AÇÕES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@pessoas.each_with_index do |p,i|%>
+    <tr class="accordion-toggle">
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;"><%= p.nome%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
+      <td>
+        <%#= link_to "Funcionários",pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%>
+        <%= link_to "Editar",editar_contrato_pessoas_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs" if can? :update,Pessoa%>
+        <%= link_to "Visualizar", detalhes_contrato_pessoas_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs"%>
+        <%= link_to "Apagar", pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Pessoa%>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="10" class="hiddenRow">
+        <div class="accordion-body collapse" id="demo<%=i%>">
+         <br/>
+         <% p.funcionarios.each.with_index(1) do |f,i|%>
+         <div class="well">
+          <div class="row">
+            <div class="col-xs-2">
+              <dt>MATRÍCULA:</dt>
+              <dd><%= detalhes(f.matricula)%></dd>
+            </div>
+            <div class="col-xs-4">
+              <dt>CARGO:</dt>
+              <dd><%=cargo_disciplina(f)%></dd>
+            </div>
+            <div class="col-xs-4">
+              <dt>CATEGORIA:</dt>
+              <dd><%=detalhes(f.categoria)%></dd>
+            </div>
+          </div>
+          <br/>
+          <div class="row">
+            <div class="col-xs-2">
+              <dt>ADMISSÃO:</dt>
+              <dd><%=f.data_nomeacao.to_s_br%></dd>
+            </div>
+            <div class="col-xs-4">
+              <dt>LOTAÇÃO:</dt>
+              <dd><%=lotacao(f)%></dd>
+            </div>
+            <div class="col-xs-4">
+              <dt>QUADRO:</dt>
+              <dd><%=detalhes(f.entidade)%></dd>
+            </div>
+          </div>
+          <br/>
+          <div class="footer pull-right">
+            <%= link_to "Editar",edit_pessoa_funcionario_path(p,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and  can? :edit,Funcionario%>
+            <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(p,f),:class=>"btn btn-primary btn-xs" if can? :manage,Lotacao%>
+
+          </div>
+          <br/>
+        </div>
+
+        <% end %>
+
+      </div>
+    </td>
+  </tr>
+  <% end%>
+</tbody>
+</table>
+<%=will_paginate @pessoas%>

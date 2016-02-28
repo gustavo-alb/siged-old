@@ -1,0 +1,73 @@
+<%content_for :titulo do%>
+Novo Contrato Administrativo
+<% end %>
+<%= simple_form_for @pessoa, :url=>salvar_contrato_pessoas_url,:html => { :class => 'form-horizontal' } do |p| %>
+<h3>Dados Pessoais</h3>
+  <%= p.input :nome %>
+  <%= p.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"]%>
+  <%= p.input :endereco,:label=>"Endereço" %>
+  <%= p.input :numero %>
+  <%= p.input :complemento %>
+  <%= p.input :bairro %>
+  <%= p.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
+  <%= p.input :telefone_celular,:input_html=>{:class=>"celular"}%>
+  <%= p.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+  <%= p.input :naturalidade %>
+  <%= p.input :nacionalidade %>
+  <%= p.input :cpf ,:input_html=>{:class=>"cpf"}%>
+  <%= p.input :rg ,:label=>"RG"%>
+  <%= p.input :uf ,:label=>"UF do RG",:collection=>Estado.all.collect{|e|e.sigla}%>
+  <%= p.input :pis_pasep ,:label=>"PIS/PASEP"%>
+  <%= p.input :cidade_id,:collection=>@municipios,:label=>"Município de Residência"%>
+  <%= p.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
+  <%= p.input :cep,:input_html=>{:class=>"cep"}%>
+  <%= p.input :email,:as=>:email %>
+  <%= p.input :pai %>
+  <%= p.input :mae,:label=>"Mãe" %>
+
+<h3>Dados Funcionais</h3>
+<%= simple_fields_for :funcionario,@funcionario do |f|%>
+<%=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
+<%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
+<%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
+
+
+<%= f.input :cargo_id,as: :select, :collection=>@cargos,:input_html=>{:id=>"funcionario_cargo_id"}%>
+
+ <div id='disc'>
+    <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+  </div>
+<%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
+<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record?)},:label=>"Admissão"%>
+<%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
+  <div id='dist'>
+    <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if (!@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?) or (!params[:funcionario].blank? and (params[:funcionario][:distrito_id] or Municipio.find(params[:funcionario][:municipio_id]).distritos.count>0))%>
+  </div>
+  
+
+<%end%>
+<%= simple_fields_for :lotacao,@lotacao do |f|%>
+  <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}%>
+  <%= f.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
+  <div id="destino">
+    <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
+    <%= f.input :destino_id,:as=>:hidden%>
+    <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
+    <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
+    <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
+  </div>
+  <%=f.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
+<%end%>
+
+<%= simple_fields_for :contrato,@contrato do |f|%>
+<%= f.input :inicio,:input_html=>{:class=>"data"}%>
+<%= f.input :termino,:input_html=>{:class=>"data"}%>
+<%= f.input :salario,:input_html=>{:class=>"salario"}%>
+
+<%end%>
+
+
+  <%= p.button :submit, :class => 'btn-primary' %>
+  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                contratos_pessoas_path, :class => 'btn btn-default' %>
+<% end %>

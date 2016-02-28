@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160212140645) do
+ActiveRecord::Schema.define(:version => 20160228152607) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -280,6 +280,7 @@ ActiveRecord::Schema.define(:version => 20160212140645) do
     t.decimal  "salario"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "numero"
   end
 
   create_table "curriculos", :force => true do |t|
@@ -763,6 +764,7 @@ ActiveRecord::Schema.define(:version => 20160212140645) do
     t.integer  "destino_id"
     t.string   "destino_type"
     t.string   "state"
+    t.integer  "contrato_id"
   end
 
   add_index "lotacaos", ["departamento_id"], :name => "index_lotacaos_on_departamento_id"
@@ -1408,11 +1410,11 @@ ActiveRecord::Schema.define(:version => 20160212140645) do
   end
 
   create_table "usuarios", :force => true do |t|
-    t.string   "name",       :limit => nil
-    t.string   "login",      :limit => nil
-    t.string   "email",      :limit => nil
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "login"
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "vencimentos", :force => true do |t|

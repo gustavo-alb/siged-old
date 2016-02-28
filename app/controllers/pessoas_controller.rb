@@ -149,9 +149,9 @@ class PessoasController < ApplicationController
   def gerar_relatorio
     pdf = PDFController.render_pdf
     send_data pdf,
-      :type         => "application/pdf",
-      :disposition  => "inline",
-      :filename     => "report.pdf"
+    :type         => "application/pdf",
+    :disposition  => "inline",
+    :filename     => "report.pdf"
   end
 
 
@@ -171,16 +171,16 @@ class PessoasController < ApplicationController
           :layout => "pdf", # OPTIONAL
           :wkhtmltopdf=>"/usr/bin/wkhtmltopdf",
           :margin => {:top=> 0,
-                      :bottom=> 30},
+            :bottom=> 30},
           #:left=> 2,
           # :right=> 3},
           :footer=>{:html =>{:template => 'pessoas/footer.pdf.erb'}},
           :zoom => 0.873 ,
           :orientation => 'Portrait'
 
+        end
       end
     end
-  end
 
   # GET /pessoas/new
   # GET /pessoas/new.xml
@@ -273,6 +273,58 @@ class PessoasController < ApplicationController
         format.xml  { render :xml => @lista.errors, :status => :unprocessable_entity }
       end
     end
+  end
+
+  def contratos
+    @categoria = Categoria.find_by_nome("Contrato Administrativo")
+    @q = Pessoa.ransack(params[:q])
+    if params[:q] and params[:q].size>0
+      @busca = params[:q][:nome_or_cpf_or_rg_or_funcionarios_matricula_cont]
+      @pessoas = @q.result(distinct: true).joins(:funcionarios).where("funcionarios.categoria_id = ? and funcionarios.ativo = ?",@categoria,true).order('nome ASC').paginate :page => params[:page], :per_page => 10
+    else
+      @pessoas = Pessoa.joins(:funcionarios).where("funcionarios.categoria_id = ? and funcionarios.ativo = ?",@categoria,true).order("nome asc").paginate :page => params[:page], :per_page => 10
+    end
+  end
+
+  def novo_contrato
+    @categoria = Categoria.find_by_nome("Contrato Administrativo")
+    @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
+    @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+    @pessoa = Pessoa.new
+    @funcionario = @pessoa.funcionarios.new
+    @lotacao = @funcionario.lotacoes.new
+  end
+
+  def salvar_contrato
+    @categoria = Categoria.find_by_nome("Contrato Administrativo")
+    @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
+     @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+    @pessoa = Pessoa.new(params[:pessoa])
+    @funcionario = @pessoa.funcionarios.new(params[:funcionario])
+    @lotacao = @funcionario.lotacoes.new(params[:lotacao])
+    @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]}
+    respond_to do |format|
+      if @pessoa.save
+        format.html { redirect_to(@pessoa, :notice => 'Pessoa cadastrada com sucesso.') }
+        format.xml  { render :xml => @pessoa, :status => :created, :location => @pessoa }
+      else
+        format.html { render :action => "novo_contrato" }
+        format.xml  { render :xml => @pessoa.errors, :status => :unprocessable_entity }
+      end
+
+    end
+  end
+
+  def editar_contrato
+    @distritos = @municipio.distritos.all.collect{|m|[m.nome,m.id]}
+  end
+
+  def atualizar_contrato
+    @distritos = @municipio.distritos.all.collect{|m|[m.nome,m.id]}
+  end
+
+  def detalhes_contrato
+    @pessoa = Pessoa.find(params[:pessoa_id])
   end
 
 

@@ -19,7 +19,7 @@ class Pessoa < ActiveRecord::Base
   has_many :lotacoes,:through=>:funcionarios
   accepts_nested_attributes_for :funcionarios
   belongs_to :entidade
-  belongs_to :cidade
+  belongs_to :cidade,:class_name=>"Municipio"
   scope :diretores,lambda {joins(:funcionarios).where("funcionarios.id in(select funcionario_id from comissionados where comissionados.tipo='DIRETORIA' and comissionados.ativo=true)")}
   scope :responsaveis,lambda {joins(:funcionarios).where("funcionarios.id in(select funcionario_id from comissionados where comissionados.tipo='CHEFIA' and comissionados.ativo=true)")}
   scope :secretarios,lambda {joins(:funcionarios).where("funcionarios.id in(select funcionario_id from comissionados where comissionados.tipo='SECRETARIA' and comissionados.ativo=true)")}
@@ -59,7 +59,7 @@ class Pessoa < ActiveRecord::Base
     self.cpf = cpf.to_s.gsub(".","").gsub("-","")
   end
   def nome_upcase
-    self.nome = self.nome.upcase
+    self.nome = ActiveSupport::Inflector.transliterate(self.nome.upcase)
   end
 
   def self.ransackable_scopes(auth_object = nil)
