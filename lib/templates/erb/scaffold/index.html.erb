@@ -24,6 +24,7 @@
           <%% @<%=plural_table_name%>.each_with_index do |<%=singular_table_name[0]%>,i| %>
     
           
+          
           <tr>
             <%attributes[0..3].each do |attribute|%>
               <td><%%= <%=singular_table_name[0]%>.<%=attribute.name%>%></td>
@@ -37,4 +38,4 @@
           <%% end%>
         </tbody>
       </table>
-      <%%= will_paginate @<%=singular_table_name%>,renderer: BootstrapPagination::Rails%>
+      <%%= will_paginate @<%=singular_table_name%>%>

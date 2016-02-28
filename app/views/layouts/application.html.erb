@@ -28,10 +28,14 @@
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
             <li><%= link_to "Página Inicial",root_url%></li>
+            <% if user_signed_in?%>
             <li><%= link_to "Perfil",edit_user_registration_url%></li>
-            <li><a href="#" title="Em breve">Ajuda</a></li>
             <li><a href="#" title="Em breve">Mensagens</a></li>
             <li><a href="/users/sign_out">Sair</a></li>
+            <%else%>
+            <li><a href="/users/sign_in">Entrar</a></li>
+            <%end%>
+            <li><a href="#" title="Em breve">Ajuda</a></li>
           </ul>
         </div>
       </div>
@@ -46,9 +50,9 @@
             <% if can?(:read,Pessoa)%>
               <li><%=link_to "Pessoas", pessoas_path%></li>
             <%end%>
-            <%=setor%>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
+            <!--<%=setor%>-->
+           <!--  <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li> -->
           </ul>
           <% if can?(:configurar,:all)%>
             <ul class="nav nav-sidebar">
@@ -102,7 +106,7 @@
               <% if can?(:read,Orgao)%>
                 <li><%=link_to "Orgãos", orgaos_path%></li>
               <%end%>
-              <% if can?(:read,Departamento)%>
+              <% if can?(:read,Departamento) and current_user.unidade_organizacional%>
                 <li><%=link_to "Departamentos do seu Orgão", orgao_departamentos_path(current_user.unidade_organizacional.orgao)%></li>
               <%end%>
             </ul>

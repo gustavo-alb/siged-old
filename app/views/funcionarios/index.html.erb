@@ -1,52 +1,34 @@
 <%content_for :titulo do%>
   Funcionarios
-  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
-    <%= search_form_for @q do |f|%>
-      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
-      <span class="input-group-btn">
-        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-          <span class="glyphicon glyphicon-search"></span>
-          <% end %>
-        </span>
-      </div>
-      <%end%>
-      <%= link_to "Criar",new_funcionario_path,:class=>"btn btn-primary"%>
-      <%end%>
-      <table class="table table-striped tabela-colapsavel">
-        <thead>
-          <tr>
-            
-              <th>matricula</th>
-            
-              <th>cargo_id</th>
-            
-              <th>entidade_id</th>
-            
-              <th>categoria_id</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <% @funcionarios.each_with_index do |f,i| %>
-    
-          
-          <tr>
-            
-              <td><%= f.matricula%></td>
-            
-              <td><%= f.cargo_id%></td>
-            
-              <td><%= f.entidade_id%></td>
-            
-              <td><%= f.categoria_id%></td>
-            
-            <td>
-              <%= link_to "Editar", edit_funcionario_path(f),:class=>"btn btn-primary btn-xs"%>
-      <%= link_to "Visualizar",funcionario_path(f),:class=>"btn btn-primary btn-xs"%>
-      <%= link_to "Apagar", funcionario_path(f),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
-      </td>
-          </tr>
-          <% end%>
-        </tbody>
-      </table>
-      <%= will_paginate @funcionario,renderer: BootstrapPagination::Rails%>
+  
+  <%= link_to "Criar",new_pessoa_funcionario_path(@pessoa),:class=>"btn btn-primary"%>
+<%end%>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>MATRÍCULA</th>
+      <th>CARGO</th>
+      <th>CATEGORIA</th>
+      <!-- <th>QUADRO</th> -->
+      <th>LOTAÇÃO</th>
+      <th>AÇÕES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @funcionarios.each_with_index do |f,i| %>
+      <tr>
+        <td><%= f.matricula%></td>
+        <td><%= cargo_disciplina(f)%></td>
+        <td><%= detalhes(f.categoria)%></td>
+        <!-- <td><%= detalhes(f.entidade)%></td> -->
+        <td><%= lotacao(f)%></td>
+        <td>
+          <%= link_to "Editar", edit_pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Visualizar",pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"%>
+          <%= link_to "Apagar", pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+        </td>
+      </tr>
+    <% end%>
+  </tbody>
+</table>
+<%= will_paginate @funcionario%>

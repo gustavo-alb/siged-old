@@ -1,6 +1,5 @@
-<%content_for :links do%>
-		<%=link_to "Escolas",escolas_path%><div class="breadcrumb_divider"></div><%=link_to "Editando escola",edit_escola_path, :class=>"current"%>
-
-<%end%>
-<%= render 'form',:legenda=>'Edição de Escolas ' %>
-
+<%model_class = Escola%>
+<%content_for :titulo do%>
+  Editando registro de 
+  <%end%>
+  <%= render :partial => 'form' %>

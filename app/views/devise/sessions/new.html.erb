@@ -1,27 +1,16 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h4><%= t('.sign_in', :default => "Sign in") %></h4>
-  </div>
-  <div class="panel-body">
-    <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { role: "form" }) do |f| %>
-      <div class="form-group">
-        <%= f.label "Usuário" %>
-        <%= f.text_field :username, autofocus: true, class: "form-control" %>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 col-md-4 col-md-offset-4">
+      <h1 class="text-center login-title">SIGED - Login</h1>
+      <div class="account-wall">
+        <%= image_tag "logo.png",:class=>"profile-img"%>
+        <%= simple_form_for(resource, :as => resource_name, :url => session_path(resource_name), :html => {:class => 'form-signin' }) do |f| %>
+        <%= f.input :username,:label=>false,:placeholder=>"Usuário",:input_html=>{:class=>"form-control"},:wrapper=>false%>
+        <%= f.input :password,:label=>false,:placeholder=>"Senha",:input_html=>{:class=>"form-control"},:wrapper=>false%>
+            <%=f.submit "Entrar",:class=>"btn btn-lg btn-primary btn-block"%>
+        <%  end %>
       </div>
-      <div class="form-group">
-        <%= f.label "Senha" %>
-        <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
-      </div>
-      <% if devise_mapping.rememberable? %>
-        <div class="checkbox">
-          <label>
-            <%= f.check_box :remember_me %>
-            <%= f.label "Lembrar?" %>
-          </label>
-        </div>
-      <% end %>
-      <%= f.submit  t('.sign_in', :default => "Sign in"), class: "btn btn-primary" %>
-    <% end %>
+
+    </div>
   </div>
 </div>
-<%#= render "devise/shared/links" %>

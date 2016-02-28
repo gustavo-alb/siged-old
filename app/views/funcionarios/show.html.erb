@@ -1,38 +1,42 @@
 <%model_class = Funcionario%>
 <%content_for :titulo do%>
-  Detalhes de 
+Detalhes de 
+<%end%>
+<dl class="dl-horizontal">
+  <dt><strong>Matricula:</strong></dt>
+  <dd><%= @funcionario.matricula %></dd>
+  <dt><strong>Cargo:</strong></dt>
+  <dd><%= detalhes(@funcionario.cargo) %></dd>
+  <%if @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>  
+  <dt><strong>Disciplina</strong></dt>
+  <dd><%= detalhes(@funcionario.disciplina_contratacao) %></dd>
   <%end%>
-  <dl class="dl-horizontal">
-          <dt><strong>Matricula:</strong></dt>
-      <dd><%= @funcionario.matricula %></dd>
-          <dt><strong>Cargo:</strong></dt>
-      <dd><%= @funcionario.cargo_id %></dd>
-          <dt><strong>Entidade:</strong></dt>
-      <dd><%= @funcionario.entidade_id %></dd>
-          <dt><strong>Categoria:</strong></dt>
-      <dd><%= @funcionario.categoria_id %></dd>
-          <dt><strong>Nivel:</strong></dt>
-      <dd><%= @funcionario.nivel_id %></dd>
-          <dt><strong>Disciplina contratacao:</strong></dt>
-      <dd><%= @funcionario.disciplina_contratacao_id %></dd>
-          <dt><strong>Decreto nomeacao:</strong></dt>
-      <dd><%= @funcionario.decreto_nomeacao %></dd>
-          <dt><strong>Termo posse:</strong></dt>
-      <dd><%= @funcionario.termo_posse %></dd>
-          <dt><strong>Orgao:</strong></dt>
-      <dd><%= @funcionario.orgao_id %></dd>
-          <dt><strong>Data nomeacao:</strong></dt>
-      <dd><%= @funcionario.data_nomeacao %></dd>
-          <dt><strong>Municipio:</strong></dt>
-      <dd><%= @funcionario.municipio_id %></dd>
-          <dt><strong>Observacao:</strong></dt>
-      <dd><%= @funcionario.observacao %></dd>
-    
-  </dl>
-  <%= link_to 'Voltar', funcionarios_path, :class => 'btn btn-default'  %>
-  <%= link_to 'Editar', edit_funcionario_path(@funcionario), :class => 'btn btn-default' %>
-  <%= link_to "Apagar",
-              funcionario_path(@funcionario),
-              :method => 'delete',
-              :data => { :confirm => "Você tem certeza?" },
-              :class => 'btn btn-danger' %>
+
+  <dt><strong>Quadro:</strong></dt>
+  <dd><%= detalhes(@funcionario.entidade) %></dd>
+  <dt><strong>Categoria:</strong></dt>
+  <dd><%= detalhes(@funcionario.categoria) %></dd>
+  <dt><strong>Referência/Nivel:</strong></dt>
+  <dd><%= detalhes(@funcionario.nivel) %></dd>
+  
+  <dt><strong>Decreto de Nomeação:</strong></dt>
+  <dd><%= @funcionario.decreto_nomeacao %></dd>
+  <dt><strong>Termo de Posse:</strong></dt>
+  <dd><%= detalhes(@funcionario.termo_posse) %></dd>
+  <dt><strong>Orgão:</strong></dt>
+  <dd><%= detalhes(@funcionario.orgao) %></dd>
+  <dt><strong>Admissão:</strong></dt>
+  <dd><%= @funcionario.data_nomeacao.to_s_br %></dd>
+  <dt><strong>Município de Opção:</strong></dt>
+  <dd><%= detalhes(@funcionario.municipio) %></dd>
+  <dt><strong>Observacao:</strong></dt>
+  <dd><%= detalhes(@funcionario.observacao) %></dd>
+
+</dl>
+<%= link_to 'Voltar', pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default'  %>
+<%= link_to 'Editar', edit_pessoa_funcionario_path(@pessoa,@funcionario), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+pessoa_funcionario_path(@pessoa,@funcionario),
+:method => 'delete',
+:data => { :confirm => "Você tem certeza?" },
+:class => 'btn btn-danger' %>

@@ -1,7 +1,8 @@
 # -*- encoding : utf-8 -*-
 class HomeController < ApplicationController
   #load_and_authorize_resource
-
+  skip_before_filter :authenticate_user!
+  layout :layout_by_resource
   def index
     @disciplinas = Rails.cache.fetch('disciplinas', :expires_in => 24.hours) { DisciplinaContratacao.joins(:funcionarios).order('nome asc').uniq }
     # @disciplinas = DisciplinaContratacao.find(:all,:joins=>:funcionarios,:order=>['nome asc']).uniq
@@ -17,5 +18,13 @@ class HomeController < ApplicationController
   end
 
   def home
+  end
+
+  def layout_by_resource
+    if current_user.nil?
+      "guest"
+    else
+      "application"
+    end
   end
 end

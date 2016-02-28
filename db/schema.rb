@@ -11,12 +11,12 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151210162154) do
+ActiveRecord::Schema.define(:version => 20160212140645) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "administracao_logs", :force => true do |t|
@@ -209,13 +209,6 @@ ActiveRecord::Schema.define(:version => 20151210162154) do
     t.integer "funcionario_id"
   end
 
-  create_table "certificados", :force => true do |t|
-    t.string   "nome"
-    t.string   "poar"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "cidades", :force => true do |t|
     t.string   "nome"
     t.integer  "estado_id"
@@ -277,6 +270,16 @@ ActiveRecord::Schema.define(:version => 20151210162154) do
     t.datetime "hora_limite_saida_manha"
     t.datetime "hora_limite_entrada_tarde"
     t.datetime "hora_limite_saida_tarde"
+  end
+
+  create_table "contratos", :force => true do |t|
+    t.integer  "funcionario_id"
+    t.date     "inicio"
+    t.date     "termino"
+    t.integer  "lotacao_id"
+    t.decimal  "salario"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
   end
 
   create_table "curriculos", :force => true do |t|
@@ -701,8 +704,8 @@ ActiveRecord::Schema.define(:version => 20151210162154) do
     t.string   "codigo"
     t.integer  "valor_fixo"
     t.integer  "valor_porcentagem"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "rubrica_id"
     t.integer  "funcionario_id"
   end
@@ -1193,8 +1196,8 @@ ActiveRecord::Schema.define(:version => 20151210162154) do
   create_table "rubricas", :force => true do |t|
     t.string   "nome"
     t.integer  "codigo"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "series", :force => true do |t|
@@ -1402,6 +1405,14 @@ ActiveRecord::Schema.define(:version => 20151210162154) do
   create_table "users_entidades", :id => false, :force => true do |t|
     t.integer "entidade_id"
     t.integer "user_id"
+  end
+
+  create_table "usuarios", :force => true do |t|
+    t.string   "name",       :limit => nil
+    t.string   "login",      :limit => nil
+    t.string   "email",      :limit => nil
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "vencimentos", :force => true do |t|

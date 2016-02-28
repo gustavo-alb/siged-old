@@ -1,2 +1,40 @@
-geralzão
-hauhauhauha
+  <div class="accordion-toggle" >
+    <h2 style="font-color: black;" data-toggle="collapse" data-target="#disciplinas" class="btn btn-lg btn-primary">Estatísticas - Professores</h2>
+  </div>
+  <div class="accordion-body collapse" id="disciplinas">
+    <table class="table table-striped" WIDTH='80%'>
+      <thead>
+      <tr>
+        <th>Disciplina</th>
+        <th>Qnt.</th>
+        <th>%</th>
+        <th WIDTH=1%>Lotados</th>
+        <th>%</th>
+        <th WIDTH=1%>Especificados</th>
+        <th>%</th>
+      </tr>
+      </thead>
+      <tbody>
+      <%@disciplinas.each do |d|%>
+          <tr>
+            <td><%=d.nome%></td>
+            <td ALIGN=CENTER><%=d.funcionarios.count%></td>
+            <td ALIGN=CENTER><%=(d.funcionarios.count*100)/@professores.count%></td>
+            <td ALIGN=CENTER><%=d.funcionarios.joins(:lotacoes).where("lotacaos.ativo = true").count%></td>
+            <td ALIGN=CENTER><%=(d.funcionarios.joins(:lotacoes).where("lotacaos.ativo = true").count*100)/d.funcionarios.count%></td>
+            <td ALIGN=CENTER><%=d.funcionarios.joins(:especificacoes).count%></td>
+            <td ALIGN=CENTER><%=(d.funcionarios.joins(:especificacoes).count*100)/d.funcionarios.count%></td>
+          </tr>
+      <%end%>
+      <tr>
+        <td><b>Indefinidos</b></td>
+        <td ALIGN=CENTER><%=@indefinidos.count%></td>
+        <td ALIGN=CENTER><%=(@indefinidos.count*100)/@professores.count%></td>
+        <td ALIGN=CENTER><%=@i_lotados.count%></td>
+        <td ALIGN=CENTER><%=(@i_lotados.count*100)/@indefinidos.count%></td>
+        <td ALIGN=CENTER><%=@i_especificados.count%></td>
+        <td ALIGN=CENTER><%=(@i_especificados.count*100)/@indefinidos.count%></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
