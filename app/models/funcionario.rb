@@ -55,6 +55,7 @@ class Funcionario < ActiveRecord::Base
   has_many :processos,:dependent=>:destroy
   has_many :boletins, :class_name=>"BoletimFuncional",:dependent=>:nullify
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
+  has_one :contrato
   scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}
   after_create :criar_comissionado
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}

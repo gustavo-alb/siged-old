@@ -5,8 +5,11 @@ class UsuariosController < ApplicationController
   load_and_authorize_resource
   def index
     @q = User.ransack(params[:q])
-    @users = @q.result(distinct: true).order('name ASC').paginate :page => params[:page], :per_page => 10
-
+    if params[:q].blank?
+    @usuarios = User.order("name asc").paginate :page => params[:page], :per_page => 10
+    else
+    @usuarios = @q.result(distinct: true).order('name ASC').paginate :page => params[:page], :per_page => 10
+  end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @users }

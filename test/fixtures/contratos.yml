@@ -1,15 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
 one:
-  funcionario_id: 1
-  inicio: 2016-02-12
-  termino: 2016-02-12
-  lotacao_id: 1
+  numero: 1
   salario: 9.99
+  funcionario_id: 1
+  lotacao_id: 1
 
 two:
-  funcionario_id: 1
-  inicio: 2016-02-12
-  termino: 2016-02-12
-  lotacao_id: 1
+  numero: 1
   salario: 9.99
+  funcionario_id: 1
+  lotacao_id: 1

@@ -1,18 +1,20 @@
 <%content_for :titulo do%>
 Contratos Administrativos
 
-<div class="input-group col-md-3 pull-right" style="margin-right: 30px;">
-  <%= search_form_for @q do |f|%>
+<div class="input-group col-md-4 pull-right">
+  <%= search_form_for @q,:url=>contratos_index_url do |f|%>
 
-  <div class="input-append">
-    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-md"%> 
-    <%= button_tag(type: 'submit', class: "btn btn-info btn-md") do %>
+  <div class="input-group">
+    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-lg"%> 
+    <div class="input-group-btn">
+    <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
     <span class="glyphicon glyphicon-search"></span>
     <% end %>
+    </div>
   </div>
 </div>
 <%end%>
-<%=link_to "Criar",novo_contrato_pessoas_path,:class=>"btn btn-primary"%>
+<%=link_to "Criar",contratos_novo_path,:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -35,9 +37,9 @@ Contratos Administrativos
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
       <td>
         <%#= link_to "Funcionários",pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%>
-        <%= link_to "Editar",editar_contrato_pessoas_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs" if can? :update,Pessoa%>
-        <%= link_to "Visualizar", detalhes_contrato_pessoas_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs"%>
-        <%= link_to "Apagar", pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Pessoa%>
+        <%= link_to "Editar",contratos_editar_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs" if can? :update,Pessoa%>
+        <%= link_to "Visualizar", contratos_detalhes_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs"%>
+        <%= link_to "Apagar", contratos_apagar_path(:pessoa_id=>p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Pessoa%>
       </td>
     </tr>
     <tr>

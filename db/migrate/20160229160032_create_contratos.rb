@@ -1,11 +1,10 @@
 class CreateContratos < ActiveRecord::Migration
   def change
     create_table :contratos do |t|
-      t.integer :funcionario_id
-      t.date :inicio
-      t.date :termino
-      t.integer :lotacao_id
+      t.integer :numero
       t.decimal :salario
+      t.integer :funcionario_id
+      t.integer :lotacao_id
 
       t.timestamps
     end
