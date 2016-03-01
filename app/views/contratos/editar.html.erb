@@ -35,7 +35,7 @@ Novo Contrato Administrativo
     <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
   </div>
 <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
-<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record? and !@funcionario.data_nomeacao.blank?)},:label=>"Admissão"%>
+<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record? and !  @funcionario.data_nomeacao.blank?)},:label=>"Admissão"%>
 <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
   <div id='dist'>
     <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção" if @funcionario
@@ -55,7 +55,7 @@ Novo Contrato Administrativo
     <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
     <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
     <%else%>
-    <%= f.input :destino_nome,:label=>"Setorial",:as=>:autocomplete,:url=>lotacoes_autocomplete_departamento_nome_path,:input_html=>{:class=>"string form-control",:value=>@lotacao.destino.nome},:id_element=>"#lotacao_destino_id",:required=>true%>
+    <%= f.input :destino_nome,:label=>"Setorial",:as=>:autocomplete,:url=>lotacoes_autocomplete_departamento_nome_path,:input_html=>{:class=>"string form-control",:value=>@lotacao.destino.nome if @lotacao.destino},:id_element=>"#lotacao_destino_id",:required=>true%>
     <%= f.input :destino_id,:as=>:hidden,:input_html=>{:value=>@lotacao.destino.id}%>
     <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
     <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
