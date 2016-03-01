@@ -50,7 +50,7 @@
             <% if can?(:read,Pessoa)%>
               <li><%=link_to "Pessoas", pessoas_path%></li>
             <%end%>
-            <%if can? :index,Contrato%>
+            <%if can? :manage,Lotacao%>
             <li><%=link_to "Contratos Administrativos", contratos_index_path%></li>
             <%end%>
             <!--<%=setor%>-->
