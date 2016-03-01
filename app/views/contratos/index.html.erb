@@ -23,6 +23,7 @@ Contratos Administrativos
       <th>CPF</th>
       <th>RG</th>
       <th>NASCIMENTO</th>
+      <th>CRIADO EM</th>
       <th>Nº DE FUNC.</th>
       <th>AÇÕES</th>
     </tr>
@@ -34,6 +35,7 @@ Contratos Administrativos
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.created_at.strftime("%d/%m/%Y %H:%M")%></td>
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
       <td>
         <%#= link_to "Funcionários",pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%>

@@ -1,0 +1,19 @@
+<%content_for :titulo do%>
+Estatísticas Gerais do Contrato Administrativo
+<%end%>
+<div class="well">
+  <legend>Estatísticas</legend>
+  <p><strong>Total de Contratos Emitidos: </strong><%= Contrato.count %></p>
+  <%@contratos.each do |f|%>
+  <%end%>
+  <%if @data%>
+  <h3>Estatísticas do dia <%=@data%></h3>
+  <p><strong>Total de Contratos Emitidos em <%=@data%>: </strong><%= Contrato.count %></p>
+  <%end%>
+ 
+
+</div>
+
+
+<%= link_to "Voltar",
+contratos_index_path, :class => 'btn btn-default'  %>
