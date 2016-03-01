@@ -56,7 +56,7 @@ Novo Contrato Administrativo
     <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
     <%else%>
     <%= f.input :destino_nome,:label=>"Setorial",:as=>:autocomplete,:url=>lotacoes_autocomplete_departamento_nome_path,:input_html=>{:class=>"string form-control",:value=>(@lotacao.destino.nome if @lotacao.destino)},:id_element=>"#lotacao_destino_id",:required=>true%>
-    <%= f.input :destino_id,:as=>:hidden,:input_html=>{:value=>@lotacao.destino.id}%>
+    <%= f.input :destino_id,:as=>:hidden,:input_html=>{:value=>(@lotacao.destino.id if @lotacao.destino)}%>
     <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
     <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
     <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>@lotacao.destino_type}%>
