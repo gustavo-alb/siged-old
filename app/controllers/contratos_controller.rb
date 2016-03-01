@@ -194,7 +194,7 @@ def salvar
     arquivo_contrato = contrato.generate("/tmp/contrato-#{@funcionario.matricula}.odt")
     system "unoconv -f pdf /tmp/contrato-#{@funcionario.matricula}.odt"
     f = File.open("/tmp/contrato-#{@funcionario.matricula}.pdf",'r')
-    send_file(f,:filename=>"Contrato Nº #{@contrato.numero}- #{@pessoa.nome}",:content_type=>"application/pdf")
+    send_file(f,:filename=>"Contrato Nº #{@contrato.numero}- #{@pessoa.nome}.pdf",:content_type=>"application/pdf")
 
   end
 
