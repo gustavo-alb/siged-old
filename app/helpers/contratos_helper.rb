@@ -23,9 +23,9 @@ module ContratosHelper
     end
 
     def municipio_destino(obj)
-        if obj.municipio and obj.distrito and !obj.distrito.blank?
+        if obj.municipio and obj.respond_to?(:distrito) and !obj.distrito.blank?
             return raw("#{obj.municipio.nome}/#{obj.distrito}")
-        elsif obj.municipio and (obj.distrito.blank? or !obj.respond_to?(:distrito))
+        else
             return raw("#{obj.municipio.nome}")
         end
     end

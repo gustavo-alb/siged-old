@@ -18,14 +18,18 @@ class ContratosController < ApplicationController
   end
 
   def estatisticas
-   @categoria = Categoria.find_by_nome("Contrato Administrativo")
-   if params[:data] and params[:data].to_dat
-     @contratos = Funcionario.all.where("categoria_id = ? ativo = ?",@categoria.id,true,params[:data])
-   else
-   end
- end
+    @categoria = Categoria.find_by_nome("Contrato Administrativo")
+    if !params[:data].blank?
+      Date.parse(params[:data])
+    end
+    if @data
+      @contratos = Funcionario.where("categoria_id = ? and ativo = ?",@categoria.id,true,params[:data])
+    else
+      @contratos = Funcionario.where("categoria_id = ? and ativo = ?",@categoria.id,true)
+    end
+  end
 
- def funcional
+def funcional
   @pessoa = Pessoa.new(params[:pessoa])
   @funcionario = Funcionario.new
   @categoria = Categoria.find_by_nome("Contrato Administrativo")
