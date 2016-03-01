@@ -131,7 +131,7 @@ class PontosController < ApplicationController
       @objeto = Escola.find(@obj)
       @obj_tipo = "Escola"
     end
-    @lotacoes = @objeto.lotacoes
+    @lotacoes = @objeto.lotacoes.joins(:pessoa).order("pessoas.nome asc")
     @pdf = CombinePDF.new
     @lotacoes.each do |l|
       ponto = l.pontos.find_by_data(data)||l.funcionario.pontos.create(:data=>data,:funcionario_id=>l.funcionario.id,:lotacao_id=>l.id,:usuario=>current_user)

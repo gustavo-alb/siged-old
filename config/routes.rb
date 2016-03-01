@@ -113,7 +113,7 @@ Siged20::Application.routes.draw do
   resources :pontos do
     get :funcionarios,:on=>:collection
     get :gerar_pontos,:on=>:collection
-    get :salvar_pontos,:on=>:collection
+    post :salvar_pontos,:on=>:collection
   end
 
 

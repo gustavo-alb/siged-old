@@ -47,3 +47,7 @@ jQuery(document).ready(function() {
     $('a[href="' + this.location.pathname + '"]').addClass('active');
 });
 
+var activeTab = null;
+jQuery('a[data-toggle="tab"]').on('shown', function (e) {
+  activeTab = e.target;
+})

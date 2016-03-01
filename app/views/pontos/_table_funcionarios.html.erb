@@ -1,18 +1,17 @@
-<div id='partial' style="position: relative; height: 85vh;">
   <script type="text/javascript">
    jQuery(function() {
     jQuery('.pagination a').attr('data-remote', 'true');
   });
  </script>
- <table class="tablesorter" cellspacing="0">
+ <table class="table table-striped" cellspacing="0">
   <thead>
     <tr>
       <th>Matrícula</th>
       <th>Funcionário</th>
       <th>Cargo</th>
       <th title="Regência Semanal Disponível">RSD<sup>(?)</sup></th>
-      <th>Ações</th>
-      <th colspan=2></th>
+     <!--  <th>Ações</th>
+      <th colspan=2></th> -->
     </tr>
   </thead>
   <tbody>
@@ -23,13 +22,10 @@
      <td><%= cargo_resumido(f) %></td>
      <td title='<%=turmas(f)%>'><%= cor_rsd(f)%></td>
      <%if can? :especificar_lotacao,Lotacao%>
-     <td><%= link_to  image_tag('/images/icn_devolver.png',:title=>"Devolver funcionario"), pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativo.find_by_funcionario_id(f.id)),:rel=>"facebox",:rev=>"height:300px;width:500px"  %></td>
+     <!-- <td><%= link_to "Devolver Funcionário", pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativas.find_by_funcionario_id(f.id))  %></td> -->
      <% end %>
    </tr>
    <% end %>
  </tbody>
 </table>
-</div>
-<div style='z-index: 10;'>
-  <%= will_paginate @funcionarios, :remote => true,:params=>{:aba=>'funcionarios'}%>
-</div>
+<%= will_paginate @funcionarios, :remote => true,:params=>{:aba=>'funcionarios'}%>

@@ -1,26 +1,39 @@
-<%content_for :links do%>
-<%=link_to "Orgãos",orgaos_path%><div class="breadcrumb_divider"></div><a class="current">Detalhes</a>
-<%end%>
-<article class="module width_full">
-  <header><h3>Funcionários cedidos ao <%=@obj_tipo%>: <%= @objeto.nome.titleize%></h3></header>
-  <div class="module_content">
-   <div id="tabs1" class="tabset">
-    <ul class="tabset_tabs">
-      <li><a href="#funcionarios">Quadro funcional</a></li>
-      <li><a href="#encaminhados">Lotações à confirmar</a></li>
-        <li><%=link_to "Gerar Pontos",gerar_pontos_pontos_path(:objeto_id=>@objeto.id,:tipo=>@tipo),:rel=>'facebox',:rev=>"height:300px;width:500px"%></li>
-    </ul>
-    <div class="tabset_content_container">
-      <div id="funcionarios" class="tabset_content">
-        <div id="func">  
-          <%= render 'table_funcionarios' %>  
-        </div>
-      </div>
-      <div id="encaminhados" class="tabset_content">
-       <div id="enc">  
-        <%= render 'encaminhados' %>  
-      </div>
-    </div>
+<h3>Funcionários cedidos ao <%=@obj_tipo%>: <%= @objeto.nome.titleize%></h3>
+<ul class="nav nav-tabs" role="tablist">
+  <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Funcionarios do Setor</a></li>
+  <li role="presentation"><a href="#tab1" data-toggle="modal" data-target="#myModal">Funcionarios do Setor</a></li>
+  <!-- <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Lotações em Aberto</a></li>
+  <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Histórico de Lotações</a></li> -->
+</ul>
+<div class="tab-content">
+  <div role="tabpanel" class="tab-pane active" id="tab1">
+    <%=render :partial=>"table_funcionarios"%>
+  </div>
+  <div role="tabpanel" class="tab-pane" id="tab2">
+    <%=render :partial=>"table_funcionarios"%>
   </div>
 </div>
 </article>
+
+<!-- Button trigger modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Gerar Pontos do Mês</h4>
+      </div>
+      <div class="modal-body">
+       <%= form_tag :controller=>'pontos',:action=>'salvar_pontos',:method=>:post,:remote=>true,:tipo=>@tipo,:objeto_id=>@objeto.id%>
+       <%= date_select :ponto,:data,:discard_day=>true%><br/><br/>
+       
+     </div>
+     <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">Canncelar</button>
+      <%= submit_tag 'Gerar Pontos'%>
+    </div>
+  </div>
+</div>
+</div>

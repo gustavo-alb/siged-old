@@ -23,6 +23,7 @@ class Lotacao < ActiveRecord::Base
   has_many :status,:class_name=>"Status",:through=>:processos,:source=>"status"
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
   has_one :contrato,:dependent=>:destroy
+  has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
   def funcionario_v
     if self.funcionario_id.blank?
