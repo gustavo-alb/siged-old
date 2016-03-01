@@ -4,6 +4,7 @@
   <%= f.input :email %>
   <label>Grupos</label><br/>
   <%= f.collection_check_boxes :role_ids,@roles,:id,:name%>
+  <%= f.input :enabled,:label=>"Habilitado"%>
   <%= f.button :submit, :class => 'btn-primary' %>
 
   <%= link_to "Cancelar",

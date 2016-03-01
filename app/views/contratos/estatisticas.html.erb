@@ -4,12 +4,12 @@ Estatísticas Gerais do Contrato Administrativo
 <div class="well">
   <legend>Estatísticas</legend>
   <p><strong>Total de Contratos Emitidos: </strong><%= Contrato.count %></p>
-  <%@contratos.each do |f|%>
-  <%end%>
-  <%if @data%>
+  <!--<%@contratos.each do |f|%>
+  <%end%>-->
+  <%#if @data%>
   <h3>Estatísticas do dia <%=@data%></h3>
-  <p><strong>Total de Contratos Emitidos em <%=@data%>: </strong><%= Contrato.count %></p>
-  <%end%>
+  <p><strong>Total de Contratos Emitidos Hoje: </strong><%= Contrato.where("created_at > ? and created_at <= ?",Date.yesterday,Date.today).count %></p>
+  <%#end%>
  
 
 </div>
