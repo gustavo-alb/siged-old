@@ -117,6 +117,7 @@ def salvar
     @pessoa = Pessoa.find(params[:pessoa_id])
     @funcionario = @pessoa.funcionarios.first
     @lotacao = @funcionario.lotacoes.ativas.first||Lotacao.new
+    @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]} if @funcionario.municipio
     @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
     @tipo = ""
     if @lotacao.destino_type=="Escola"
