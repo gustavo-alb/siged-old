@@ -50,7 +50,7 @@
             <% if can?(:read,Pessoa)%>
               <li><%=link_to "Pessoas", pessoas_path%></li>
             <%end%>
-            <%if can? :manage,Lotacao%>
+            <%if current_user.role?(:chefia_ucolom) or current_user.role?(:admin)%>
             <li><%=link_to "Contratos Administrativos", contratos_index_path%></li>
             <%end%>
             <!--<%=setor%>-->

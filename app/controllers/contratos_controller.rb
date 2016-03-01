@@ -1,6 +1,7 @@
 # -*- encoding : utf-8 -*-
 class ContratosController < ApplicationController
   before_filter :dados_essenciais,:atributos
+  before_filter :permissao
   def index
     @categoria = Categoria.find_by_nome("Contrato Administrativo")
     @q = Pessoa.ransack(params[:q])
@@ -194,6 +195,13 @@ def salvar
    @atributos_funcionario = ["matricula", "cpf", "cargo_nome", "cargo_id", "funcao", "orgao_id", "nivel_id", "jornada", "classe", "decreto_nomeacao", "data_nomeacao", "termo_posse", "comissao_id", "afastamento", "funcao_gratificada", "situacao_juridica", "banco", "agencia", "conta", "created_at", "updated_at", "cargo", "nivel", "sjuridica_id", "quadro_id", "disciplina_contratacao_id", "folha_id", "municipio_id", "distrito_id", "recad", "gaveta", "observacao", "recad_cargo_id", "lotacao_recad", "licenca", "escola_id", "verificado", "arquivo_id", "categoria_ids", "categoria_id", "cargo_em_comissao", "decreto_nomeacao_comissao", "data_decreto_nomeacao", "decreto_exoneracao_comissao", "data_decreto_exoneracao", "tipo_comissionado", "tipo_comissao", "comissao_ativa", "vencimento", "entidade_id", "slug", "fonte_recurso_id", "codigo_sirh", "conjunto", "usuario_id", "interiorizacao", "interiorizacao_valor", "interiorizacao_rubrica", "ativo"]
    @atributos_lotacao = ["funcionario_id", "escola_id", "carga_horaria_disponivel", "data_lotacao", "regencia_de_classe", "created_at", "updated_at", "finalizada", "codigo_barra", "ativo", "tipo_lotacao", "orgao_id", "esfera_id", "tipo_destino_id", "departamento_id", "unidade_id", "convalidada", "data_convalidacao", "convalidador_id", "entidade_id", "complementar", "ambiente_id", "data_confirmacao", "quick", "motivo", "usuario_id", "disciplina_atuacao_id", "destino_id", "destino_type", "state", "contrato_id"]
  end
+
+ def permissao
+  if current_user.role?(:chefia_ucolom) or current_user.role?(:admin)
+  else
+    redirect_to root_url,:error=>"Você não tem permissão para acessar esta área"
+  end
+end
 
 end
 
