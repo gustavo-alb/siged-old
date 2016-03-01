@@ -6,7 +6,7 @@ class Funcionario < ActiveRecord::Base
   #default_scope where('funcionarios.entidade_id in (?)',User.usuario_atual.entidade_ids)
   validates_presence_of  :cargo_id,:categoria_id,:nivel_id,:entidade_id,:data_nomeacao,:message=>"Não pode ficar em branco!"
   validates_presence_of :disciplina_contratacao_id,:if=>Proc.new{|f|f.cargo and f.cargo.nome=="Professor"}
-  validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id].include?(f.categoria.id) if f.categoria}
+  validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id,Categoria.find_by_nome("Contrato Administrativo").id].include?(f.categoria.id) if f.categoria}
   validates_uniqueness_of :matricula,:message=>"já existente",:on=>:create,:if => Proc.new {|f| not f.matricula.blank?}
   #scoped_search
   scope :busca, lambda { |q| where("matricula like ?" ,"%#{q}%") }

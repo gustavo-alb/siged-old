@@ -48,6 +48,7 @@ def lotacao
  @funcionario = Funcionario.new(params[:funcionario])
  @lotacao = Lotacao.new
  @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+ @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]} if @funcionario.municipio
  respond_to do |format|
   if @funcionario.valid?
     format.html { render "lotacao"}

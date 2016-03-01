@@ -17,7 +17,7 @@ Novo Contrato Administrativo
 <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (f.object.data_nomeacao.strftime("%d/%m/%Y") if !f.object.data_nomeacao.blank?)},:label=>"Admissão"%>
 <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
 <div id='dist'>
-  <%#= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"%>
+  <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção" if f.object.municipio and f.object.municipio.distritos.count>0%>
 </div>
 
 <!--
