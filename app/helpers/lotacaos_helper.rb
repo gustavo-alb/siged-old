@@ -30,15 +30,6 @@ else
 end
 end
 
-def municipio_destino(func)
-  if func.municipio and func.distrito and !func.distrito.blank?
-    return raw("#{func.municipio.nome}/#{func.distrito}")
-elsif func.municipio and (func.distrito.blank? or !func.respond_to?(:distrito))
-    return raw("#{func.municipio.nome}")
-else
-    return ""
-end
-end
 
 def carencia(valor,ambiente=false)
     if valor>0 and ambiente==false
@@ -120,8 +111,8 @@ end
 
 
 def destino_ponto(lotacao)
- if lotacao
-     if lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.departamento.nil? and lotacao.escola.nil?
+   if lotacao
+       if lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.departamento.nil? and lotacao.escola.nil?
         return "#{lotacao.departamento.sigla}/#{lotacao.orgao.sigla}"
     elsif lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.escola.nil?
         return "#{lotacao.escola.nome}/#{lotacao.orgao.sigla}"

@@ -216,6 +216,8 @@ Siged20::Application.routes.draw do
 
 namespace :contratos do
   get :index
+  get :estatisticas
+  get :relatorio_nominal
   get :pessoal
   post :funcional
   post :lotacao
