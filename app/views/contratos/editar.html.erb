@@ -35,7 +35,7 @@ Novo Contrato Administrativo
     <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
   </div>
 <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
-<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record?)},:label=>"Admissão"%>
+<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record? and !@funcionario.data_nomeacao.blank?)},:label=>"Admissão"%>
 <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
   <div id='dist'>
     <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção" if @funcionario
