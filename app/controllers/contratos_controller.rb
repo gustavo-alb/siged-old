@@ -189,7 +189,7 @@ def salvar
       r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
       r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
       r.add_field "DATA",@lotacao.data_lotacao
-      r.add_field "USER", @lotacao.usuario.nome.split(" ").first
+      r.add_field "USER", @lotacao.usuario.name.split(" ").first
       r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
     end
     arquivo_contrato = contrato.generate("/tmp/contrato-#{@funcionario.matricula}.odt")
