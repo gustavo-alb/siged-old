@@ -2,7 +2,10 @@
   <%= f.input :name %>
   <%= f.input :username %>
   <%= f.input :email %>
+  <label>Grupos</label><br/>
+  <%= f.collection_check_boxes :role_ids,@roles,:id,:name%>
   <%= f.button :submit, :class => 'btn-primary' %>
+
   <%= link_to "Cancelar",
 usuarios_path, :class => 'btn btn-default' %>
 <% end %>

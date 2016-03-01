@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class UsuariosController < ApplicationController
+  before_filter :grupos
   # GET /users
   # GET /users.xml
   load_and_authorize_resource
@@ -126,5 +127,9 @@ class UsuariosController < ApplicationController
       format.html { redirect_to(usuarios_url) }
       format.xml  { head :ok }
     end
+  end
+
+  def grupos
+    @roles = Role.order("name")
   end
 end
