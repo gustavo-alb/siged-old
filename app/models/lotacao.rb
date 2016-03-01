@@ -21,7 +21,7 @@ class Lotacao < ActiveRecord::Base
   has_many :todos_processos,:class_name=>"Processo"
   has_many :status,:class_name=>"Status",:through=>:processos,:source=>"status"
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
-  has_one :contrato
+  has_one :contrato,:dependent=>:destroy
 
   scope :em_aberto, -> { where("finalizada = ?",false)}
   scope :finalizadas, -> { where("finalizada = ?",true)}

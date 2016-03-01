@@ -63,3 +63,4 @@ gem 'simple_enum', '1.6.9'
 #gem 'activerecord-session_store'
 gem "iconv"
 gem 'devise-bootstrap-views'
+gem 'wicked'

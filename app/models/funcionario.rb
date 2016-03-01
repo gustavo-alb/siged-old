@@ -19,6 +19,7 @@ class Funcionario < ActiveRecord::Base
   scope :ativos, -> { where(:ativo=>true)}
 
 
+
   scope :efetivos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo"),Categoria.find_by_nome("Concurso de 2012"),Categoria.find_by_nome("992")])}
   scope :federais,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
   scope :contratos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Administrativo")])}
@@ -56,6 +57,7 @@ class Funcionario < ActiveRecord::Base
   has_many :boletins, :class_name=>"BoletimFuncional",:dependent=>:nullify
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
   has_one :contrato
+  accepts_nested_attributes_for :lotacoes
   scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}
   after_create :criar_comissionado
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}

@@ -1,32 +1,8 @@
 <%content_for :titulo do%>
 Novo Contrato Administrativo
 <% end %>
-<%= simple_form_for @pessoa, :url=>contratos_salvar_url,:html => { :class => 'form-horizontal' } do |p| %>
-<h3>Dados Pessoais</h3>
-<%= p.input :nome %>
-<%= p.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"]%>
-<%= p.input :endereco,:label=>"Endereço" %>
-<%= p.input :numero %>
-<%= p.input :complemento %>
-<%= p.input :bairro %>
-<%= p.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
-<%= p.input :telefone_celular,:input_html=>{:class=>"celular"}%>
-<%= p.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
-<%= p.input :naturalidade %>
-<%= p.input :nacionalidade,:collection=>["Brasileiro","Outro"] %>
-<%= p.input :cpf ,:input_html=>{:class=>"cpf"}%>
-<%= p.input :rg ,:label=>"RG"%>
-<%= p.input :uf ,:label=>"UF do RG",:collection=>Estado.all.collect{|e|e.sigla}%>
-<%= p.input :pis_pasep ,:label=>"PIS/PASEP"%>
-<%= p.input :cidade_id,:collection=>@municipios,:label=>"Município de Residência"%>
-<%= p.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
-<%= p.input :cep,:input_html=>{:class=>"cep"}%>
-<%= p.input :email,:as=>:email %>
-<%= p.input :pai %>
-<%= p.input :mae,:label=>"Mãe" %>
-
+<%= simple_form_for @funcionario, :url=>contratos_lotacao_url,:html => { :class => 'form-horizontal' } do |f| %>
 <h3>Dados Funcionais</h3>
-<%= p.simple_fields_for :funcionarios do |f|%>
 <%=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
 <%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
 <%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
@@ -41,9 +17,10 @@ Novo Contrato Administrativo
 <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (f.object.data_nomeacao.strftime("%d/%m/%Y") if !f.object.data_nomeacao.blank?)},:label=>"Admissão"%>
 <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
 <div id='dist'>
-  <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"%>
+  <%#= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"%>
 </div>
 
+<!--
 <%= f.simple_fields_for :lotacoes do |l|%>
 <%= l.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
 <%= l.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}%>
@@ -54,13 +31,23 @@ Novo Contrato Administrativo
   <%= l.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
 </div>
 <%=l.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
+
+
+<%end%>
+-->
+<%= simple_fields_for :pessoa do |f|%>
+<% @atributos_pessoa.each do |atributo|%>
+<%if !@pessoa.send("#{atributo}").blank?%>
+	<%if (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i!=0 and atributo!='cpf' and atributo!='rg' and atributo!='pis_pasep' and atributo!='cep')%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}").to_i}%>
+	<%elsif (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i==0) or @pessoa.send("#{atributo}").is_a?(Date) or atributo=="cpf" or atributo=="rg" or atributo=="pis_pasep" or atributo=="cep"%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}")}%>
+	<%end%>
+<%end%>
+<%end%>
 <%end%>
 
-<%end%>
-
-
-
-<%= p.button :submit, :class => 'btn-primary' %>
+<%= f.button :submit, :class => 'btn-primary' %>
 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
 contratos_index_path, :class => 'btn btn-default' %>
 <% end %>

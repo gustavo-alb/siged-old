@@ -216,7 +216,10 @@ Siged20::Application.routes.draw do
 
 namespace :contratos do
   get :index
-  get :novo
+  get :pessoal
+  post :funcional
+  post :lotacao
+  post :revisar
   get :detalhes
   get :editar
   post :salvar

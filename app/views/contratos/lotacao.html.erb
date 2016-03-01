@@ -1,0 +1,43 @@
+<%content_for :titulo do%>
+Novo Contrato Administrativo
+<% end %>
+<%= simple_form_for @lotacao, :url=>contratos_revisar_url,:html => { :class => 'form-horizontal' } do |l| %>
+
+<%= l.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
+<%= l.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}%>
+<%= l.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
+<div id="destino">
+	<%= l.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
+	<%= l.input :destino_id,:as=>:hidden,:input_html=>{:id=>"lotacao_destino_id"}%>
+	<%= l.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
+</div>
+<%=l.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
+
+<%= simple_fields_for :pessoa do |f|%>
+<% @atributos_pessoa.each do |atributo|%>
+<%if !@pessoa.send("#{atributo}").blank?%>
+	<%if (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i!=0 and atributo!='cpf' and atributo!='rg' and atributo!='pis_pasep' and atributo!='cep')%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}").to_i}%>
+	<%elsif (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i==0) or @pessoa.send("#{atributo}").is_a?(Date) or atributo=="cpf" or atributo=="rg" or atributo=="pis_pasep" or atributo=="cep"%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}")}%>
+	<%end%>
+<%end%>
+<%end%>
+<%end%>
+
+<%= simple_fields_for :funcionario do |f|%>
+<% @atributos_funcionario.each do |atributo|%>
+<%if !@funcionario.send("#{atributo}").blank?%>
+	<%if (@funcionario.send("#{atributo}").respond_to?(:to_i) and @funcionario.send("#{atributo}").to_i==0) or @funcionario.send("#{atributo}").is_a?(Date)%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@funcionario.send("#{atributo}")}%>
+	<%elsif (@funcionario.send("#{atributo}").respond_to?(:to_i) and @funcionario.send("#{atributo}").to_i!=0)%>
+	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@funcionario.send("#{atributo}").to_i}%>
+	<%end%>
+<%end%>
+<%end%>
+<%end%>
+
+<%= l.button :submit, :class => 'btn-primary' %>
+<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+contratos_index_path, :class => 'btn btn-default' %>
+<% end %>

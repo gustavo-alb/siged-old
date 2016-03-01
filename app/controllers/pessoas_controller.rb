@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 class PessoasController < ApplicationController
   load_and_authorize_resource
-  before_filter :dados_essenciais
+  before_filter :dados_essenciais,:parametro
   # GET /pessoas
   # GET /pessoas.xml
 
@@ -327,7 +327,10 @@ class PessoasController < ApplicationController
     @pessoa = Pessoa.find(params[:pessoa_id])
   end
 
-
+  def parametro
+    params[:atual] = "RH"
+    params[:ativo] = "RH"
+  end
 
   # def pessoa_params
   #   params.require(:pessoa).permit!

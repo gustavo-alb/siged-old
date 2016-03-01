@@ -42,3 +42,8 @@ jQuery(function() {
     jQuery("#lotacao_tipo_lotacao_especial").change(function(){
     jQuery.ajax({data:'tp_lotacao=' + this.value, success:function(request){jQuery('#destino').html(request);}, url:"/lotacoes/lotacao_especial"
   })});});
+
+jQuery(document).ready(function() {
+    $('a[href="' + this.location.pathname + '"]').addClass('active');
+});
+

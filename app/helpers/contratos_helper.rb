@@ -11,5 +11,15 @@ module ContratosHelper
             return "SEM CONTATOS"
         end
     end
+
+    def endereco(obj)
+        if !obj.endereco.blank? and !obj.numero.blank? and !obj.bairro.blank?
+            if obj.complemento.blank?
+                return "#{obj.endereco}, Nº #{obj.numero}, Bairro #{obj.bairro}"
+            else
+                return "#{obj.endereco}, Nº #{obj.numero}, Bairro #{obj.bairro}, #{obj.complemento}"
+            end
+        end
+    end
 end
 

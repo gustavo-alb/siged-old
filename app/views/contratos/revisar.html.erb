@@ -1,0 +1,127 @@
+<%model_class = Pessoa%>
+<%content_for :titulo do%>
+Detalhes do Contrato de  <%=@pessoa.nome%>
+<%end%>
+<dl class="dl-horizontal">
+  <h3>Dados Pessoais</h3>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= @pessoa.nome %></dd>
+
+  <dt><strong>Sexo:</strong></dt>
+  <dd><%= detalhes(@pessoa.sexo) %></dd>
+
+  <dt><strong>Endereço:</strong></dt>
+  <dd><%= detalhes(@pessoa.endereco) %></dd>
+
+  <dt><strong>Telefone Residencial:</strong></dt>
+  <dd><%= detalhes(@pessoa.telefone_residencial) %></dd>
+
+  <dt><strong>Telefone Celular:</strong></dt>
+  <dd><%= detalhes(@pessoa.telefone_celular) %></dd>
+
+  <dt><strong>Data de Nascimento:</strong></dt>
+  <dd><%= detalhes(@pessoa.nascimento.to_s_br) %></dd>
+
+  <dt><strong>Naturalidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.naturalidade) %></dd>
+
+  <dt><strong>Nacionalidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.nacionalidade) %></dd>
+
+  <dt><strong>CPF:</strong></dt>
+  <dd><%= detalhes(Cpf.new(@pessoa.cpf).numero) %></dd>
+
+  <dt><strong>RG:</strong></dt>
+  <dd><%= detalhes(@pessoa.rg) %></dd>
+
+  <dt><strong>UF RG:</strong></dt>
+  <dd><%= detalhes(@pessoa.uf) %></dd>
+
+  <dt><strong>PIS:</strong></dt>
+  <dd><%= detalhes(@pessoa.pis_pasep) %></dd>
+
+  <dt><strong>Cidade:</strong></dt>
+  <dd><%= detalhes(@pessoa.cidade) %></dd>
+
+  <dt><strong>Estado Civil:</strong></dt>
+  <dd><%= detalhes(@pessoa.estado_civil) %></dd>
+
+  <dt><strong>CEP:</strong></dt>
+  <dd><%= detalhes(@pessoa.cep) %></dd>
+
+  <dt><strong>Email:</strong></dt>
+  <dd><%= detalhes(@pessoa.email) %></dd>
+
+  <dt><strong>Nome do Pai:</strong></dt>
+  <dd><%= detalhes(@pessoa.pai) %></dd>
+
+  <dt><strong>Nome da Mãe:</strong></dt>
+  <dd><%= detalhes(@pessoa.mae) %></dd>
+
+  <%#@pessoa.funcionarios.each do |f|%>
+  <div id="funcional">
+    <h3>Dados Funcionais</h3>
+    <dt><strong>Cargo:</strong></dt>
+    <dd><%= detalhes(@funcionario.cargo) %></dd>
+    <%if @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+    <dt><strong>Disciplina de Contratação:</strong></dt>
+    <dd><%= detalhes(@funcionario.disciplina_contratacao) %></dd>
+    <%end%>
+    <dt><strong>Referência/Nível:</strong></dt>
+    <dd><%= detalhes(@funcionario.nivel,'codigo') %></dd>
+    <dt><strong>Município de Opção:</strong></dt>
+    <dd><%= detalhes(@funcionario.municipio) %></dd>
+    <dt><strong>Distrito/Área de Opção:</strong></dt>
+    <dd><%= detalhes(@funcionario.distrito) %></dd>
+    <dt><strong>Data de Admissão:</strong></dt>
+    <dd><%= detalhes(@funcionario.data_nomeacao.to_s_br) %></dd>
+    <dt><strong>Lotação:</strong></dt>
+    <dd><%= detalhes(@lotacao.destino) %></dd>
+  </div>
+  <%#end%>
+</dl>
+
+<%= simple_form_for @pessoa,:url=>contratos_salvar_url do |p|%>
+
+<%= simple_fields_for :pessoa do |f|%>
+<% @atributos_pessoa.each do |atributo|%>
+<%if !@pessoa.send("#{atributo}").blank?%>
+  <%if (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i!=0 and atributo!='cpf' and atributo!='rg' and atributo!='pis_pasep' and atributo!='cep')%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}").to_i}%>
+  <%elsif (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i==0) or @pessoa.send("#{atributo}").is_a?(Date) or atributo=="cpf" or atributo=="rg" or atributo=="pis_pasep" or atributo=="cep"%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}")}%>
+  <%end%>
+<%end%>
+<%end%>
+<%end%>
+
+<%= simple_fields_for :funcionario do |f|%>
+<% @atributos_funcionario.each do |atributo|%>
+<%if !@funcionario.send("#{atributo}").blank?%>
+  <%if (@funcionario.send("#{atributo}").respond_to?(:to_i) and @funcionario.send("#{atributo}").to_i==0) or @funcionario.send("#{atributo}").is_a?(Date)%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@funcionario.send("#{atributo}")}%>
+  <%elsif (@funcionario.send("#{atributo}").respond_to?(:to_i) and @funcionario.send("#{atributo}").to_i!=0)%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@funcionario.send("#{atributo}").to_i}%>
+  <%end%>
+<%end%>
+<%end%>
+<%end%>
+
+<%= simple_fields_for :lotacao do |f|%>
+<% @atributos_lotacao.each do |atributo|%>
+<%if !@lotacao.send("#{atributo}").blank?%>
+  <%if (@lotacao.send("#{atributo}").respond_to?(:to_i) and @lotacao.send("#{atributo}").to_i==0) or @lotacao.send("#{atributo}").is_a?(Date)%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@lotacao.send("#{atributo}")}%>
+  <%elsif (@lotacao.send("#{atributo}").respond_to?(:to_i) and @lotacao.send("#{atributo}").to_i!=0)%>
+  <%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@lotacao.send("#{atributo}").to_i}%>
+  <%end%>
+<%end%>
+<%end%>
+<%end%>
+
+
+
+<%= link_to "Cancelar",
+contratos_index_path, :class => 'btn btn-default btn-danger'  %>
+<%= p.button :submit, :class => 'btn-primary' %>
+<%end%>
