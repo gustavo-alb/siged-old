@@ -14,6 +14,7 @@ class Orgao < ActiveRecord::Base
   has_many :lotacoes,:class_name=>"Lotacao",:dependent=>:destroy,:as=>:destino
   has_many :escolas
   has_many :departamentos,:dependent=>:destroy
+  belongs_to :municipio
   validates_uniqueness_of :nome
 
   def municipio_nome

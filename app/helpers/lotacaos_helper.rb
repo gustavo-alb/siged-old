@@ -21,10 +21,8 @@ def municipio_lotacao(lot)
 end
 
 def municipio(func)
-  if func.municipio and func.distrito and func.distrito.tipo.blank?
+  if func.municipio and func.distrito
     return raw("#{func.municipio.nome}/#{func.distrito.nome }")
-elsif func.municipio and func.distrito and !func.distrito.tipo.blank?
-    return raw("#{func.municipio.nome} - #{func.distrito.tipo} #{func.distrito.nome}")
 elsif func.municipio and func.distrito.nil?
     return raw("#{func.municipio.nome}")
 else
@@ -32,6 +30,15 @@ else
 end
 end
 
+def municipio_destino(func)
+  if func.municipio and func.distrito and !func.distrito.blank?
+    return raw("#{func.municipio.nome}/#{func.distrito}")
+elsif func.municipio and (func.distrito.blank? or !func.respond_to?(:distrito))
+    return raw("#{func.municipio.nome}")
+else
+    return ""
+end
+end
 
 def carencia(valor,ambiente=false)
     if valor>0 and ambiente==false

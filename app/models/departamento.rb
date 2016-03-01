@@ -13,8 +13,9 @@ class Departamento < ActiveRecord::Base
   belongs_to :departamento_pai,:class_name=>"Departamento",:foreign_key => "pai_id"
   has_many :departamentos_filhos,:class_name=>"Departamento",:foreign_key => "pai_id"
   scope :do_orgao, lambda {|id|where("departamentos.orgao_id = ?",id) }
+  belongs_to :municipio
   scope :busca, lambda { |q| where("sigla ilike ? or nome ilike ?" ,"%#{q}%","%#{q}%") }
-  attr_accessor :pai_nomere
+  attr_accessor :pai_nome
 
   validates_uniqueness_of :nome,:scope=>[:nome,:sigla]
 

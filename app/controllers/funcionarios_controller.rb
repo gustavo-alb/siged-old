@@ -215,7 +215,7 @@ class FuncionariosController < ApplicationController
       r.add_field "NOME", @pessoa.nome
       r.add_field "CPF", @pessoa.cpf
       r.add_field "MATRICULA", @funcionario.matricula
-      r.add_field "QUADRO",  "#{view_context.detalhes(@funcionario.entidade)}/#{view_context.detalhes(@funcionario.categoria)}"
+      r.add_field "QUADRO",  "#{view_context.detalhes(@funcionario.categoria)}"
       r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
       r.add_field "JORNADA",view_context.jornada(@funcionario.nivel)
       r.add_field "NUMERO", @processo.processo
@@ -226,7 +226,7 @@ class FuncionariosController < ApplicationController
       r.add_field "DATAAPRESENTACAO", @lotacao.data_lotacao+3.days
       r.add_field "USER", @usuario.name
       r.add_field "DISCIPLINACONTRATACAO", view_context.cargo_disciplina(@funcionario)
-      r.add_field "MUNICIPIO", @lotacao.destino.municipio_nome
+      r.add_field "MUNICIPIO", view_context.municipio_destino(@lotacao.destino)
       r.add_field "OBSERVACAO",@lotacao.motivo
       r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
     end

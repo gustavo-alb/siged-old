@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160229160032) do
+ActiveRecord::Schema.define(:version => 20160301103440) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(:version => 20160229160032) do
     t.string   "telefone"
     t.string   "hierarquia",      :limit => nil
     t.integer  "entidade_id"
+    t.integer  "municipio_id"
   end
 
   add_index "departamentos", ["orgao_id"], :name => "index_departamentos_on_orgao_id"
@@ -863,6 +864,7 @@ ActiveRecord::Schema.define(:version => 20160229160032) do
     t.integer  "esfera_id"
     t.integer  "poder_id"
     t.integer  "tipo_administracao_id"
+    t.integer  "municipio_id"
   end
 
   add_index "orgaos", ["esfera_id"], :name => "index_orgaos_on_esfera_id"
@@ -1408,11 +1410,11 @@ ActiveRecord::Schema.define(:version => 20160229160032) do
   end
 
   create_table "usuarios", :force => true do |t|
-    t.string   "name",       :limit => nil
-    t.string   "login",      :limit => nil
-    t.string   "email",      :limit => nil
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string   "name"
+    t.string   "login"
+    t.string   "email"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "vencimentos", :force => true do |t|

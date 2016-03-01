@@ -55,6 +55,24 @@ def revisar
   @pessoa = Pessoa.new(params[:pessoa])
   @funcionario = @pessoa.funcionarios.new(params[:funcionario])
   @lotacao = @funcionario.lotacoes.new(params[:lotacao])
+  @categoria = Categoria.find_by_nome("Contrato Administrativo")
+  @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
+  @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+  @escolas = Escola.where(:municipio_id=>@funcionario.municipio)
+  respond_to do |format|
+    if @lotacao.valid?
+      format.html { render "lotacao"}
+      format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
+    else
+      if @lotacao.destino.nil?
+        @lotacao.errors.add(:destino_nome,"É necessário um destino para a lotação")
+      elsif !@lotacao.destino.nil? and @lotacao.destino_type=="Escola" and !@lotacao.destino.in?(@escolas)
+        @lotacao.errors.add(:destino_nome,"Escola não é do municipio de opção")
+      end
+      format.html { render :action => "lotacao" }
+      format.xml  { render :xml => @lotacao.errors, :status => :unprocessable_entity }
+    end
+  end
 end
 
 def salvar
@@ -151,7 +169,8 @@ def salvar
       r.add_field "CEP",@pessoa.cep
       r.add_field "CONTATO", view_context.contato(@pessoa)
       r.add_field "DESTINO",view_context.lotacao(@funcionario)
-      r.add_field "MOPCAO",view_context.detalhes(@funcionario.municipio)
+      r.add_field "MOPCAO",view_context.municipio(@funcionario)
+      r.add_field "MLOTACAO",view_context.municipio_destino(@lotacao.destino)
       r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
       r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
       r.add_field "DATA",@lotacao.data_lotacao
