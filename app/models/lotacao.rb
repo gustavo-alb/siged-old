@@ -4,7 +4,8 @@ require "barby/outputter/png_outputter"
 class Lotacao < ActiveRecord::Base
   self.table_name = "lotacaos"
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
-  validates_presence_of :usuario_id,:funcionario_id
+  validates_presence_of :usuario_id
+  #validates_presence_of :funcionario_id
   validates_presence_of :tipo_lotacao
   validates_presence_of :destino_id,:message=>"É necessário que o destino seja válido"
   validates :motivo, :length => {:maximum => 230, :message => "Observaçao/Motivo até 230 caracteres" }
@@ -22,6 +23,12 @@ class Lotacao < ActiveRecord::Base
   has_many :status,:class_name=>"Status",:through=>:processos,:source=>"status"
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
   has_one :contrato,:dependent=>:destroy
+  before_save :funcionario_v
+  def funcionario_v
+    if self.funcionario_id.blank?
+      self.errors.add(:funcionario_id,"Funcionario não está presente")
+    end
+  end
 
   scope :em_aberto, -> { where("finalizada = ?",false)}
   scope :finalizadas, -> { where("finalizada = ?",true)}

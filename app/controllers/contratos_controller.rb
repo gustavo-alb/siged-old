@@ -61,7 +61,7 @@ def revisar
   @escolas = Escola.where(:municipio_id=>@funcionario.municipio)
   respond_to do |format|
     if @lotacao.valid?
-      format.html { render "lotacao"}
+      format.html { render "revisar"}
       format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
     else
       if @lotacao.destino.nil?

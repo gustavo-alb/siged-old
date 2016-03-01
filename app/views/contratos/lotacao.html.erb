@@ -37,6 +37,13 @@ Novo Contrato Administrativo
 <%end%>
 <%end%>
 
+<%if @lotacao.errors%>
+<% @lotacao.errors.each do |e|%>
+<%=e%>
+<%end%>
+<%end%>
+
+
 <%= l.button :submit, :class => 'btn-primary' %>
 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
 contratos_index_path, :class => 'btn btn-default' %>
