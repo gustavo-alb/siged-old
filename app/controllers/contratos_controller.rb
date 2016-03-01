@@ -107,7 +107,7 @@ def salvar
   def editar
     @pessoa = Pessoa.find(params[:pessoa_id])
     @funcionario = @pessoa.funcionarios.first
-    @lotacao = @funcionario.lotacoes.ativas.first
+    @lotacao = @funcionario.lotacoes.ativas.first||Lotacao.new
     @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
     @tipo = ""
     if @lotacao.destino_type=="Escola"
