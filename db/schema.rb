@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160301103440) do
+ActiveRecord::Schema.define(:version => 20160302120321) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -270,6 +270,20 @@ ActiveRecord::Schema.define(:version => 20160301103440) do
     t.datetime "hora_limite_saida_manha"
     t.datetime "hora_limite_entrada_tarde"
     t.datetime "hora_limite_saida_tarde"
+  end
+
+  create_table "contrato_anteriores", :force => true do |t|
+    t.string   "nome"
+    t.string   "cpf"
+    t.string   "rg"
+    t.string   "matricula"
+    t.string   "lotacao"
+    t.string   "cargo"
+    t.string   "disciplina"
+    t.string   "municipio"
+    t.string   "distrito"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "contratos", :force => true do |t|

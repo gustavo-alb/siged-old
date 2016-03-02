@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  nome: MyString
+  cpf: MyString
+  rg: MyString
+  matricula: MyString
+  lotacao: MyString
+  cargo: MyString
+  disciplina: MyString
+  municipio: MyString
+  distrito: MyString
+
+two:
+  nome: MyString
+  cpf: MyString
+  rg: MyString
+  matricula: MyString
+  lotacao: MyString
+  cargo: MyString
+  disciplina: MyString
+  municipio: MyString
+  distrito: MyString
