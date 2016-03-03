@@ -2,8 +2,13 @@
   <%= f.input :name %>
   <%= f.input :username %>
   <%= f.input :email %>
+  <%= f.input :password %>
+  <%= f.input :password_confirmation %>
+  
   <label>Grupos</label><br/>
+  <div class="well">
   <%= f.collection_check_boxes :role_ids,@roles,:id,:name%>
+  </div>
   <%= f.input :enabled,:label=>"Habilitado"%>
   <%= f.button :submit, :class => 'btn-primary' %>
 
