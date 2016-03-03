@@ -5,14 +5,15 @@
   <div id="destino">
     <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
     <%= f.input :destino_id,:as=>:hidden%>
-    <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
-    <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
     <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
   </div>
   <%= simple_fields_for :exibicao do |e|%>
     <%=e.input :anterior,:label=>"Lotação Anterior",:required=>false,:input_html=>{:disabled=>true,:value=>l_ant(@funcionario)}%>
     <%=e.input :atual,:label=>"Lotação Atual",:required=>false,:input_html=>{:disabled=>true,:value=>lotacao(@funcionario)}%>
   <%end%>
+
+  <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
+    <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
   <%=f.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
   <%= f.button :submit, :class => 'btn-primary' %>
 <% end %>
