@@ -3,15 +3,31 @@ Estatísticas Gerais do Contrato Administrativo
 <%end%>
 <div class="well">
   <legend>Estatísticas</legend>
-  <p><strong>Total de Contratos Emitidos: </strong><%= Contrato.count %></p>
-  <!--<%@contratos.each do |f|%>
-  <%end%>-->
-  <%#if @data%>
+  <h4>GERAL</h4>
+  Contratos Emitidos: <%= @contratos.count %>
+  <%@contratos.group_by(&:cargo).each do |cargo,f|%>
+  <h4><%=cargo.nome%></h4>
+  Contratos Emitidos: <%=f.count%>
+  <%end%>
+  
+  
   <h3>Estatísticas do dia <%=@data%></h3>
-  <p><strong>Total de Contratos Emitidos Hoje: </strong><%= Contrato.where("created_at > ? and created_at <= ?",Date.yesterday,Date.today).count %></p>
-  <%#end%>
- 
+  
+  <h4>GERAL</h4>
+  Contratos Emitidos: <%= @contratos_data.count %>
+  <%@contratos_data.group_by(&:cargo).each do |cargo,f|%>
+  <h4><%=cargo.nome%></h4>
+  Contratos Emitidos: <%=f.count%>
+  <%end%>
 
+<p>
+<h4>Selecione a data</h4>
+  <%= form_tag(contratos_estatisticas_path,:method=>:get) do |f|%>
+  <%= select_date(@data)%>
+  <br><br>
+  <%= submit_tag 'Selecionar Data',:class=>"btn btn-default btn-info" %>
+  <%end%>
+  </p>
 </div>
 
 
