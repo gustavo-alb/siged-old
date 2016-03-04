@@ -19,49 +19,49 @@ class ContratosController < ApplicationController
 
   def estatisticas
     @categoria = Categoria.find_by_nome("Contrato Administrativo")
-    if !params[:data].blank?
-      Date.parse(params[:data])
-    end
-    if @data
-      @contratos = Funcionario.where("categoria_id = ? and ativo = ?",@categoria.id,true,params[:data])
+    @contratos = Funcionario.joins(:contrato).where("categoria_id = ? and ativo = ?",@categoria.id,true)
+    if !params[:date].blank?
+      @parametro = params[:date].collect{|d|d[1]}
+      @data = Date.parse("#{@parametro[1]}/#{@parametro[0]}/@parametro[2]")
     else
-      @contratos = Funcionario.where("categoria_id = ? and ativo = ?",@categoria.id,true)
+      @data = Date.today
+    end
+    @contratos_data = Funcionario.joins(:contrato).where("categoria_id = ? and ativo = ? and funcionarios.created_at > ? and funcionarios.created_at <= ?",@categoria.id,true,@data-1.days,@data)
+  end
+
+  def funcional
+    @pessoa = Pessoa.new(params[:pessoa])
+    @funcionario = Funcionario.new
+    @categoria = Categoria.find_by_nome("Contrato Administrativo")
+    @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
+    respond_to do |format|
+      if @pessoa.valid?
+        format.html { render "funcional"}
+        format.xml  { render :xml => @funcionario, :status => :created, :location => @funcionario }
+      else
+        format.html { render :action => "pessoal" }
+        format.xml  { render :xml => @pessoa.errors, :status => :unprocessable_entity }
+      end
     end
   end
 
-def funcional
-  @pessoa = Pessoa.new(params[:pessoa])
-  @funcionario = Funcionario.new
-  @categoria = Categoria.find_by_nome("Contrato Administrativo")
-  @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
-  respond_to do |format|
-    if @pessoa.valid?
-      format.html { render "funcional"}
-      format.xml  { render :xml => @funcionario, :status => :created, :location => @funcionario }
+  def lotacao
+   @pessoa = Pessoa.new(params[:pessoa])
+   @categoria = Categoria.find_by_nome("Contrato Administrativo")
+   @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
+   @funcionario = Funcionario.new(params[:funcionario])
+   @lotacao = Lotacao.new
+   @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
+   @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]} if @funcionario.municipio
+   respond_to do |format|
+    if @funcionario.valid?
+      format.html { render "lotacao"}
+      format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
     else
-      format.html { render :action => "pessoal" }
-      format.xml  { render :xml => @pessoa.errors, :status => :unprocessable_entity }
+      format.html { render :action => "funcional" }
+      format.xml  { render :xml => @funcionario.errors, :status => :unprocessable_entity }
     end
   end
-end
-
-def lotacao
- @pessoa = Pessoa.new(params[:pessoa])
- @categoria = Categoria.find_by_nome("Contrato Administrativo")
- @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
- @funcionario = Funcionario.new(params[:funcionario])
- @lotacao = Lotacao.new
- @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
- @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]} if @funcionario.municipio
- respond_to do |format|
-  if @funcionario.valid?
-    format.html { render "lotacao"}
-    format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
-  else
-    format.html { render :action => "funcional" }
-    format.xml  { render :xml => @funcionario.errors, :status => :unprocessable_entity }
-  end
-end
 end
 
 
