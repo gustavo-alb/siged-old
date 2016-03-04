@@ -11,7 +11,7 @@ Estatísticas Gerais do Contrato Administrativo
   <%end%>
   
   
-  <h3>Estatísticas do dia <%=@data%></h3>
+  <h3>Estatísticas do dia <%=@data.to_date%></h3>
   
   <h4>GERAL</h4>
   Contratos Emitidos: <%= @contratos_data.count %>
@@ -23,7 +23,7 @@ Estatísticas Gerais do Contrato Administrativo
 <p>
 <h4>Selecione a data</h4>
   <%= form_tag(contratos_estatisticas_path,:method=>:get) do |f|%>
-  <%= select_date(@data)%>
+  <%= select_date(@data.to_date)%>
   <br><br>
   <%= submit_tag 'Selecionar Data',:class=>"btn btn-default btn-info" %>
   <%end%>
