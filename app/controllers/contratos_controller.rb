@@ -22,11 +22,11 @@ class ContratosController < ApplicationController
     @contratos = Funcionario.joins(:contrato).where("categoria_id = ? and ativo = ?",@categoria.id,true)
     if !params[:date].blank?
       @parametro = params[:date].collect{|d|d[1]}
-      @data = Date.parse("#{@parametro[1]}/#{@parametro[0]}/@parametro[2]")
+      @data = Date.parse("#{@parametro[1]}/#{@parametro[0]}/@parametro[2]").to_time
     else
-      @data = Date.today
+      @data = Date.today.to_time
     end
-    @contratos_data = Funcionario.joins(:contrato).where("categoria_id = ? and ativo = ? and funcionarios.created_at > ? and funcionarios.created_at <= ?",@categoria.id,true,@data-1.days,@data)
+    @contratos_data = Funcionario.joins(:contrato).where("categoria_id = ? and ativo = ? and funcionarios.created_at > ? and funcionarios.created_at <= ?",@categoria.id,true,@data,@data+23.hours+59.minutes)
   end
 
   def funcional
