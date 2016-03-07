@@ -131,7 +131,7 @@ class PontosController < ApplicationController
       @objeto = Escola.find(@obj)
       @obj_tipo = "Escola"
     end
-    @lotacoes = @objeto.lotacoes.joins(:pessoa).order("pessoas.nome asc")
+    @lotacoes = @objeto.lotacoes.ativas.joins(:pessoa).order("pessoas.nome asc")
     @pdf = CombinePDF.new
     @lotacoes.each do |l|
       ponto = l.pontos.find_by_data(data)||l.funcionario.pontos.create(:data=>data,:funcionario_id=>l.funcionario.id,:lotacao_id=>l.id,:usuario=>current_user)
@@ -155,12 +155,12 @@ class PontosController < ApplicationController
       @obj_tipo = "Escola"
     end
 
-    @funcionarios = @objeto.funcionarios.joins(:lotacoes,:pessoa).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",true,true).order("pessoas.nome asc").paginate :page => params[:page], :per_page => 8
+    @funcionarios = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",true,true).uniq.sort_by{|f|f.pessoa.nome}.paginate :page => params[:page], :per_page => 8
     #@cargos_principais = Cargo.where("id in (?)",[Cargo.find_by_nome("PEDAGOGO").id,Cargo.find_by_nome("PROFESSOR").id,Cargo.find_by_nome("ESPECIALISTA DE EDUCACAO").id,Cargo.find_by_nome("AUXILIAR EDUCACIONAL").id,Cargo.find_by_nome("CUIDADOR").id,Cargo.find_by_nome("INTERPRETE").id]).order(:nome)
     #@outros_cargos = Cargo.where("id not in (?)",@cargos_principais).order(:nome)
     #@funcionarios_cargos_principais = @objeto.funcionarios.where("cargo_id in (?)",@cargos_principais).group_by{|t|t.cargo}
     #@funcionarios_outros = @objeto.funcionarios.where("cargo_id in (?)",@outros_cargos)
-    @encaminhados = @objeto.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",false,true).paginate :page => params[:page], :per_page => 8
+    @encaminhados = @objeto.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",false,true).uniq.paginate :page => params[:page], :per_page => 8
     @aba = params[:aba]
     respond_to do |format|
       format.html # index.html.erb
