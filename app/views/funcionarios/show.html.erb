@@ -34,9 +34,9 @@ Detalhes de
 
 </dl>
 <%= link_to 'Voltar', pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default'  %>
-<%= link_to 'Editar', edit_pessoa_funcionario_path(@pessoa,@funcionario), :class => 'btn btn-default' %>
+<%= link_to 'Editar', edit_pessoa_funcionario_path(@pessoa,@funcionario), :class => 'btn btn-default' if can?(:edit,Funcionario)%>
 <%= link_to "Apagar",
 pessoa_funcionario_path(@pessoa,@funcionario),
 :method => 'delete',
 :data => { :confirm => "Você tem certeza?" },
-:class => 'btn btn-danger' %>
+:class => 'btn btn-danger' if can?(:destroy,Funcionario)%>
