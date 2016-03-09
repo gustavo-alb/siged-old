@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160302120321) do
+ActiveRecord::Schema.define(:version => 20160308152800) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -931,6 +931,7 @@ ActiveRecord::Schema.define(:version => 20160302120321) do
     t.string   "conjunto"
     t.integer  "usuario_id"
     t.boolean  "verificado"
+    t.integer  "idade"
   end
 
   add_index "pessoas", ["slug"], :name => "index_pessoas_on_slug", :unique => true
