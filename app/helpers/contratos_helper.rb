@@ -6,7 +6,19 @@ module ContratosHelper
         elsif !obj.telefone_residencial.blank? and obj.telefone_celular.blank?
             return "TELEFONE FIXO: #{obj.telefone_residencial}"
         elsif obj.telefone_residencial.blank? and !obj.telefone_celular.blank?
-            return "TELEFONE FIXO: #{obj.telefone_celular}"
+            return "TELEFONE CELULAR: #{obj.telefone_celular}"
+        else
+            return "SEM CONTATOS"
+        end
+    end
+
+      def contato_simples(obj)
+        if !obj.telefone_residencial.blank? and !obj.telefone_celular.blank?
+            return "#{obj.telefone_residencial} e #{obj.telefone_celular}"
+        elsif !obj.telefone_residencial.blank? and obj.telefone_celular.blank?
+            return "#{obj.telefone_residencial}"
+        elsif obj.telefone_residencial.blank? and !obj.telefone_celular.blank?
+            return "#{obj.telefone_celular}"
         else
             return "SEM CONTATOS"
         end

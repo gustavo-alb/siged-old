@@ -64,3 +64,4 @@ gem 'simple_enum', '1.6.9'
 gem "iconv"
 gem 'devise-bootstrap-views'
 gem 'wicked'
+gem 'workbook'

@@ -226,6 +226,48 @@ def salvar
    @atributos_lotacao = ["funcionario_id", "escola_id", "carga_horaria_disponivel", "data_lotacao", "regencia_de_classe", "created_at", "updated_at", "finalizada", "codigo_barra", "ativo", "tipo_lotacao", "orgao_id", "esfera_id", "tipo_destino_id", "departamento_id", "unidade_id", "convalidada", "data_convalidacao", "convalidador_id", "entidade_id", "complementar", "ambiente_id", "data_confirmacao", "quick", "motivo", "usuario_id", "disciplina_atuacao_id", "destino_id", "destino_type", "state", "contrato_id"]
  end
 
+ def relatorio_docente
+  pasta = Workbook::Book.open("public/modelos/relatorio_docente.xls")
+  planilha = pasta.sheet.table
+  linha_modelo = planilha[1]
+  @professores = Funcionario.joins(:contrato).where(:cargo_id=>Cargo.find_by_nome("PROFESSOR").id).sort_by{|f|f.pessoa.nome}
+  @professores.each.with_index(2) do |f,i|
+    planilha << linha_modelo.clone
+    planilha[i][0] = f.pessoa.nome
+    planilha[i][1] = f.pessoa.cpf
+    planilha[i][2] = f.pessoa.rg
+    planilha[i][3] = view_context.contato_simples(f.pessoa)
+    planilha[i][4] = view_context.detalhes(f.disciplina_contratacao)
+    planilha[i][5] = view_context.municipio(f).upcase
+    planilha[i][6] = view_context.lotacao(f)
+  end
+  planilha.delete(linha_modelo)
+  arquivo = File.open("/tmp/relatorio-#{Time.now.strftime("%d-%m-%Y-%H-%M-%S")}.xls",'w')
+  pasta.write_to_xls("#{arquivo.path}")
+  send_file(arquivo.path,:filename=>"Relatório Contratos Docentes.xls",:type=>"application/vnd.ms-excel")
+ end
+
+  def relatorio_nao_docente
+  pasta = Workbook::Book.open("public/modelos/relatorio_nao_docente.xls")
+  planilha = pasta.sheet.table
+  linha_modelo = planilha[1]
+  @funcionarios = Funcionario.joins(:contrato).where("cargo_id <> ?",Cargo.find_by_nome("PROFESSOR").id).sort_by{|f|f.pessoa.nome}
+  @funcionarios.each.with_index(2) do |f,i|
+    planilha << linha_modelo.clone
+    planilha[i][0] = f.pessoa.nome
+    planilha[i][1] = f.pessoa.cpf
+    planilha[i][2] = f.pessoa.rg
+    planilha[i][3] = view_context.contato_simples(f.pessoa)
+    planilha[i][4] = view_context.detalhes(f.cargo)
+    planilha[i][5] = view_context.municipio(f).upcase
+    planilha[i][6] = view_context.lotacao(f)
+  end
+  planilha.delete(linha_modelo)
+  arquivo = File.open("/tmp/relatorio-nd-#{Time.now.strftime("%d-%m-%Y-%H-%M-%S")}.xls",'w')
+  pasta.write_to_xls("#{arquivo.path}")
+  send_file(arquivo.path,:filename=>"Relatório Contratos Não Docentes.xls",:type=>"application/vnd.ms-excel")
+ end
+
  def permissao
   if current_user.role?(:chefia_ucolom) or current_user.role?(:admin)
   else

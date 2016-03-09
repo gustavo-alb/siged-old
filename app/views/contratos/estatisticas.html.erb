@@ -28,8 +28,14 @@ Estatísticas Gerais do Contrato Administrativo
   <%= submit_tag 'Selecionar Data',:class=>"btn btn-default btn-info" %>
   <%end%>
   </p>
+
+
 </div>
 
 
 <%= link_to "Voltar",
 contratos_index_path, :class => 'btn btn-default'  %>
+<%= link_to "Relatório - Não Docentes",
+contratos_relatorio_nao_docente_path, :class => 'btn btn-default btn-info'  %>
+<%= link_to "Relatório - Docentes",
+contratos_relatorio_docente_path, :class => 'btn btn-default btn-info'  %>

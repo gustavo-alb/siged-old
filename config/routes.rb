@@ -228,6 +228,8 @@ namespace :contratos do
   post :atualizar
   delete :apagar
   get :gerar
+  get :relatorio_docente
+  get :relatorio_nao_docente
 end
 
   resources :pessoas do
