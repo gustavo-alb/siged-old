@@ -14,7 +14,15 @@ class LotacoesController < ApplicationController
     departamentos = Departamento.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
     orgaos = Orgao.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
     setoriais = orgaos+departamentos
-    render :json => setoriais.map { |setorial| {:id => setorial.id, :label => setorial.nome, :value => setorial.nome} }
+    render :json => setoriais.map { |setorial| {:id => setorial.id,:type=>setorial.class.name, :label => setorial.nome, :value => setorial.nome} }
+  end
+
+  def autocomplete_escola_nome
+    term = params[:term]
+    escolas = Escola.where('nome ilike ? or codigo ilike ?', "%#{term}%","%#{term}%").order(:nome).all
+    # orgaos = Orgao.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
+    # setoriais = orgaos+departamentos
+    render :json => escolas.map { |escola| {:id => escola.id,:type=>"Escola", :label => "#{escola.nome} - #{escola.municipio.nome} - #{escola.rede}", :value => escola.nome} }
   end
 
   def index
@@ -47,11 +55,11 @@ class LotacoesController < ApplicationController
 
   def gerar_arquivo
     @inicio = Date.civil(params[:relatorio]["inicio(1i)"].to_i,
-                         params[:relatorio]["inicio(2i)"].to_i,
-                         params[:relatorio]["inicio(3i)"].to_i)
+     params[:relatorio]["inicio(2i)"].to_i,
+     params[:relatorio]["inicio(3i)"].to_i)
     @fim = Date.civil(params[:relatorio]["fim(1i)"].to_i,
-                      params[:relatorio]["fim(2i)"].to_i,
-                      params[:relatorio]["fim(3i)"].to_i)
+      params[:relatorio]["fim(2i)"].to_i,
+      params[:relatorio]["fim(3i)"].to_i)
     relatorio(@inicio.to_date,@fim.to_date)
     render :layout=>false
   end
@@ -162,16 +170,16 @@ class LotacoesController < ApplicationController
 
   def auto_complete_for_escola_nome
     @escolas = Escola.find(:all,
-                           :conditions => [ 'LOWER(nome) iLIKE ?',
-                                            '%' + params[:escola][:nome].downcase + '%' ])
+     :conditions => [ 'LOWER(nome) iLIKE ?',
+      '%' + params[:escola][:nome].downcase + '%' ])
     render :partial => "busca_escolas"
 
   end
 
   def auto_complete_for_departamento_nome
     @departamentos = Departamento.find(:all,
-                                       :conditions => [ 'LOWER(nome) iLIKE ?',
-                                                        '%' + params[:departamento][:nome].downcase + '%' ])
+     :conditions => [ 'LOWER(nome) iLIKE ?',
+      '%' + params[:departamento][:nome].downcase + '%' ])
     render :partial => "busca_departamentos"
 
   end
@@ -339,15 +347,6 @@ class LotacoesController < ApplicationController
     @processos = @funcionario.processos.order("created_at ASC, processo ASC")
     @url = pessoa_funcionario_lotacoes_path(@pessoa,@funcionario)
     @lotacao = Lotacao.new(params[:lotacao])
-    if @lotacao.tipo_lotacao=="ESPECIAL" or @lotacao.tipo_lotacao=="SUMARIA ESPECIAL"
-      @orgao  = Orgao.where(:nome=>params[:lotacao][:destino_nome]).first
-      @departamento  = Departamento.where(:nome=>params[:lotacao][:destino_nome]).first
-      if @orgao
-        @lotacao.destino_type = "Orgao"
-      else
-        @lotacao.destino_type = "Departamento"
-      end
-    end
     respond_to do |format|
       if @lotacao.save
         format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.

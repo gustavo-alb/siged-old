@@ -13,7 +13,7 @@
   <%end%>
 
   <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
-    <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
+  <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
   <%=f.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
   <%= f.button :submit, :class => 'btn-primary' %>
 <% end %>
