@@ -60,7 +60,7 @@ Novo Contrato Administrativo
   
 <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
 <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
-<%=f.input :motivo,:as=>:text,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
+<%= f.input :motivo,:as=>:text,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
 <%end%>
 
 

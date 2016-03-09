@@ -159,16 +159,18 @@ def salvar
       @orgao  = Orgao.where(:nome=>params[:lotacao][:destino_nome]).first
       @departamento  = Departamento.where(:nome=>params[:lotacao][:destino_nome]).first
       if @orgao
-        @lotacao.destino_type = "Orgao"
+        @destino_type = "Orgao"
       else
-        @lotacao.destino_type = "Departamento"
+        @destino_type = "Departamento"
       end
     end
+
     respond_to do |format|
       if @pessoa.valid? and @funcionario.valid? and @lotacao.valid? 
         @pessoa.update_attributes(params[:pessoa])
         @funcionario.update_attributes(params[:funcionario])
         @lotacao.update_attributes(params[:lotacao])
+        @lotacao.update_attributes(:destino_type=>@destino_type) if !@destino_type.nil?
         format.html { redirect_to(contratos_detalhes_path(:pessoa_id=>@pessoa.id), :notice => 'Pessoa atualizada com sucesso.') }
         format.xml  { render :xml => @pessoa, :status => :created, :location => @pessoa }
       else
