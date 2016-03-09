@@ -20,8 +20,6 @@ class LotacoesController < ApplicationController
   def autocomplete_escola_nome
     term = params[:term]
     escolas = Escola.where('nome ilike ? or codigo ilike ?', "%#{term}%","%#{term}%").order(:nome).all
-    # orgaos = Orgao.where('nome ilike ? or sigla ilike ?', "%#{term}%","%#{term}%").order(:nome).all
-    # setoriais = orgaos+departamentos
     render :json => escolas.map { |escola| {:id => escola.id,:type=>"Escola", :label => "#{escola.nome} - #{escola.municipio.nome} - #{escola.rede}", :value => escola.nome} }
   end
 
