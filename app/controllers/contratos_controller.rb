@@ -169,7 +169,7 @@ def salvar
       if @pessoa.valid? and @funcionario.valid? and @lotacao.valid? 
         @pessoa.update_attributes(params[:pessoa])
         @funcionario.update_attributes(params[:funcionario])
-        @lotacao.update_attributes(params[:lotacao])
+        @lotacao.update_attributes!(params[:lotacao])
         @lotacao.update_attributes(:destino_type=>@destino_type) if !@destino_type.nil?
         format.html { redirect_to(contratos_detalhes_path(:pessoa_id=>@pessoa.id), :notice => 'Pessoa atualizada com sucesso.') }
         format.xml  { render :xml => @pessoa, :status => :created, :location => @pessoa }
