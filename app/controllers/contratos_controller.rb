@@ -155,6 +155,15 @@ def salvar
     else
       @tipo = "ESPECIAL"
     end
+    if @lotacao.tipo_lotacao=="ESPECIAL" or @lotacao.tipo_lotacao=="SUMARIA ESPECIAL"
+      @orgao  = Orgao.where(:nome=>params[:lotacao][:destino_nome]).first
+      @departamento  = Departamento.where(:nome=>params[:lotacao][:destino_nome]).first
+      if @orgao
+        @lotacao.destino_type = "Orgao"
+      else
+        @lotacao.destino_type = "Departamento"
+      end
+    end
     respond_to do |format|
       if @pessoa.valid? and @funcionario.valid? and @lotacao.valid? 
         @pessoa.update_attributes(params[:pessoa])
