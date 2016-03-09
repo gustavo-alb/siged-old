@@ -1,5 +1,5 @@
 <%= simple_fields_for :lotacao do |l|%>
   <%= l.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
-  <%= l.hidden_field :destino_type,:input_html=>{:value=>"Escola"} %>
+  <%= l.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"} %>
   <%= l.input :destino_id,:as=>:hidden%>
 <% end %>
