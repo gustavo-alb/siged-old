@@ -73,6 +73,15 @@ def revisar
   @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
   @tipos = [["Escola","REGULAR"],["Setorial","ESPECIAL"]]
   @escolas = Escola.where(:municipio_id=>@funcionario.municipio)
+  if @lotacao.tipo_lotacao=="ESPECIAL" or @lotacao.tipo_lotacao=="SUMARIA ESPECIAL"
+    @orgao  = Orgao.where(:nome=>params[:lotacao][:destino_nome]).first
+    @departamento  = Departamento.where(:nome=>params[:lotacao][:destino_nome]).first
+    if @orgao
+      @lotacao.destino_type = "Orgao"
+    else
+      @lotacao.destino_type = "Departamento"
+    end
+  end
   respond_to do |format|
     if @lotacao.valid?
       format.html { render "revisar"}
