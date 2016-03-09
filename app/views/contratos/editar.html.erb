@@ -48,7 +48,7 @@ Novo Contrato Administrativo
 <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}%>
 <%= f.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>@tipo, item_wrapper_class: 'inline'%>
 <div id="destino">
-  <% if @lotacao.destino_type=="Escola"%>
+  <% if @lotacao.destino and @lotacao.destino_type=="Escola"%>
   <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control",:value=>@lotacao.destino.nome},:id_element=>"#lotacao_destino_id",:required=>true%>
   <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
   <%else%>
@@ -57,7 +57,7 @@ Novo Contrato Administrativo
   <%end%>
   <%= f.input :destino_id,:as=>:hidden,:input_html=>{:value=>(@lotacao.destino.id if @lotacao.destino),:id=>"lotacao_destino_id"}%>
 </div>
-
+  
 <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
 <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
 <%=f.input :motivo,:as=>:text,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
