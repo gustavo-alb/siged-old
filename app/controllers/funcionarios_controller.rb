@@ -22,54 +22,54 @@ class FuncionariosController < ApplicationController
     @funcionario = Funcionario.find(params[:funcionario_id])
     @funcionario.verificado = true
     if @funcionario.save!(:validate=>false)
-      render :update do |page|
-        page.replace_html "verificado-#{@funcionario.matricula}", :partial=>"verificar_funcionario"
+      respond_to do |format|
+         format.js {render "verificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
       end
     end
   end
 
-  def desverificar_funcionario
-    @funcionario = Funcionario.find(params[:funcionario_id])
-    @funcionario.verificado = false
-    if @funcionario.save!(:validate=>false)
-      render :update do |page|
-        page.replace_html "verificado-#{@funcionario.matricula}", :partial=>"verificar_funcionario"
+    def desverificar_funcionario
+      @funcionario = Funcionario.find(params[:funcionario_id])
+      @funcionario.verificado = false
+      if @funcionario.save!(:validate=>false)
+        respond_to do |format|
+          format.js {render "desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
+        end
       end
     end
-  end
 
-  def ativar_funcionario
-    @funcionario = Funcionario.find(params[:funcionario_id])
-    @funcionario.ativo = true
-    if @funcionario.save!(:validate=>false)
-      render :update do |page|
-        page.replace_html "ativo-#{@funcionario.matricula}", :partial=>"ativar_funcionario"
+    def ativar_funcionario
+      @funcionario = Funcionario.find(params[:funcionario_id])
+      @funcionario.ativo = true
+      if @funcionario.save!(:validate=>false)
+        render :update do |page|
+           format.js {render("desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa})}
+        end
       end
     end
-  end
 
-  def desativar_funcionario
-    @funcionario = Funcionario.find(params[:funcionario_id])
-    @funcionario.ativo = false
-    if @funcionario.save!(:validate=>false)
-      render :update do |page|
-        page.replace_html "ativo-#{@funcionario.matricula}", :partial=>"ativar_funcionario"
+    def desativar_funcionario
+      @funcionario = Funcionario.find(params[:funcionario_id])
+      @funcionario.ativo = false
+      if @funcionario.save!(:validate=>false)
+        render :update do |page|
+          page.replace_html "ativo-#{@funcionario.matricula}", :partial=>"ativar_funcionario"
+        end
       end
     end
-  end
 
-  def cargo
-    if params[:disciplina].size>0
-      @cargo = Cargo.find(params[:disciplina])
-      if @cargo.tipo and @cargo.tipo.nome=="Magistério/Docência"
-        render :partial=>"magisterio"
+    def cargo
+      if params[:disciplina].size>0
+        @cargo = Cargo.find(params[:disciplina])
+        if @cargo.tipo and @cargo.tipo.nome=="Magistério/Docência"
+          render :partial=>"magisterio"
+        else
+          render :partial=>"sem_distritos"
+        end
       else
         render :partial=>"sem_distritos"
       end
-    else
-      render :partial=>"sem_distritos"
     end
-  end
 
 
   # GET /funcionarios/1
@@ -168,9 +168,9 @@ class FuncionariosController < ApplicationController
           :zoom => 1.0 ,
           :orientation => 'Portrait'
 
+        end
       end
     end
-  end
 
   # def carta
   #   @funcionario = Funcionario.find(params[:funcionario_id])
