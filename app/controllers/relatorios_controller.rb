@@ -4,7 +4,7 @@ class RelatoriosController < ApplicationController
       pasta = Workbook::Book.open("public/modelos/relatorio_sem_lotacao.xls")
       planilha = pasta.sheet.table
       linha_modelo = planilha[1]
-      @funcionarios = Funcionario.sem_lotacao.joins(:categoria).where("categoria.nome not in (?)",["Ex-Território do Amapá", "Ministério da Educação","UDE", "Sem Vínculo","Ex-Território Federal do Amapá - Comissionado", "Ministério da Educação - Comissionado"]).uniq.sort_by{|f|f.pessoa.nome}
+      @funcionarios = Funcionario.sem_lotacao.joins(:categoria).where("categoria.nome not in (?)",["Ex-Território do Amapá", "Ministério da Educação","UDE", "Sem Vínculo","Ex-Território Federal do Amapá - Comissionado", "Ministério da Educação - Comissionado","Contrato Administrativo"]).uniq.sort_by{|f|f.pessoa.nome}
       @funcionarios.each.with_index(2) do |f,i|
         planilha << linha_modelo.clone
         planilha[i][0] = f.pessoa.nome
