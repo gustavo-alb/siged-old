@@ -40,5 +40,5 @@
     </table>
   </div></p>
 <p>
-<%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary"%>
+<%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
