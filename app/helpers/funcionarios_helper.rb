@@ -12,7 +12,7 @@ module FuncionariosHelper
       return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
       return "#{func.nivel.nome.upcase}"
-    else
+    elsif func.cargo
       return "#{func.cargo.nome.upcase}"
     end
   end

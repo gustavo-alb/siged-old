@@ -21,6 +21,10 @@ Siged20::Application.routes.draw do
 
   end
 
+  namespace :relatorios do
+    get "sem_lotacao"
+  end
+
   resources :escolas do
     get :controle_turma
     get :controle_ambiente
