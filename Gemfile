@@ -1,6 +1,6 @@
 # -*- encoding : utf-8 -*-
 source 'http://rubygems.org'
-
+ruby '2.1.1'
 gem 'rails', '3.2.22'
 gem 'iconv'
 gem "rake", "~> 0.9.2"
@@ -65,3 +65,4 @@ gem "iconv"
 gem 'devise-bootstrap-views'
 gem 'wicked'
 gem 'workbook'
+gem "audited-activerecord", "~> 3.0"

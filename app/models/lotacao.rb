@@ -3,6 +3,7 @@ require "barby/barcode/code_39"
 require "barby/outputter/png_outputter"
 class Lotacao < ActiveRecord::Base
   self.table_name = "lotacaos"
+  audited :associated_with => :funcionarios
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
   validates_presence_of :usuario_id
   #validates_presence_of :funcionario_id

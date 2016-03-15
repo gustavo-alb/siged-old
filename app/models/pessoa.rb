@@ -2,6 +2,8 @@
 class Pessoa < ActiveRecord::Base
   extend FriendlyId
   friendly_id :nome, :use=> :slugged
+  audited
+  has_associated_audits
 
   #default_scope where('pessoas.entidade_id in (?)',User.usuario_atual.entidade_ids)
   validates_uniqueness_of :cpf,:on=>:create
