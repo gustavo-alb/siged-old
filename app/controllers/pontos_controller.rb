@@ -131,7 +131,9 @@ class PontosController < ApplicationController
       @objeto = Escola.find(@obj)
       @obj_tipo = "Escola"
     end
-    @lotacoes = @objeto.lotacoes.ativas.joins(:pessoa).order("pessoas.nome asc")
+    @devolvidos = @objeto.lotacoes.where("lotacaos.finalizada = ? and ? BETWEEN lotacaos.data_lotacao and lotacaos.data_devolucao",true,@data)
+    @atuais = @objeto.lotacoes.where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month)
+    @lotacoes = @devolvidos+@atuais.sort_by{|l|l.pessoa.nome}
     @pdf = CombinePDF.new
     @lotacoes.each do |l|
       ponto = l.pontos.find_by_data(data)||l.funcionario.pontos.create(:data=>data,:funcionario_id=>l.funcionario.id,:lotacao_id=>l.id,:usuario=>current_user)
