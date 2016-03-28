@@ -237,14 +237,14 @@ module ApplicationHelper
       return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
       return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
-    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
-      return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
-    elsif func.cargo and func.nivel.nil? and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
-      return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Comissão'
       return "#{func.cargo.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome!="Comissão"
       return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
+    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
+    elsif func.cargo and func.nivel.nil? and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
       return "#{func.nivel.nome.upcase}"
     else
