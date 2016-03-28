@@ -3,7 +3,7 @@ require "barby/barcode/code_39"
 require "barby/outputter/png_outputter"
 class Lotacao < ActiveRecord::Base
   self.table_name = "lotacaos"
-  audited :associated_with => :funcionarios
+  audited :associated_with => :funcionario
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
   validates_presence_of :usuario_id
   #validates_presence_of :funcionario_id
@@ -155,6 +155,7 @@ class Lotacao < ActiveRecord::Base
         self.funcionario.lotacoes.complementares.order("created_at asc").first.update_attributes(:complementar=>false)
       end
       self.ativo = false
+      self.data_devolucao = Time.now
       self.especificacoes.delete_all
       self.save
       status = proc2.status.new

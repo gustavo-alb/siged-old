@@ -19,9 +19,11 @@
      <td><%= f.matricula %></td>
      <td><%= detalhes(f.pessoa) %></td>
      <td><%= cargo_resumido(f) %></td>
-     <%if can? :especificar_lotacao,Lotacao%>
-     <!-- <td><%= link_to "Devolver Funcionário", pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativas.find_by_funcionario_id(f.id))  %></td> -->
+     <td>
+     <%if can? :manage,Lotacao and !@objeto.lotacoes.ativas.find_by_funcionario_id(f.id).nil?%>
+     <%= link_to "Devolver Funcionário", pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativas.find_by_funcionario_id(f.id))  %>
      <% end %>
+     </td>
    </tr>
    <% end %>
  </tbody>

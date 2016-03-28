@@ -141,8 +141,9 @@ class PontosController < ApplicationController
   end
 
   def funcionarios
-    @obj = params[:objeto_id]
-    @tipo = params[:tipo]
+    @meses = [["Janeiro", 1], ["Fevereiro", 2], ["Março", 3], ["Abril", 4], ["Maio", 5], ["Junho", 6], ["Julho", 7], ["Agosto", 8], ["Setembro", 9], ["Outubro", 10], ["Novembro", 11], ["Dezembro", 12]]
+    @obj = params[:objeto_id]||params[:ponto][:objeto_id]
+    @tipo = params[:tipo]||params[:ponto][:tipo]
     case @tipo
     when "orgao"
       @objeto = Orgao.find(@obj)
@@ -154,12 +155,13 @@ class PontosController < ApplicationController
       @objeto = Escola.find(@obj)
       @obj_tipo = "Escola"
     end
+    data = Date.parse("01/#{params[:ponto][:mes]}/#{params[:ponto][:ano]}") if params[:ponto]
+    @data = data||Date.today
+    #@data = params[:data] || Date.today
+    @devolvidos = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and ? BETWEEN lotacaos.data_lotacao and lotacaos.data_devolucao",true,@data)
 
-    @funcionarios = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",true,true).uniq.sort_by{|f|f.pessoa.nome}.paginate :page => params[:page], :per_page => 8
-    #@cargos_principais = Cargo.where("id in (?)",[Cargo.find_by_nome("PEDAGOGO").id,Cargo.find_by_nome("PROFESSOR").id,Cargo.find_by_nome("ESPECIALISTA DE EDUCACAO").id,Cargo.find_by_nome("AUXILIAR EDUCACIONAL").id,Cargo.find_by_nome("CUIDADOR").id,Cargo.find_by_nome("INTERPRETE").id]).order(:nome)
-    #@outros_cargos = Cargo.where("id not in (?)",@cargos_principais).order(:nome)
-    #@funcionarios_cargos_principais = @objeto.funcionarios.where("cargo_id in (?)",@cargos_principais).group_by{|t|t.cargo}
-    #@funcionarios_outros = @objeto.funcionarios.where("cargo_id in (?)",@outros_cargos)
+    @atuais = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month)
+    @funcionarios = (@devolvidos+@atuais).uniq.sort_by{|f|f.pessoa.nome}.paginate :page => params[:page], :per_page => 8
     @encaminhados = @objeto.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",false,true).uniq.paginate :page => params[:page], :per_page => 8
     @aba = params[:aba]
     respond_to do |format|

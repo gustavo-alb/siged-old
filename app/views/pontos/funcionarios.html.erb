@@ -1,4 +1,23 @@
 <h3>Funcionários cedidos ao <%=@obj_tipo%>: <%= @objeto.nome.titleize%></h3>
+<div class="input-group col-md-4 pull-right">
+  <%= simple_form_for :ponto,:method=>:get,:url=>funcionarios_pontos_url(:objeto_id=>@objeto.id,:tipo=>@objeto.class.name.downcase) do |f|%>
+    <%= f.input :objeto_id,:as=>:hidden,:input_html=>{:value=>@objeto.id}%>
+    <%= f.input :tipo,:as=>:hidden,:input_html=>{:value=>@objeto.class.name.downcase}%>
+    <div class="row">
+    <div class="span3">
+    <%= f.input :mes,:collection=>@meses,:label=>false,:include_blank=>false,:selected=>@data.month,:input_html=>{:class=>"form-control input-md"}%>
+    </div>
+    <div class="span3">
+      <%= f.input :ano,:collection=>2014.upto(Date.today.year),:label=>false,:selected=>@data.year,:include_blank=>false,:input_html=>{:class=>"form-control input-md"}%>
+      </div>
+      <div class="span3">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-md") do %>
+          <span class="glyphicon glyphicon-search"></span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>
 <ul class="nav nav-tabs" role="tablist">
   <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Funcionarios do Setor</a></li>
   <li role="presentation"><a href="#tab1" data-toggle="modal" data-target="#myModal">Gerar Pontos do Mês</a></li>
@@ -14,9 +33,7 @@
   </div>
 </div>
 </article>
-
 <!-- Button trigger modal -->
-
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -26,14 +43,14 @@
         <h4 class="modal-title" id="myModalLabel">Gerar Pontos do Mês</h4>
       </div>
       <div class="modal-body">
-       <%= form_tag :controller=>'pontos',:action=>'salvar_pontos',:method=>:post,:remote=>true,:tipo=>@tipo,:objeto_id=>@objeto.id%>
-       <%= date_select :ponto,:data,:discard_day=>true%><br/><br/>
-       
-     </div>
-     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-      <%= submit_tag 'Gerar Pontos',:class=>"btn btn-default btn-info"%>
+        <%= form_tag :controller=>'pontos',:action=>'salvar_pontos',:method=>:post,:remote=>true,:tipo=>@tipo,:objeto_id=>@objeto.id%>
+        <%= date_select :ponto,:data,:discard_day=>true%><br/>
+        <br/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+        <%= submit_tag 'Gerar Pontos',:class=>"btn btn-default btn-info"%>
+      </div>
     </div>
   </div>
-</div>
 </div>
