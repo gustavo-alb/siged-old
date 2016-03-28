@@ -131,6 +131,7 @@ class PontosController < ApplicationController
       @objeto = Escola.find(@obj)
       @obj_tipo = "Escola"
     end
+    @data = data
     @devolvidos = @objeto.lotacoes.where("lotacaos.finalizada = ? and ? BETWEEN lotacaos.data_lotacao and lotacaos.data_devolucao",true,@data)
     @atuais = @objeto.lotacoes.where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month)
     @lotacoes = @devolvidos+@atuais.sort_by{|l|l.pessoa.nome}
