@@ -224,7 +224,7 @@ class Ability
     if user.role? :chefia_ucolom
       can :manage, Lotacao
       cannot :convalidar,Lotacao
-      cannot :create, Lotacao
+      #cannot :create, Lotacao
       can :read,Funcionario
       can :manage,Pessoa
       cannot :create,Pessoa
