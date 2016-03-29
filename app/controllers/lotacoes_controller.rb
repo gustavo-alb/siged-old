@@ -542,7 +542,7 @@ class LotacoesController < ApplicationController
   end
 
   def funcionario
-    @funcionario = Funcionario.find_by_slug(params[:funcionario_id])
+    @funcionario = Funcionario.find_by_slug(params[:funcionario_id])||Funcionario.find(params[:funcionario_id])
     @pessoa = Pessoa.find_by_slug(params[:pessoa_id])
     @escolas = Escola.all.collect{|p| [p.nome,p.id]}
   end
