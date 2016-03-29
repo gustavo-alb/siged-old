@@ -8,8 +8,8 @@ class Funcionario < ActiveRecord::Base
   validates_presence_of :disciplina_contratacao_id,:if=>Proc.new{|f|f.cargo and f.cargo.nome=="Professor"}
   validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id,Categoria.find_by_nome("Contrato Administrativo").id].include?(f.categoria.id) if f.categoria}
   validates_uniqueness_of :matricula,:message=>"já existente",:on=>:create,:if => Proc.new {|f| not f.matricula.blank?}
-  audited :associated_with => :pessoa
-  has_associated_audits
+  #audited :associated_with => :pessoa
+  #has_associated_audits
   #scoped_search
   scope :busca, lambda { |q| where("matricula like ?" ,"%#{q}%") }
   scope :da_pessoa, lambda {|id|where("pessoa_id = ?",id) }

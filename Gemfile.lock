@@ -33,10 +33,6 @@ GEM
       jquery-rails (>= 1.0.17)
       rails (~> 3.0)
     arel (3.0.3)
-    audited (3.0.0)
-    audited-activerecord (3.0.0)
-      activerecord (~> 3.0)
-      audited (= 3.0.0)
     barby (0.6.2)
     bcrypt (3.1.10)
     bootstrap-will_paginate (0.0.10)
@@ -270,7 +266,6 @@ PLATFORMS
 
 DEPENDENCIES
   ajax_pagination
-  audited-activerecord (~> 3.0)
   barby
   bootstrap-will_paginate (= 0.0.10)
   brazilian-rails (= 3.1.0)

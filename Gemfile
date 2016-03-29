@@ -65,4 +65,3 @@ gem "iconv"
 gem 'devise-bootstrap-views'
 gem 'wicked'
 gem 'workbook'
-gem "audited-activerecord", "~> 3.0"
