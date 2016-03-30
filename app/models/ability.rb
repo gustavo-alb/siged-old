@@ -28,7 +28,7 @@ class Ability
 
       if user.role? :chefia_ucada
         can :manage,Funcionario
-        cannot :destroy,Funcionario
+        #cannot :destroy,Funcionario
         can :manage,Pessoa
         cannot :destroy,Pessoa
         can :manage,Departamento
