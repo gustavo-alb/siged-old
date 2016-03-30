@@ -1,6 +1,6 @@
 <%= simple_form_for @situacao, :html => { :class => 'form-horizontal' } do |f| %>
 <%= f.input :nome %>
-<%= f.input :cor %>
+<%= f.input :cor,:collection=>[["Azul","info"],["Verde","success"],["Amarelo","warning"],["Vermelho","error"]] %>
 
 <%= f.button :submit, :class => 'btn-primary' %>
 <%= link_to "Cancelar",

@@ -4,7 +4,8 @@ class SituacoesController < ApplicationController
   respond_to :html
 
   def index
-    @situacoes = Situacao.all
+    @q = Situacao.ransack(params[:q])
+    @situacoes = @q.result.all.paginate :page => params[:page], :per_page => 10
     respond_with(@situacoes)
   end
 

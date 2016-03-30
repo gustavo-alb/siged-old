@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160330141142) do
+ActiveRecord::Schema.define(:version => 20160330144108) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -734,6 +734,7 @@ ActiveRecord::Schema.define(:version => 20160330141142) do
     t.integer  "interiorizacao_valor"
     t.integer  "interiorizacao_rubrica"
     t.boolean  "ativo",                       :default => true
+    t.integer  "situacao_id"
   end
 
   add_index "funcionarios", ["cargo_id"], :name => "index_funcionarios_on_cargo_id"

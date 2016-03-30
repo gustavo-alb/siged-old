@@ -16,6 +16,7 @@
     <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
   </div>
   <%= f.input :observacao,as: :text,input_html: {size: "3x3"},:label=>"Observação" %>
+  <%= f.input :situacao_id,:collection=>Situacao.all.collect{|s|[s.nome,s.id]}%>
   <%= f.button :submit, :class => 'btn-primary' %>
   <%= link_to "Cancelar",
 pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default' %>

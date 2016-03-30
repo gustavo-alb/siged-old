@@ -41,6 +41,7 @@ class Funcionario < ActiveRecord::Base
   belongs_to :distrito
   belongs_to :processo
   belongs_to :entidade
+  belongs_to :situacao
   has_many :requisicoes
   has_one :user,:dependent=>:destroy
   belongs_to :fonte_recurso,:class_name=>"Folha::FonteRecurso"
@@ -329,9 +330,7 @@ class Funcionario < ActiveRecord::Base
       end
     end
 
-    def flotacao
-      lotacao(self)
-    end
+
 
     private
     def criar_comissionado

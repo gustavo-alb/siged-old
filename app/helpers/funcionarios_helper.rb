@@ -17,6 +17,13 @@ module FuncionariosHelper
     end
   end
 
+  def situacao(f)
+    if f and f.situacao
+      sit = f.situacao
+      return raw("<span class='label label-default label-#{sit.cor}'>#{sit.nome.upcase}</span>")
+    end
+  end
+
   def desc(obj)
     if obj
       return obj.nome

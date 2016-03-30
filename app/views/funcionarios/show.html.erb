@@ -31,6 +31,8 @@ Detalhes de
   <dd><%= detalhes(@funcionario.municipio) %></dd>
   <dt><strong>Observacao:</strong></dt>
   <dd><%= detalhes(@funcionario.observacao) %></dd>
+  <dt><strong>Situação:</strong></dt>
+  <dd><%=situacao(@funcionario)%></dd>
 
 </dl>
 <%= link_to 'Voltar', pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default'  %>
