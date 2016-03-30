@@ -68,13 +68,19 @@ class Funcionario < ActiveRecord::Base
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}
   #attr_accessor(:rsd) {self.regencia_semanal_disponivel}
   attr_accessor(:disciplina) {self.disciplina_nome}
-
+  before_save :setar_situacao
   def rsn
     return self.regencia_semanal_nominal
   end
 
   def rsd
     return self.regencia_semanal_disponivel
+  end
+
+  def setar_situacao
+    if self.situacao.nil?
+      self.situacao = Situacao.find_by_nome("Ativo")
+    end
   end
 
 
