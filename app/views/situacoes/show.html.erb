@@ -1,0 +1,18 @@
+<%model_class = Situacao%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Nome:</strong></dt>
+      <dd><%= @situacao.nome %></dd>
+          <dt><strong>Cor:</strong></dt>
+      <dd><%= @situacao.cor %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', situacoes_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_situacao_path(@situacao), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              situacao_path(@situacao),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

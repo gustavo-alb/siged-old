@@ -1,0 +1,45 @@
+<%content_for :titulo do%>
+  Situacoes
+  <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
+    <%= search_form_for @q do |f|%>
+      <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+      <span class="input-group-btn">
+        <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+          <span class="glyphicon glyphicon-search"></span>
+          <% end %>
+        </span>
+      </div>
+      <%end%>
+      <%= link_to "Criar",new_situacao_path,:class=>"btn btn-primary"%>
+      <%end%>
+      <table class="table table-striped tabela-colapsavel">
+        <thead>
+          <tr>
+            
+              <th>nome</th>
+            
+              <th>cor</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <% @situacoes.each_with_index do |s,i| %>
+    
+          
+          
+          <tr>
+            
+              <td><%= s.nome%></td>
+            
+              <td><%= s.cor%></td>
+            
+            <td>
+              <%= link_to "Editar", edit_situacao_path(s),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Visualizar",situacao_path(s),:class=>"btn btn-primary btn-xs"%>
+      <%= link_to "Apagar", situacao_path(s),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+      </td>
+          </tr>
+          <% end%>
+        </tbody>
+      </table>
+      <%= will_paginate @situacao%>

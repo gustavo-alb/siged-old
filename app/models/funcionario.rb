@@ -2,8 +2,8 @@
 class Funcionario < ActiveRecord::Base
   extend FriendlyId
   friendly_id :matricula, :use=> :slugged
-    include ApplicationHelper
-    include PessoasHelper
+    #include ApplicationHelper
+    #include PessoasHelper
   #default_scope joins(:pessoa).order('pessoas.nome asc')
   #default_scope where('funcionarios.entidade_id in (?)',User.usuario_atual.entidade_ids)
   validates_presence_of  :cargo_id,:categoria_id,:nivel_id,:entidade_id,:data_nomeacao,:message=>"Não pode ficar em branco!"

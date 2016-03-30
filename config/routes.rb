@@ -3,6 +3,9 @@ Siged20::Application.routes.draw do
 
 
 
+  resources :situacoes
+
+
   resources :escolas
 
 
