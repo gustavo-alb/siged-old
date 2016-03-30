@@ -9,8 +9,8 @@
       <th>Matrícula</th>
       <th>Funcionário</th>
       <th>Cargo</th>
-     <!--  <th>Ações</th>
-      <th colspan=2></th> -->
+      <th>Local</th>
+      <th>Ações</th>
     </tr>
   </thead>
   <tbody>
@@ -19,9 +19,12 @@
      <td><%= f.matricula %></td>
      <td><%= detalhes(f.pessoa) %></td>
      <td><%= cargo_resumido(f) %></td>
+     <td><%= destino(f.lotacoes.where("destino_id = ? or destino_id in (?)",@objeto.id,@objeto.departamentos_filho_ids).last) %></td>
      <td>
      <%if can? :manage,Lotacao and !@objeto.lotacoes.ativas.find_by_funcionario_id(f.id).nil?%>
      <%= link_to "Devolver Funcionário", pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativas.find_by_funcionario_id(f.id))  %>
+     <%else%>
+     Setorial Subordinado
      <% end %>
      </td>
    </tr>

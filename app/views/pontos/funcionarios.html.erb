@@ -44,7 +44,8 @@
       </div>
       <div class="modal-body">
         <%= form_tag :controller=>'pontos',:action=>'salvar_pontos',:method=>:post,:remote=>true,:tipo=>@tipo,:objeto_id=>@objeto.id%>
-        <%= date_select :ponto,:data,:discard_day=>true%><br/>
+        <label>Mês/Ano:</label> <%= date_select :ponto,:data,:discard_day=>true%><br/>
+        <label>Gerar pontos dos setoriais subordinados à este: </label> <%= check_box :ponto,:subordinados%>
         <br/>
       </div>
       <div class="modal-footer">
