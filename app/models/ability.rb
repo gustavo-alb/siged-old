@@ -30,7 +30,7 @@ class Ability
         can :manage,Funcionario
         #cannot :destroy,Funcionario
         can :manage,Pessoa
-        cannot :destroy,Pessoa
+        #cannot :destroy,Pessoa
         can :manage,Departamento
         cannot :update,Departamento
         cannot :create,Departamento
