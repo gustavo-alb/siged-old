@@ -71,7 +71,7 @@ def codigo_lotacao(lotacao)
     elsif lotacao.departamento.nil? and lotacao.escola.nil?
         return "#{lotacao.funcionario.orgao.codigo}"
     else
-        return raw("<font color=red><b>Nada Cadastrado</b></font>")
+        return raw("Nada Cadastrado")
     end
 end
 
@@ -131,7 +131,7 @@ def destino_ponto(lotacao)
     elsif lotacao.tipo_lotacao=="SUMARIA" or lotacao.tipo_lotacao=="REGULAR" or lotacao.tipo_lotacao=="PROLABORE"
         return "#{lotacao.escola.nome}"
     elsif lotacao.escola.nil? and lotacao.orgao.nil? and lotacao.departamento.nil?
-        return raw("<b><font color=red>LOTAÇÃO INVÁLIDA</b></font>")
+        return raw("<b><font color=red>LOTAÇÃO INVÁLIDA")
     end
 end
 end

@@ -1,27 +1,7 @@
 # -*- encoding : utf-8 -*-
 module PontosHelper
 
-  def detalhes(obj=nil,sigla=false)
-    if obj
-      if obj.respond_to? "nome" and !obj.nome.blank?
-        return obj.nome.upcase
-      elsif obj.respond_to? "sigla" and !obj.sigla.blank? and sigla==true
-        return obj.sigla.upcase
-      elsif obj.respond_to? "codigo" and !obj.codigo.blank? and sigla==true
-        return obj.codigo.upcase
-      elsif obj.respond_to? "nome" and !obj.nome.blank?
-        return obj.nome.upcase
-      elsif obj.respond_to? "username" and !obj.username.blank?
-        return obj.username.upcase
-      elsif obj.class==String and !obj.blank?
-        return obj
-      else
-        return raw("<font color=red><b>Nada Cadastrado</b></font>")
-      end
-    else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
-    end
-  end
+
 
   def datas_especiais(d)
 

@@ -26,6 +26,7 @@ Siged20::Application.routes.draw do
 
   namespace :relatorios do
     get "sem_lotacao"
+    get "geral"
     get "contrato_docente"
     get "contrato_nao_docente"
   end

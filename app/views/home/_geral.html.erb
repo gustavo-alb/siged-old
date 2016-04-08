@@ -39,6 +39,9 @@
       </tbody>
     </table>
   </div></p>
+  <p>
+<%= link_to "Relatório Geral de Lotação", relatorios_geral_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+</p>
 <p>
 <%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
@@ -46,7 +49,9 @@
 <p>
 <%= link_to "Relatório de Contrato Administrativo Docente", relatorios_contrato_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
+
 <p>
 <%= link_to "Relatório de Contrato Administrativo Não Docente", relatorios_contrato_nao_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 
 </p>
+

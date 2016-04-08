@@ -70,7 +70,7 @@ module ApplicationHelper
     if obj and !obj.usuario.blank?
       return raw("<b>#{obj.usuario.upcase}</b>")
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -277,13 +277,26 @@ module ApplicationHelper
   end
 
 
+  def categorias_gerais(obj)
+    if obj.categoria and ["Concurso de 2012","Estado Antigo","992","Ex-Ipesap","Estado Novo"].include?(obj.categoria.nome)
+      return "EFETIVO ESTADUAL"
+    elsif obj.categoria and ["Contrato Administrativo"].include?(obj.categoria.nome)
+      return "CONTRATO ADMINISTRATIVO"
+    elsif obj.categoria and ["Ex-Território do Amapá","Ministério da Educação","Ex-Território Federal do Amapá - Comissionado","Ministério da Educação - Comissionado"].include?(obj.categoria.nome)
+      return "FEDERAL"
+    elsif obj.categoria and ["Prefeitura - Permuta","Prefeitura - Cedido"]
+      return "PREFEITURA"
+    else
+      return "INDEFINIDO"   
+    end
+  end
 
 
   def detalhes_str(obj)
     if obj
       return obj
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -299,7 +312,7 @@ module ApplicationHelper
     if obj and obj.pessoa and !obj.pessoa.email.blank?
       return obj.pessoa.email
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -311,7 +324,7 @@ module ApplicationHelper
     elsif obj and !obj.telefone_residencial.blank? and obj.telefone_celular.blank?
       return "#{obj.telefone_residencial}"
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -325,7 +338,7 @@ module ApplicationHelper
         return "#{obj.pessoa.telefone_residencial}"
       end
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -334,7 +347,7 @@ module ApplicationHelper
     if obj
       return obj.codigo
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
@@ -353,10 +366,10 @@ module ApplicationHelper
       elsif obj.class==String and !obj.blank?
         return obj
       else
-        return raw("<font color=red><b>Nada Cadastrado</b></font>")
+        return raw("Nada Cadastrado")
       end
     else
-      return raw("<font color=red><b>Nada Cadastrado</b></font>")
+      return raw("Nada Cadastrado")
     end
   end
 
