@@ -14,7 +14,11 @@ class ContratosController < ApplicationController
   end
 
   def pessoal
+    if can?(:create,Contrato)
     @pessoa = Pessoa.new
+  else
+    redirect_to(root_url,:alert=>"Você não tem permissão para acessar esta área")
+  end
   end
 
   def estatisticas
@@ -269,7 +273,7 @@ def salvar
  end
 
  def permissao
-  if current_user.role?(:chefia_ucolom) or current_user.role?(:admin)
+  if current_user.role?(:chefia_ucolom) or current_user.role?(:admin) or current_user.role?(:bancos)
   else
     redirect_to root_url,:error=>"Você não tem permissão para acessar esta área"
   end

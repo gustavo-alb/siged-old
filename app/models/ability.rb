@@ -239,6 +239,7 @@ class Ability
       can :manage, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola
       cannot :especificar_lotacao,Lotacao
+      can :manage, Contrato
     end
 
     if user.role? :crh
@@ -269,6 +270,13 @@ class Ability
       can :manage,Pessoa
       cannot :destroy,Pessoa
       can :manage,Lotacao
+    end
+
+    if user.role? :bancos
+      can :read, Contrato
+      cannot :create, Contrato
+      cannot :update, Contrato
+      cannot :destroy, Contrato
     end
 
     if user.role? :revisao_carga_horaria

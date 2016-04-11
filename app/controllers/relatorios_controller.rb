@@ -1,5 +1,6 @@
 # -*- encoding : utf-8 -*-
 class RelatoriosController < ApplicationController
+  
   def sem_lotacao
     pasta = Workbook::Book.open("public/modelos/relatorio_sem_lotacao.xls")
     planilha = pasta.sheet.table
@@ -19,6 +20,7 @@ class RelatoriosController < ApplicationController
     pasta.write_to_xls("#{arquivo.path}")
     send_file(arquivo.path,:filename=>"Relatório de Funcionários Sem Lotação.xls",:type=>"application/vnd.ms-excel")
   end
+
 
   def contrato_docente
     pasta = Workbook::Book.open("public/modelos/relatorio_docente.xls")
