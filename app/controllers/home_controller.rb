@@ -4,6 +4,9 @@ class HomeController < ApplicationController
   skip_before_filter :authenticate_user!
   layout :layout_by_resource
   def index
+    if user_signed_in? and current_user.role?(:bancos)
+      redirect_to :contratos_index_path
+    end
     @disciplinas = Rails.cache.fetch('disciplinas', :expires_in => 24.hours) { DisciplinaContratacao.joins(:funcionarios).order('nome asc').uniq }
     # @disciplinas = DisciplinaContratacao.find(:all,:joins=>:funcionarios,:order=>['nome asc']).uniq
     @professores = Rails.cache.fetch('professores', :expires_in => 24.hours) { Funcionario.where(:cargo_id=>Cargo.find_by_nome("PROFESSOR")).uniq }

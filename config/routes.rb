@@ -59,8 +59,6 @@ Siged20::Application.routes.draw do
 
   resources :mensagens
 
-  get "home/index"
-  get "home/home"
 
   resources :niveis_ensinos do
     resources :series
@@ -385,6 +383,7 @@ end
     root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}, as: :ucolom_root
     root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}, as: :ucada_root
     root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}, as: :chefia_ucolom_root
+    root :to => "contratos#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'bancos')}, as: :bancos_root
   end
   root :to => "home#index"
 
