@@ -5,18 +5,18 @@
   <div class="accordion-body collapse" id="disciplinas">
     <table class="table table-striped" WIDTH='80%'>
       <thead>
-      <tr>
-        <th>Disciplina</th>
-        <th>Qnt.</th>
-        <th>%</th>
-        <th WIDTH=1%>Lotados</th>
-        <th>%</th>
-        <th WIDTH=1%>Especificados</th>
-        <th>%</th>
-      </tr>
+        <tr>
+          <th>Disciplina</th>
+          <th>Qnt.</th>
+          <th>%</th>
+          <th WIDTH=1%>Lotados</th>
+          <th>%</th>
+          <th WIDTH=1%>Especificados</th>
+          <th>%</th>
+        </tr>
       </thead>
       <tbody>
-      <%@disciplinas.each do |d|%>
+        <%@disciplinas.each do |d|%>
           <tr>
             <td><%=d.nome%></td>
             <td ALIGN=CENTER><%=d.funcionarios.count%></td>
@@ -26,32 +26,38 @@
             <td ALIGN=CENTER><%=d.funcionarios.joins(:especificacoes).count%></td>
             <td ALIGN=CENTER><%=(d.funcionarios.joins(:especificacoes).count*100)/d.funcionarios.count%></td>
           </tr>
-      <%end%>
-      <tr>
-        <td><b>Indefinidos</b></td>
-        <td ALIGN=CENTER><%=@indefinidos.count%></td>
-        <td ALIGN=CENTER><%=(@indefinidos.count*100)/@professores.count%></td>
-        <td ALIGN=CENTER><%=@i_lotados.count%></td>
-        <td ALIGN=CENTER><%=(@i_lotados.count*100)/@indefinidos.count%></td>
-        <td ALIGN=CENTER><%=@i_especificados.count%></td>
-        <td ALIGN=CENTER><%=(@i_especificados.count*100)/@indefinidos.count%></td>
-      </tr>
+        <%end%>
+        <tr>
+          <td><b>Indefinidos</b></td>
+          <td ALIGN=CENTER><%=@indefinidos.count%></td>
+          <td ALIGN=CENTER><%=(@indefinidos.count*100)/@professores.count%></td>
+          <td ALIGN=CENTER><%=@i_lotados.count%></td>
+          <td ALIGN=CENTER><%=(@i_lotados.count*100)/@indefinidos.count%></td>
+          <td ALIGN=CENTER><%=@i_especificados.count%></td>
+          <td ALIGN=CENTER><%=(@i_especificados.count*100)/@indefinidos.count%></td>
+        </tr>
       </tbody>
     </table>
-  </div></p>
-  <p>
-<%= link_to "Relatório Geral de Lotação", relatorios_geral_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+  </div>
 </p>
 <p>
-<%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+  <%= link_to "Relatório Geral de Lotação", relatorios_geral_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+</p>
+<p>
+  <%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+
+</p>
+<p>
+  <%= link_to "Relatório de Lotação - SEED e Anexos", relatorios_seed_anexos_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+</p>
+<p>
+  <%= link_to "Relatório de Lotação - Cargos Comissionados", relatorios_cargos_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
 
 <p>
-<%= link_to "Relatório de Contrato Administrativo Docente", relatorios_contrato_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
+  <%= link_to "Relatório de Contrato Administrativo Docente", relatorios_contrato_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
-
 <p>
-<%= link_to "Relatório de Contrato Administrativo Não Docente", relatorios_contrato_nao_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
-
+  <%= link_to "Relatório de Contrato Administrativo Não Docente", relatorios_contrato_nao_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%>
 </p>
 

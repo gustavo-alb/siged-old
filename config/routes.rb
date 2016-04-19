@@ -29,6 +29,8 @@ Siged20::Application.routes.draw do
     get "geral"
     get "contrato_docente"
     get "contrato_nao_docente"
+    get "seed_anexos"
+    get "cargos"
   end
 
   resources :escolas do

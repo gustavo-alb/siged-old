@@ -286,6 +286,8 @@ module ApplicationHelper
       return "FEDERAL"
     elsif obj.categoria and ["Prefeitura - Permuta","Prefeitura - Cedido"]
       return "PREFEITURA"
+    elsif obj.categoria and ["Sem Vínculo"]
+      return "CARGO SEM VÍNCULO"
     else
       return "INDEFINIDO"   
     end
