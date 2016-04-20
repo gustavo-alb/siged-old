@@ -37,7 +37,7 @@ class ContratosController < ApplicationController
     @pessoa = Pessoa.new(params[:pessoa])
     @funcionario = Funcionario.new
     @categoria = Categoria.find_by_nome("Contrato Administrativo")
-    @categorias_contrato = Categoria.where("nome ilike ?","%contrato%")
+    @categorias_contrato = Categoria.where("nome ilike ?","%contrato%").collect{|c|[c.nome,c.id]}
     @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
     respond_to do |format|
       if @pessoa.valid?
