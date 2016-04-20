@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
     @tipo_ambientes = TipoAmbiente.all.collect{|t|[t.nome,t.id]}
     @series = Serie.all.collect{|s|[s.nome,s.id]}
     @categorias = Categoria.all.collect{|c|[c.nome,c.id]}
-    @categorias_contrato = Categoria.where("nome ilike ?","%contrato%")
+    @categorias_contrato = Categoria.where("nome ilike ?","%contrato%").collect{|c|[c.nome,c.id]}
     @entidades = Entidade.all.collect{|e|[e.nome,e.id]}
     @recursos = Folha::FonteRecurso.all.collect{|r|[r.nome,r.id]}
     @usuarios = User.order(:username).collect{|u|["#{u.name} (#{u.username})",u.id]}
