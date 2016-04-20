@@ -3,12 +3,14 @@ Novo Contrato Administrativo
 <% end %>
 <%= simple_form_for @funcionario, :url=>contratos_lotacao_url,:html => { :class => 'form-horizontal' } do |f| %>
 <h3>Dados Funcionais</h3>
-<%=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
+<%#=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
 <%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
 <%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
 
+<%= f.input :categoria_id,as: :select, :collection=>@categorias_contrato%>
 
 <%= f.input :cargo_id,as: :select, :collection=>@cargos,:input_html=>{:id=>"funcionario_cargo_id"}%>
+
 
 <div id='disc'>
   <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if f.object.cargo  and f.object.cargo.nome=="PROFESSOR"%>

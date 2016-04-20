@@ -61,6 +61,8 @@ Detalhes do Contrato de  <%=@pessoa.nome%>
   <%#@pessoa.funcionarios.each do |f|%>
   <div id="funcional">
     <h3>Dados Funcionais</h3>
+    <dt><strong>Categoria:</strong></dt>
+    <dd><%= detalhes(@funcionario.cargo) %></dd>
     <dt><strong>Cargo:</strong></dt>
     <dd><%= detalhes(@funcionario.cargo) %></dd>
     <%if @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>

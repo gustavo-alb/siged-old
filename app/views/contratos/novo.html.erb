@@ -27,11 +27,11 @@ Novo Contrato Administrativo
 
 <h3>Dados Funcionais</h3>
 <%= p.simple_fields_for :funcionarios do |f|%>
-<%=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
+<%#=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
 <%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
 <%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
 
-
+<%= f.input :categoria_id,as: :select, :collection=>@categorias_contrato%>
 <%= f.input :cargo_id,as: :select, :collection=>@cargos,:input_html=>{:id=>"funcionario_cargo_id"}%>
 
 <div id='disc'>
