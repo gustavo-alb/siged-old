@@ -7,9 +7,10 @@ class ContratosController < ApplicationController
     @q = Pessoa.ransack(params[:q])
     if params[:q] and params[:q].size>0
       @busca = params[:q][:nome_or_cpf_or_rg_or_funcionarios_matricula_cont]
-      @pessoas = @q.result(distinct: true).joins(:funcionarios).where("funcionarios.categoria_id in (?)",Categoria.where("%contrato%").collect{|c|c.id}).paginate :page => params[:page], :per_page => 10
+      @pessoas = @q.result(distinct: true).joins(:funcionarios).joins(:funcionarios).where("funcionarios.categoria_id in (?)",Categoria.where("nome ilike ?","%contrato%").collect{|c|c.id}.to_a).sort_by{|p|p.nome}.paginate :page => params[:page], :per_page => 10
+      #@pessoas = Pessoa.joins(:funcionarios).where("funcionarios.categoria_id in (?)",Categoria.where("nome ilike ?","%contrato%").collect{|c|c.id}.to_a).sort_by{|p|p.nome}.paginate :page => params[:page], :per_page => 10
     else
-      @pessoas = Pessoa.joins(:funcionarios).where("funcionarios.categoria_id in (?)",Categoria.where("%contrato%").collect{|c|c.id}).order("nome asc").paginate :page => params[:page], :per_page => 10
+      @pessoas = Pessoa.joins(:funcionarios).where("funcionarios.categoria_id in (?)",Categoria.where("nome ilike ?","%contrato%").collect{|c|c.id}.to_a).sort_by{|p|p.nome}.paginate :page => params[:page], :per_page => 10
     end
   end
 
