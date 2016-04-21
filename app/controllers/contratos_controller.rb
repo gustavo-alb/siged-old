@@ -7,7 +7,7 @@ class ContratosController < ApplicationController
     @q = Pessoa.ransack(params[:q])
     if params[:q] and params[:q].size>0
       @busca = params[:q][:nome_or_cpf_or_rg_or_funcionarios_matricula_cont]
-      @pessoas = @q.result(distinct: true).joins(:funcionarios).where("funcionarios.categoria_id = ? and funcionarios.ativo = ?",@categoria,true).order('nome ASC').paginate :page => params[:page], :per_page => 10
+      @pessoas = @q.result(distinct: true).joins(:funcionarios).where("funcionarios.categoria_id in (?) and funcionarios.ativo = ?",@categorias_contrato,true).order('nome ASC').paginate :page => params[:page], :per_page => 10
     else
       @pessoas = Pessoa.joins(:funcionarios).where("funcionarios.categoria_id = ? and funcionarios.ativo = ?",@categoria,true).order("nome asc").paginate :page => params[:page], :per_page => 10
     end
