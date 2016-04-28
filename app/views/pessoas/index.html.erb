@@ -91,7 +91,7 @@ Pessoas
           <br/>
           <div class="footer pull-right">
             <%= link_to "Editar",edit_pessoa_funcionario_path(p,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and  can? :edit,Funcionario%>
-            <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(p,f),:class=>"btn btn-primary btn-xs" if can? :manage,Lotacao%>
+            <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(p,f),:class=>"btn btn-primary btn-xs" if can? :read,Lotacao%>
 
           </div>
           <br/>

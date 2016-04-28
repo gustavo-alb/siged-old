@@ -2,16 +2,19 @@
   Lotações de <%=@pessoa.nome%>
 <%end%>
 <ul class="nav nav-tabs" role="tablist">
-  <li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Novo Processo de Lotação</a></li>
+  <%if can?(:create,Lotacao)%><li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Novo Processo de Lotação</a></li>
   <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Lotações em Aberto</a></li>
+  <%end%>
   <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Histórico de Lotações</a></li>
 </ul>
 <!-- Tab panes -->
 <div class="tab-content">
+<%if can?(:create,Lotacao)%>
   <div role="tabpanel" class="tab-pane active" id="tab1">
     <%= render :partial=>'nova_lotacao'%>
   </div>
   <div role="tabpanel" class="tab-pane" id="tab2"><%= render :partial=>'abertas'%></div>
-  <div role="tabpanel" class="tab-pane" id="tab3"><%= render :partial=>'historico'%></div>
+  <%end%>
+  <div role="tabpanel" class="tab-pane  <%="active" if cannot?(:create,Lotacao)%>" id="tab3"><%= render :partial=>'historico'%></div>
 </div>
 </div>
