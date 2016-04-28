@@ -34,8 +34,10 @@ module PessoasHelper
   def lotacao(func)
     if func and func.lotacoes.ativas.none?
       return "NÃO LOTADO"
-    else
+    elsif func and func.lotacoes.ativas.any?
       return detalhes(func.lotacoes.ativas.first.destino)
+    elsif func.nil?
+      return "NÃO CADASTRADO"
     end
   end
 

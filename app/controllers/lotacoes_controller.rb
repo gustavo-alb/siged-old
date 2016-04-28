@@ -351,7 +351,7 @@ class LotacoesController < ApplicationController
           Destino: ") }
         format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
       else
-        format.html { render :action => "index" }
+        format.html { render :action => "index",:danger=>"Lotação não criada" }
         format.xml  { render :xml => @lotacao.errors, :status => :unprocessable_entity }
       end
     end
