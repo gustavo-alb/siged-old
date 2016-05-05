@@ -60,6 +60,8 @@
         <dd><%= detalhes(f.data_nomeacao.to_s_br) %></dd>
         <dt><strong>Lotação:</strong></dt>
         <dd><%= lotacao(f) %></dd>
+        <dt><strong>Lotação:</strong></dt>
+        <dd><%= detalhes(@lotacao.natureza) %></dd>
       </div>
     <%end%>
   </dl>
