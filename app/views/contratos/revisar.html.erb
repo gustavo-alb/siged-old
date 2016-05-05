@@ -79,6 +79,8 @@ Detalhes do Contrato de  <%=@pessoa.nome%>
     <dd><%= detalhes(@funcionario.data_nomeacao.to_s_br) %></dd>
     <dt><strong>Lotação:</strong></dt>
     <dd><%= detalhes(@lotacao.destino) %></dd>
+    <dt><strong>Natureza da Lotação:</strong></dt>
+    <dd><%= detalhes(@lotacao.natureza) %></dd>
   </div>
   <%#end%>
 </dl>
