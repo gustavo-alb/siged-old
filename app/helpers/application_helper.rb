@@ -302,9 +302,11 @@ module ApplicationHelper
     end
   end
 
-  def jornada(obj)
-    if obj and obj.jornada
+  def jornada(obj,resumido=false)
+    if obj and obj.jornada and resumido==false
       return "#{obj.jornada} horas semanais"
+    elsif obj and obj.jornada and resumido==true
+      return "#{obj.jornada}H"
     else
       return "Nada Cadastrado"
     end
@@ -355,12 +357,12 @@ module ApplicationHelper
 
   def detalhes(obj=nil,sigla=false)
     if obj
-      if obj.respond_to? "nome" and !obj.nome.blank?
-        return obj.nome.upcase
-      elsif obj.respond_to? "sigla" and !obj.sigla.blank? and sigla==true
+      if obj.respond_to? "sigla" and !obj.sigla.blank? and sigla==true
         return obj.sigla.upcase
       elsif obj.respond_to? "codigo" and !obj.codigo.blank? and sigla==true
         return obj.codigo.upcase
+      elsif obj.respond_to? "nome" and !obj.nome.blank?
+        return obj.nome.upcase
       elsif obj.respond_to? "nome" and !obj.nome.blank?
         return obj.nome.upcase
       elsif obj.respond_to? "username" and !obj.username.blank?
