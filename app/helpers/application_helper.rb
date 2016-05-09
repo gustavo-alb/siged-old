@@ -276,6 +276,28 @@ module ApplicationHelper
     end
   end
 
+    def funcao(func)
+    if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao
+      return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Comissão'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome!="Comissão"
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
+      return "#{func.cargo.nome.upcase}"
+    else
+      return "Nada Cadastrado"
+    end
+  end
+
 
   def categorias_gerais(obj)
     if obj.categoria and ["Concurso de 2012","Estado Antigo","992","Ex-Ipesap","Estado Novo"].include?(obj.categoria.nome)
