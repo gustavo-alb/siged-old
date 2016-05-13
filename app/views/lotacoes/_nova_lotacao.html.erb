@@ -2,7 +2,10 @@
   <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today} if current_user.role? :chefia_ucolom or current_user.role? :admin%>
   <%= f.input :data_lotacao,:as=>:hidden,:input_html=>{:class=>"data",:value=>Date.today} if !current_user.role?(:chefia_ucolom)%>
   <%= f.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
+
+
   <div id="destino">
+  <%= f.input :natureza,:label=>"Natureza da Lotação",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
     <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
     <%= f.input :destino_id,:as=>:hidden%>
     <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160330144108) do
+ActiveRecord::Schema.define(:version => 20160428142048) do
 
   create_table "activities", :force => true do |t|
     t.integer  "trackable_id"
@@ -822,6 +822,7 @@ ActiveRecord::Schema.define(:version => 20160330144108) do
     t.string   "state"
     t.integer  "contrato_id"
     t.datetime "data_devolucao"
+    t.string   "natureza"
   end
 
   add_index "lotacaos", ["departamento_id"], :name => "index_lotacaos_on_departamento_id"

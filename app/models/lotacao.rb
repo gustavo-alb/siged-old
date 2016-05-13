@@ -8,6 +8,7 @@ class Lotacao < ActiveRecord::Base
   #audited :associated_with => :funcionario
   validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
   validates_presence_of :usuario_id
+  validates_presence_of :natureza,:if=>Proc.new{|l|l.tipo_lotacao=="REGULAR" or l.tipo_lotacao=="SUMARIA"},:on=>:create
   #validates_presence_of :funcionario_id
   validates_presence_of :tipo_lotacao
   validates_presence_of :destino_id,:message=>"É necessário que o destino seja válido"

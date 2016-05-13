@@ -2,4 +2,5 @@
 <%= l.autocomplete_field :destino_nome, autocomplete_escola_nome_escolas_path,:update_elements=>{:id=>'#lotacao_destino_id'}%>
 <%= l.hidden_field :destino_id %>
 <%= l.hidden_field :destino_type,:value=>"Escola" %>
+<%= f.input :natureza,:label=>"Natureza da Lotação",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
 <% end %>

@@ -41,6 +41,12 @@ class Ability
         can :qualificar_funcionario, Pessoa
       end
 
+      if user.role? :sead
+        can :read,Pessoa
+        can :read, Funcionario
+        can :read, Lotacao
+      end
+
       if user.role? :ucada
         can :manage,Funcionario
         cannot :destroy,Funcionario
