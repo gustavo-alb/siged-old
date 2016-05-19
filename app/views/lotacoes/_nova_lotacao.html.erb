@@ -1,22 +1,36 @@
-  <%= simple_form_for @lotacao,:url=>@url, :html => { :class => 'form-vertical' } do |f| %>
-  <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today} if current_user.role? :chefia_ucolom or current_user.role? :admin%>
-  <%= f.input :data_lotacao,:as=>:hidden,:input_html=>{:class=>"data",:value=>Date.today} if !current_user.role?(:chefia_ucolom)%>
-  <%= f.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
-
-
-  <div id="destino">
-  <%= f.input :natureza,:label=>"Natureza da Lotação",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
-    <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
-    <%= f.input :destino_id,:as=>:hidden%>
-    <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
+<br>
+<%= simple_form_for @lotacao,:url=>@url, :html => { :class => 'form-vertical' } do |f| %>
+<div class='col-sm-12 col-md-12 well'>
+  <div class="col-sm-4 col-md-4">
+    <%= f.label "Tipo"%>
+    <%= f.input :tipo_lotacao, label: false, :as => :radio_buttons_inline, :collection=>@tipos,:checked=>'REGULAR' %>
+    <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}, label: "Data" if current_user.role? :chefia_ucolom or current_user.role? :admin%>
+    <%= f.input :data_lotacao,:as=>:hidden,:input_html=>{:class=>"data",:value=>Date.today} if !current_user.role?(:chefia_ucolom)%>
+  </div>
+  <div class="col-sm-8 col-md-8">
+    <div id="destino">
+      <%= f.input :natureza,:label=>"Natureza",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
+      <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
+      <%= f.input :destino_id,:as=>:hidden%>
+      <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
+    </div>
   </div>
   <%= simple_fields_for :exibicao do |e|%>
-    <%=e.input :anterior,:label=>"Lotação Anterior",:required=>false,:input_html=>{:disabled=>true,:value=>l_ant(@funcionario)}%>
-    <%=e.input :atual,:label=>"Lotação Atual",:required=>false,:input_html=>{:disabled=>true,:value=>lotacao(@funcionario)}%>
+  <div class="col-sm-12 col-md-12">
+    <div class="col-sm-6 col-md-6">
+      <%=e.input :anterior,:label=>"Referência anterior",:required=>false,:input_html=>{:disabled=>true,:value=>l_ant(@funcionario)}%>
+    </div>
+    <div class="col-sm-6 col-md-6, row">
+      <%=e.input :atual,:label=>"Referência atual",:required=>false,:input_html=>{:disabled=>true,:value=>lotacao(@funcionario)}%>
+    </div>
+  </div>
   <%end%>
-
   <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
   <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
-  <%=f.input :motivo,:label=>"Observação/Motivo",:input_html=>{:size=>"2x3"}%>
-  <%= f.button :submit, :class => 'btn-primary' %>
+  <div class="col-sm-12 col-md-12">
+    <%= f.input :motivo,:label=>"Observações",:input_html=>{:size=>"2x3"}%>
+
+  </div>
+</div>
+<%= f.submit "Confirmar!", :class => "btn btn-primary" %>
 <% end %>

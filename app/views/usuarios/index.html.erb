@@ -1,21 +1,21 @@
 <%content_for :titulo do%>
-  Usuarios
-  
-  
+Usuarios
+
+
 <div class="input-group col-md-4 pull-right">
   <%= search_form_for @q,:url=>usuarios_path do |f|%>
 
   <div class="input-group">
-    <%= f.search_field :name_or_username_or_roles_name_cont,:class=>"form-control input-lg"%> 
+    <%= f.search_field :name_or_username_or_roles_name_cont,:class=>"form-control input-lg"%>
     <div class="input-group-btn">
-    <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-    <span class="glyphicon glyphicon-search"></span>
-    <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+      <span class="glyphicon glyphicon-search"></span>
+      <% end %>
     </div>
   </div>
 </div>
-  <%end%>
-  <%= link_to "Criar",new_usuario_path,:class=>"btn btn-primary"%>
+<%end%>
+<%= link_to "Criar",new_usuario_path,:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -27,17 +27,31 @@
   </thead>
   <tbody>
     <% @usuarios.each_with_index do |u,i| %>
-      <tr>
-        <td><%= u.name%></td>
-        <td><%= u.username%></td>
-        <td><%= u.email%></td>
-        <td>
-          <%= link_to "Editar", edit_usuario_path(u),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Visualizar",usuario_path(u),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Apagar", usuario_path(u),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
-        </td>
-      </tr>
+    <tr>
+      <td><%= u.name%></td>
+      <td><%= u.username%></td>
+      <td><%= u.email%></td>
+      <td>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escolha <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <% if can? :update, u %>
+            <li><%= link_to "<i class='fa fa-edit fa-fw' style='color:green'></i> Editar".html_safe, edit_usuario_path(u) %></li>
+            <% end %>
+            <li><%= link_to "<i class='fa fa-eye fa-fw' style='color:blue'></i> Visualizar".html_safe, usuario_path(u) %></li>
+            <% if can? :destroy, u %>
+            <li><%= link_to "<i class='fa fa-eraser fa-fw' style='color:red'></i> Apagar".html_safe, usuario_path(u), :method=>:delete,:confirm=>"Tem Certeza?" %></li>
+            <% end %>
+          </ul>
+        </div>
+        <%#= link_to "Editar", edit_usuario_path(u),:class=>"btn btn-primary btn-xs"%>
+        <%#= link_to "Visualizar",usuario_path(u),:class=>"btn btn-primary btn-xs"%>
+        <%#= link_to "Apagar", usuario_path(u),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
+      </td>
+    </tr>
     <% end%>
   </tbody>
 </table>
-<%= will_paginate @users%>
+<div align='center'><%= will_paginate @users%></div>

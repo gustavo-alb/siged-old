@@ -1,18 +1,21 @@
 <%model_class = Role%>
 <%content_for :titulo do%>
-  Detalhes de 
-  <%end%>
-  <dl class="dl-horizontal">
-          <dt><strong>Name:</strong></dt>
-      <dd><%= @role.name %></dd>
-          <dt><strong>Fullname:</strong></dt>
-      <dd><%= @role.fullname %></dd>
-    
-  </dl>
-  <%= link_to 'Voltar', roles_path, :class => 'btn btn-default'  %>
-  <%= link_to 'Editar', edit_role_path(@role), :class => 'btn btn-default' %>
-  <%= link_to "Apagar",
-              role_path(@role),
-              :method => 'delete',
-              :data => { :confirm => "Você tem certeza?" },
-              :class => 'btn btn-danger' %>
+Detalhes de <%= @role.name unless @role.name.nil? %>
+<%end%>
+<dl class="dl-horizontal">
+  <dt><strong>Código:</strong></dt>
+  <dd><%= @role.name %></dd>
+  <dt><strong>Nome:</strong></dt>
+  <dd><%= @role.fullname %></dd>
+  <dt><strong>Descrição:</strong></dt>
+  <dd><%= detalhes(@role.description) %></dd>
+  <dt><strong>Entidade:</strong></dt>
+  <dd><%= detalhes(@role.entidade) %></dd>
+</dl>
+<%= link_to 'Voltar', roles_path, :class => 'btn btn-default'  %>
+<%= link_to 'Editar', edit_role_path(@role), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+role_path(@role),
+:method => 'delete',
+:data => { :confirm => "Você tem certeza?" },
+:class => 'btn btn-danger' %>

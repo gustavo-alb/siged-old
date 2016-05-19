@@ -1,11 +1,11 @@
 <%content_for :titulo do%>
   Roles
-  
-  
+
+
 <div class="input-group col-md-4 pull-right">
   <%= search_form_for @q,:url=>usuarios_path do |f|%>
   <div class="input-group">
-    <%= f.search_field :name_or_fullname_cont,:class=>"form-control input-lg"%> 
+    <%= f.search_field :name_or_fullname_cont,:class=>"form-control input-lg"%>
     <div class="input-group-btn">
     <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
     <span class="glyphicon glyphicon-search"></span>
@@ -14,13 +14,16 @@
   </div>
 </div>
   <%end%>
-  <%= link_to "Criar",new_role_path,:class=>"btn btn-primary"%>
+  <%= link_to "Criar", new_role_path,:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
     <tr>
-      <th>name</th>
-      <th>fullname</th>
+      <th>Código</th>
+      <th>Nome</th>
+      <th>Descrição</th>
+      <th>Entidade</th>
+      <th>Opções</th>
     </tr>
   </thead>
   <tbody>
@@ -28,6 +31,8 @@
       <tr>
         <td><%= r.name%></td>
         <td><%= r.fullname%></td>
+        <td><%= detalhes(r.description) %></td>
+        <td><%= detalhes(r.entidade.sigla) unless r.entidade.nil? %></td>
         <td>
           <%= link_to "Editar", edit_role_path(r),:class=>"btn btn-primary btn-xs"%>
           <%= link_to "Visualizar",role_path(r),:class=>"btn btn-primary btn-xs"%>
@@ -37,4 +42,4 @@
     <% end%>
   </tbody>
 </table>
-<%= will_paginate @role%>
+<div align="center"><%= will_paginate @role%></div>

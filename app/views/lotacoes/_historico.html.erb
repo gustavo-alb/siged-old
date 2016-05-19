@@ -1,26 +1,43 @@
-<table class="table table-striped tabela-colapsavel">
-  <thead>
-    <tr>
-      <th>Destino</th>
-      <th>Data</th>
-      <th>Estafeta</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @lotacoes.each do |lot| %>
+<br>
+<div class="col-sm-12 col-md-12 well">
+  <table class="table table-striped tabela-colapsavel">
+    <thead>
+      <tr>
+        <th>Destino</th>
+        <th>Data</th>
+        <th>Estafeta</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @lotacoes.each do |lot| %>
       <tr>
         <td><%= detalhes(lot.destino) %></td>
         <td><%= lot.data_lotacao.to_s_br%></td>
         <td><%= detalhes(lot.usuario)%></td>
         <td><%= status_lotacao(lot.status.last.status)%></td>
         <td>
-          <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Devolver Funcionário", "#",:class=>"btn btn-danger btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%>
+          <div class="btn-group">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Escolha <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <% if can? :carta, @funcionario %>
+              <!-- <li><%#= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li> -->
+              <%# end %>
+              <%# if can? :manage, :all %>
+              <li><%= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_nova_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li>
+              <% end %>
+              <li><%= link_to "<i class='fa fa-rotate-left fa-fw'></i> Devolver funcionário".html_safe, :'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO" %></li>
+            </ul>
+          </div>
+          <%#= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
+          <%#= link_to "Devolver Funcionário", "#",:class=>"btn btn-danger btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%>
         </td>
       </tr>
       <%= render :partial=>"devolver_funcionario",:locals=>{:lot=>lot}%>
-    <% end%>
-  </tbody>
-</table>
+      <% end%>
+    </tbody>
+  </table>
+</div>

@@ -1,23 +1,57 @@
 <%= simple_form_for @funcionario,:url=>@url, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :matricula,:label=>"Matrícula"%>
-  <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
-  <%= f.input :entidade_id,as: :select, :collection=>@entidades ,:label=>"Quadro"%>
-  <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
-  <div id='disc'>
-    <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-2 col-md-2'>
+    <%= f.input :matricula,:label=>"Matrícula"%>
   </div>
-  <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
-  <%= f.input :decreto_nomeacao,:label=>"Decreto de Nomeação" %>
-  <%= f.input :termo_posse ,:label=>"Termo de Posse"%>
-  <%= f.input :orgao_id,as: :select, :collection=>@orgaos,:label=>"Orgão de Origem"%>
-  <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record?)},:label=>"Admissão"%>
-  <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção"%>
-  <div id='dist'>
-    <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+  <div class='col-sm-5 col-md-5'>
+    <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
+
   </div>
-  <%= f.input :observacao,as: :text,input_html: {size: "3x3"},:label=>"Observação" %>
-  <%= f.input :situacao_id,:collection=>Situacao.all.collect{|s|[s.nome,s.id]}%>
-  <%= f.button :submit, :class => 'btn-primary' %>
-  <%= link_to "Cancelar",
-pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default' %>
+  <div class='col-sm-5 col-md-5'>
+    <%= f.input :entidade_id,as: :select, :collection=>@entidades ,:label=>"Quadro"%>
+  </div>
+
+  <div class='col-sm-2 col-md-2'>
+    <%= f.input :orgao_id,as: :select, :collection=>@orgaos,:label=>"Orgão de Origem"%>
+  </div>
+  <div class='col-sm-4 col-md-4'>
+    <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
+  </div>
+  <div class='col-sm-6 col-md-6'>
+    <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção"%>
+  </div>
+  <div class='col-sm-4 col-md-4'>
+  </div>
+
+  <div class='col-sm-12 col-md-12'>
+    <div class='col-sm-6 col-md-6'>
+      <div id='disc'>
+        <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+      </div>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <div id='dist'>
+        <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+      </div>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12 row'>
+    <div class='col-sm-7 col-md-7'>
+      <div class='col-sm-12 col-md-12'>
+        <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
+      </div>
+      <div class='col-sm-3 col-md-3'><%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (@funcionario.data_nomeacao.strftime("%d/%m/%Y") if !@funcionario.new_record?)},:label=>"Admissão"%></div>
+      <div class='col-sm-3 col-md-3'><%= f.input :decreto_nomeacao,:label=>"Dec. Nomeação" %></div>
+      <div class='col-sm-3 col-md-3'><%= f.input :termo_posse ,:label=>"Termo de Posse"%></div>
+      <div class='col-sm-3 col-md-3'><%= f.input :situacao_id,:collection=>Situacao.all.collect{|s|[s.nome,s.id]}, label: 'Situação' %></div>
+    </div>
+    <div class='col-sm-5 col-md-5'>
+      <%= f.input :observacao,as: :text,input_html: {size: "3x4"},:label=>"Observação" %>
+    </div>
+  </div>
+
+</div>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar", pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default' %>
 <% end %>

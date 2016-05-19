@@ -23,53 +23,53 @@ class FuncionariosController < ApplicationController
     @funcionario.verificado = true
     if @funcionario.save!(:validate=>false)
       respond_to do |format|
-         format.js {render "verificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
-      end
+       format.js {render "verificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
+     end
+   end
+ end
+
+ def desverificar_funcionario
+  @funcionario = Funcionario.find(params[:funcionario_id])
+  @funcionario.verificado = false
+  if @funcionario.save!(:validate=>false)
+    respond_to do |format|
+      format.js {render "desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
     end
   end
+end
 
-    def desverificar_funcionario
-      @funcionario = Funcionario.find(params[:funcionario_id])
-      @funcionario.verificado = false
-      if @funcionario.save!(:validate=>false)
-        respond_to do |format|
-          format.js {render "desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa}}
-        end
-      end
-    end
+def ativar_funcionario
+  @funcionario = Funcionario.find(params[:funcionario_id])
+  @funcionario.ativo = true
+  if @funcionario.save!(:validate=>false)
+    render :update do |page|
+     format.js {render("desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa})}
+   end
+ end
+end
 
-    def ativar_funcionario
-      @funcionario = Funcionario.find(params[:funcionario_id])
-      @funcionario.ativo = true
-      if @funcionario.save!(:validate=>false)
-        render :update do |page|
-           format.js {render("desverificar_funcionario",:locals=>{:f=>@funcionario,:p=>@funcionario.pessoa})}
-        end
-      end
+def desativar_funcionario
+  @funcionario = Funcionario.find(params[:funcionario_id])
+  @funcionario.ativo = false
+  if @funcionario.save!(:validate=>false)
+    render :update do |page|
+      page.replace_html "ativo-#{@funcionario.matricula}", :partial=>"ativar_funcionario"
     end
+  end
+end
 
-    def desativar_funcionario
-      @funcionario = Funcionario.find(params[:funcionario_id])
-      @funcionario.ativo = false
-      if @funcionario.save!(:validate=>false)
-        render :update do |page|
-          page.replace_html "ativo-#{@funcionario.matricula}", :partial=>"ativar_funcionario"
-        end
-      end
+def cargo
+  if params[:disciplina].size>0
+    @cargo = Cargo.find(params[:disciplina])
+    if @cargo.tipo and @cargo.tipo.nome=="Magistério/Docência"
+      render :partial=>"magisterio"
+    else
+      render :partial=>"sem_distritos"
     end
-
-    def cargo
-      if params[:disciplina].size>0
-        @cargo = Cargo.find(params[:disciplina])
-        if @cargo.tipo and @cargo.tipo.nome=="Magistério/Docência"
-          render :partial=>"magisterio"
-        else
-          render :partial=>"sem_distritos"
-        end
-      else
-        render :partial=>"sem_distritos"
-      end
-    end
+  else
+    render :partial=>"sem_distritos"
+  end
+end
 
 
   # GET /funcionarios/1
@@ -202,6 +202,7 @@ class FuncionariosController < ApplicationController
   # end
   # end
 
+  # confirmar essa deprecação pela nova_carta
   def carta
     @funcionario = Funcionario.find(params[:funcionario_id])
     @pessoa = Pessoa.find(params[:pessoa_id])
@@ -216,17 +217,25 @@ class FuncionariosController < ApplicationController
       r.add_field "CPF", @pessoa.cpf
       r.add_field "MATRICULA", @funcionario.matricula
       r.add_field "QUADRO",  "#{view_context.detalhes(@funcionario.categoria)}"
-      r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
+      r.add_field "CARGO_E_MATRICULA", view_context.cargo_e_matricula(@funcionario)
       r.add_field "JORNADA",view_context.jornada(@funcionario.nivel)
       r.add_field "NUMERO", @processo.processo
       r.add_field "DATA",@lotacao.data_lotacao.to_s_br
       r.add_field "HORA",(@lotacao.created_at+3.hours).strftime("%H:%M")
       r.add_field "DESTINO",view_context.detalhes(@lotacao.destino)
-      r.add_field "ANTERIOR",view_context.l_ant(@funcionario)
+      # lotacao_detalhes(f,"detalhado")
+      # r.add_field "ANTERIOR",view_context.l_ant(@funcionario)
+      r.add_field "ANTERIOR",view_context.lotacao_anterior(@funcionario)
+
+
+      # meu
+      r.add_field "NOVO_ANTERIOR",view_context.l_ant(@funcionario)
       r.add_field "DATAAPRESENTACAO", @lotacao.data_lotacao+3.days
       r.add_field "USER", @usuario.name
+      # primeiro_ultimo_nome
       r.add_field "DISCIPLINACONTRATACAO", view_context.cargo_disciplina(@funcionario)
       r.add_field "MUNICIPIO", view_context.municipio_destino(@lotacao.destino)
+      r.add_field "MUNICIPIO_DESTINO", view_context.municipio_destino(@lotacao.destino)
       r.add_field "OBSERVACAO",@lotacao.motivo
       r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
     end
@@ -234,6 +243,73 @@ class FuncionariosController < ApplicationController
     system "unoconv -f pdf /tmp/carta-#{@funcionario.matricula}.odt"
     f = File.open("/tmp/carta-#{@funcionario.matricula}.pdf",'r')
     send_file(f,:filename=>"Carta de Apresentaçao - #{@pessoa.nome} - #{@funcionario.matricula}.pdf",:content_type=>"application/pdf")
+  end
+  # confirmar essa deprecação pela nova_carta
+
+  def nova_carta
+    @funcionario = Funcionario.find(params[:funcionario_id])
+    @pessoa = Pessoa.find(params[:pessoa_id])
+    @lotacao = Lotacao.find(params[:lotacao])
+    prazo = @lotacao.data_lotacao+3.day
+    @prazo=prazo.to_date.to_s_br
+    @processo = @lotacao.processos.last
+    @usuario = @lotacao.usuario
+    File.open("/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png", 'wb'){|f| f.write @lotacao.img_codigo }
+    carta = ODFReport::Report.new("#{Rails.public_path}/modelos/nova_carta.odt") do |r|
+      r.add_field "NOME", @pessoa.nome
+      r.add_field "NOME_E_CPF", view_context.nome_e_cpf(@funcionario)
+      r.add_field "CPF", @pessoa.cpf
+      r.add_field "MATRICULA", @funcionario.matricula
+      r.add_field "QUADRO",  "#{view_context.detalhes(@funcionario.categoria)}"
+      r.add_field "CARGO_E_MATRICULA", view_context.cargo_e_matricula(@funcionario)
+      r.add_field "ENQUADRAMENTO_FUNCIONAL", view_context.enquadramento_funcional(@funcionario)
+      r.add_field "JORNADA",view_context.jornada(@funcionario.nivel)
+      r.add_field "NUMERO", @processo.processo
+      r.add_field "DATA",@lotacao.data_lotacao.to_s_br
+      r.add_field "HORA",(@lotacao.created_at+3.hours).strftime("%H:%M")
+      # r.add_field "DESTINO",view_context.detalhes(@lotacao.destino)
+      # lotacao_detalhes(f,"detalhado")
+      # r.add_field "ANTERIOR",view_context.l_ant(@funcionario)
+      r.add_field "DESTINO_ANTERIOR",view_context.lotacao_anterior(@funcionario)
+      r.add_field "DESTINO_ATUAL",view_context.lotacao_atual(@lotacao)
+
+      # meu
+      r.add_field "NOVO_ANTERIOR",view_context.l_ant(@funcionario)
+      r.add_field "DATAAPRESENTACAO", @lotacao.data_lotacao+3.days
+      r.add_field "USER", @usuario.name
+      # primeiro_ultimo_nome
+      r.add_field "DISCIPLINACONTRATACAO", view_context.cargo_disciplina(@funcionario)
+      r.add_field "MUNICIPIO", view_context.municipio_destino(@lotacao.destino)
+      r.add_field "MUNICIPIO_DESTINO", view_context.municipio_destino(@lotacao.destino)
+      r.add_field "OBSERVACAO",@lotacao.motivo
+      r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
+    end
+    arquivo_carta = carta.generate("/tmp/carta-#{@funcionario.matricula}.odt")
+    system "unoconv -f pdf /tmp/carta-#{@funcionario.matricula}.odt"
+    f = File.open("/tmp/carta-#{@funcionario.matricula}.pdf",'r')
+    send_file(f,:filename=>"Carta de Apresentaçao - #{@pessoa.nome} - #{@funcionario.matricula}.pdf",:content_type=>"application/pdf")
+  end
+
+  def relatorio_sem_categoria
+    pasta = Workbook::Book.open("public/modelos/relatorio_sem_categoria.xls")
+    planilha = pasta.sheet.table
+    linha_modelo = planilha[1]
+    @funcionarios = Funcionario.sem_categoria.sort_by{|f|f.pessoa.nome}
+    @funcionarios.each.with_index(2) do |f,i|
+      planilha << linha_modelo.clone
+      planilha[i][0] = f.pessoa.nome
+      planilha[i][1] = view_context.detalhes(f.categoria)
+      planilha[i][2] = f.pessoa.cpf
+      planilha[i][3] = f.pessoa.rg
+      planilha[i][4] = view_context.contato_simples(f.pessoa)
+      planilha[i][5] = view_context.detalhes(f.cargo)
+      planilha[i][6] = view_context.municipio(f).upcase
+      planilha[i][7] = view_context.lotacao(f)
+    end
+    planilha.delete(linha_modelo)
+    arquivo = File.open("/tmp/relatorio-nd-#{Time.now.strftime("%d-%m-%Y-%H-%M-%S")}.xls",'w')
+    pasta.write_to_xls("#{arquivo.path}")
+    send_file(arquivo.path,:filename=>"Relatório Servidores sem Categoria Funcional.xls",:type=>"application/vnd.ms-excel")
   end
 
   def boletins

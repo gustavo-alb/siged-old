@@ -1,22 +1,5 @@
 # -*- encoding : utf-8 -*-
 module FuncionariosHelper
-
-  def cargo_disciplina(func)
-    if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao and func.nivel
-      return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
-    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
-      return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
-    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Comissão'
-      return "#{func.cargo.nome.upcase}"
-    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome!="Comissão"
-      return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
-    elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
-      return "#{func.nivel.nome.upcase}"
-    elsif func.cargo
-      return "#{func.cargo.nome.upcase}"
-    end
-  end
-
   def situacao(f)
     if f and f.situacao
       sit = f.situacao
@@ -100,20 +83,31 @@ def municipio_distrito(func)
   end
 end
 
-def dest(lotacao)
-  if lotacao
-    if lotacao.tipo_lotacao=="ESPECIAL" and lotacao.escola.nil?
-      return "#{lotacao.orgao.nome}"
-    elsif lotacao.tipo_lotacao=="ESPECIAL" and lotacao.escola.size>0
-      return "#{lotacao.escola.nome}/#{lotacao.orgao.nome}"
-    else
-      return "#{lotacao.escola.nome}"
-
-    end
-  else
-    return "Não lotado"
+def municipio_de_opcao(funcionario)
+  if funcionario.municipio.nil? and funcionario.distrito.nil?
+    return ""
+  elsif !funcionario.municipio.nil? and funcionario.distrito.nil?
+    return "#{detalhes(funcionario.municipio)}"
+  elsif !funcionario.municipio.nil? and !funcionario.distrito.nil?
+    return "#{detalhes(funcionario.municipio)}/#{detalhes(funcionario.distrito)}"
   end
 end
+  # - #{detalhes(func.lotacoes.ativas.first.destino.municipio)}
+
+  def dest(lotacao)
+    if lotacao
+      if lotacao.tipo_lotacao=="ESPECIAL" and lotacao.escola.nil?
+        return "#{lotacao.orgao.nome}"
+      elsif lotacao.tipo_lotacao=="ESPECIAL" and lotacao.escola.size>0
+        return "#{lotacao.escola.nome}/#{lotacao.orgao.nome}"
+      else
+        return "#{lotacao.escola.nome}"
+
+      end
+    else
+      return "Não lotado"
+    end
+  end
 
 end
 

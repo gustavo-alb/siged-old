@@ -2,68 +2,75 @@
 <%content_for :titulo do%>
 Detalhes de <%=@pessoa.nome%>
 <%end%>
-<dl class="dl-horizontal">
-  <dt><strong>Nome:</strong></dt>
-  <dd><%= @pessoa.nome %></dd>
 
-  <dt><strong>Sexo:</strong></dt>
-  <dd><%= detalhes(@pessoa.sexo) %></dd>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-6 col-md-6'>
+    <dl class="dl-horizontal">
+      <dt><strong>Sexo:</strong></dt>
+      <dd><%= detalhes(@pessoa.sexo) %></dd>
 
-  <dt><strong>Endereço:</strong></dt>
-  <dd><%= detalhes(@pessoa.endereco) %></dd>
+      <dt><strong>CPF:</strong></dt>
+      <dd><%= detalhes(Cpf.new(@pessoa.cpf).numero) %></dd>
 
-  <dt><strong>Telefone Residencial:</strong></dt>
-  <dd><%= detalhes(@pessoa.telefone_residencial) %></dd>
+      <dt><strong>Data de Nascimento:</strong></dt>
+      <dd><%= detalhes(@pessoa.nascimento.to_s_br) %></dd>
 
-  <dt><strong>Telefone Celular:</strong></dt>
-  <dd><%= detalhes(@pessoa.telefone_celular) %></dd>
+      <dt><strong>RG:</strong></dt>
+      <dd><%= detalhes(@pessoa.rg) %></dd>
 
-  <dt><strong>Data de Nascimento:</strong></dt>
-  <dd><%= detalhes(@pessoa.nascimento.to_s_br) %></dd>
+      <dt><strong>UF RG:</strong></dt>
+      <dd><%= detalhes(@pessoa.uf) %></dd>
 
-  <dt><strong>Naturalidade:</strong></dt>
-  <dd><%= detalhes(@pessoa.naturalidade) %></dd>
+      <dt><strong>PIS:</strong></dt>
+      <dd><%= detalhes(@pessoa.pis_pasep) %></dd>
 
-  <dt><strong>Nacionalidade:</strong></dt>
-  <dd><%= detalhes(@pessoa.nacionalidade) %></dd>
+      <dt><strong>Naturalidade:</strong></dt>
+      <dd><%= detalhes(@pessoa.naturalidade) %></dd>
 
-  <dt><strong>CPF:</strong></dt>
-  <dd><%= detalhes(Cpf.new(@pessoa.cpf).numero) %></dd>
+      <dt><strong>Nacionalidade:</strong></dt>
+      <dd><%= detalhes(@pessoa.nacionalidade) %></dd>
 
-  <dt><strong>RG:</strong></dt>
-  <dd><%= detalhes(@pessoa.rg) %></dd>
+      <dt><strong>Estado Civil:</strong></dt>
+      <dd><%= detalhes(@pessoa.estado_civil) %></dd>
 
-  <dt><strong>UF RG:</strong></dt>
-  <dd><%= detalhes(@pessoa.uf) %></dd>
+    </dl>
+  </div>
+  <div class='col-sm-6 col-md-6 row'>
+    <dl class="dl-horizontal">
+      <dt><strong>Endereço:</strong></dt>
+      <dd><%= detalhes(@pessoa.endereco) %></dd>
 
-  <dt><strong>PIS:</strong></dt>
-  <dd><%= detalhes(@pessoa.pis_pasep) %></dd>
+      <dt><strong>Cidade:</strong></dt>
+      <dd><%= detalhes(@pessoa.cidade) %></dd>
 
-<dt><strong>Cidade:</strong></dt>
-  <dd><%= detalhes(@pessoa.cidade) %></dd>
+      <dt><strong>CEP:</strong></dt>
+      <dd><%= detalhes(@pessoa.cep) %></dd>
 
-  <dt><strong>Estado Civil:</strong></dt>
-  <dd><%= detalhes(@pessoa.estado_civil) %></dd>
+      <dt><strong>Telefone Residencial:</strong></dt>
+      <dd><%= detalhes(@pessoa.telefone_residencial) %></dd>
 
-  <dt><strong>CEP:</strong></dt>
-  <dd><%= detalhes(@pessoa.cep) %></dd>
+      <dt><strong>Telefone Celular:</strong></dt>
+      <dd><%= detalhes(@pessoa.telefone_celular) %></dd>
 
-  <dt><strong>Email:</strong></dt>
-  <dd><%= detalhes(@pessoa.email) %></dd>
+      <dt><strong>Email:</strong></dt>
+      <dd><%= detalhes(@pessoa.email) %></dd>
 
-  <dt><strong>Nome do Pai:</strong></dt>
-  <dd><%= detalhes(@pessoa.pai) %></dd>
+      <dt><strong>Nome do Pai:</strong></dt>
+      <dd><%= detalhes(@pessoa.pai) %></dd>
 
-  <dt><strong>Nome da Mãe:</strong></dt>
-  <dd><%= detalhes(@pessoa.mae) %></dd>
+      <dt><strong>Nome da Mãe:</strong></dt>
+      <dd><%= detalhes(@pessoa.mae) %></dd>
 
-</dl>
+    </dl>
+  </div>
+</div>
+
 <%= link_to "Voltar",
-              pessoas_path, :class => 'btn btn-default'   if can?(:edit,Pessoa)%>
+pessoas_path, :class => 'btn btn-default'   if can?(:edit,Pessoa)%>
 <%= link_to "Editar",
-              edit_pessoa_path(@pessoa), :class => 'btn btn-default' %>
+edit_pessoa_path(@pessoa), :class => 'btn btn-default' %>
 <%= link_to "Apagar",
-              pessoa_path(@pessoa),
-              :method => 'delete',
-              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-              :class => 'btn btn-danger'  if can?(:destroy,Pessoa)%>
+pessoa_path(@pessoa),
+:method => 'delete',
+:data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+:class => 'btn btn-danger'  if can?(:destroy,Pessoa)%>

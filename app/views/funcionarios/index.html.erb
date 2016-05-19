@@ -1,7 +1,7 @@
 <%content_for :titulo do%>
-  Funcionarios
-  
-  <%= link_to "Criar",new_pessoa_funcionario_path(@pessoa),:class=>"btn btn-primary"%>
+Funcionários
+
+<%= link_to "Cadastrar",new_pessoa_funcionario_path(@pessoa),:class=>"btn btn-primary" if can? :create,Funcionario%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -16,19 +16,43 @@
   </thead>
   <tbody>
     <% @funcionarios.each_with_index do |f,i| %>
-      <tr>
-        <td><%= f.matricula%></td>
-        <td><%= cargo_disciplina(f)%></td>
-        <td><%= detalhes(f.categoria)%></td>
-        <!-- <td><%= detalhes(f.entidade)%></td> -->
-        <td><%= lotacao(f)%></td>
-        <td>
-          <%= link_to "Editar", edit_pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and can? :edit,Funcionario%>
-          <%= link_to "Visualizar",pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Apagar", pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Funcionario%>
-          <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(@pessoa,f),:class=>"btn btn-primary btn-xs" if can? :read,Lotacao%>
-        </td>
-      </tr>
+    <tr>
+      <td><%= f.matricula%></td>
+      <td><%= cargo_disciplina(f)%>
+        <!-- <br> -->
+        <%#= cargo_e_matricula(f)%>
+        <!-- <br><br><br> -->
+        <%#= municipio_de_opcao(f)%>
+      </td>
+      <td><%= detalhes(f.categoria)%></td>
+      <!-- <td><%= detalhes(f.entidade)%></td> -->
+      <td><%= lotacao_detalhes(f,"ativa_detalhada")%></td>
+      <td>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escolha <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+          <% if can? :update,Funcionario and can? :edit,Funcionario %>
+          <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_pessoa_funcionario_path(@pessoa,f)%></li>
+          <% end %>
+          <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe,pessoa_funcionario_path(@pessoa,f) %></li>
+          <%# if can? :destroy,Funcionario %>
+          <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_funcionario_path(@pessoa,f),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+          <%# end %>
+          <% if can? :read,Lotacao %>
+          <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(@pessoa,f) %></li>
+          <% end %>
+          </ul>
+        </div>
+        <%#= link_to "Editar", edit_pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and can? :edit,Funcionario%>
+        <%#= link_to "Visualizar",pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-primary btn-xs"%>
+        <%#= link_to "relatorio_sem_categoria",relatorio_sem_categoria_path,:class=>"btn btn-primary btn-xs"%>
+
+        <%#= link_to "Apagar", pessoa_funcionario_path(@pessoa,f),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Funcionario%>
+        <%#= link_to "Lotações",pessoa_funcionario_lotacoes_path(@pessoa,f),:class=>"btn btn-primary btn-xs" if can? :read,Lotacao%>
+      </td>
+    </tr>
     <% end%>
   </tbody>
 </table>

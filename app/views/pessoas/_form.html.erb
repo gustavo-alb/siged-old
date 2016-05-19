@@ -1,29 +1,90 @@
 <%= simple_form_for @pessoa, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :nome %>
-  <%= f.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"]%>
-  <%= f.input :endereco %>
-  <%= f.input :numero %>
-  <%= f.input :complemento %>
-  <%= f.input :bairro %>
-  <%= f.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
-  <%= f.input :telefone_celular,:input_html=>{:class=>"celular"}%>
-  <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
-  <%= f.input :naturalidade %>
-  <%= f.input :nacionalidade %>
-  <%= f.input :cpf ,:input_html=>{:class=>"cpf"}%>
-  <%= f.input :rg %>
-  <%= f.input :pis_pasep %>
-  <%= f.input :cidade_id,:collection=>@municipios%>
-  <%= f.input :uf %>
-  <%= f.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
-  <%= f.input :cep,:input_html=>{:class=>"cep"}%>
-  <%= f.input :email,:as=>:email %>
-  <%= f.input :pai %>
-  <%= f.input :mae %>
+<div class='col-sm-12 col-md-12'>
+  <h4 align='center'><b>Dados essenciais</b></h4>
+  <div class='col-sm-12 col-md-12'>
+    <%= f.input :nome %>
+  </div>
+  <div class='col-sm-12 col-md-12 row'>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :cpf ,:input_html=>{:class=>"cpf"}%>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :rg %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"] %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+
+      <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :pis_pasep %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
+    </div>
+  </div>
 
 
+  <div class='col-sm-12 col-md-12 row'>
+    <hr>
+    <div class='col-sm-9 col-md-9'>
+      <%= f.input :endereco %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= f.input :numero %>
+    </div>
 
-  <%= f.button :submit, :class => 'btn-primary' %>
-  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                pessoas_path, :class => 'btn btn-default' %>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :complemento %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :bairro %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :cidade_id,:collection=>@municipios%>
+    </div>
+    <div class='col-sm-3 col-md-3'>
+      <%= f.input :uf %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= f.input :cep,:input_html=>{:class=>"cep"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :telefone_celular,:input_html=>{:class=>"celular"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12'>
+    <hr>
+    <h4 align='center'><b>Informações adicionais</b></h4>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :pai %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :mae %>
+    </div>
+    <div class='col-sm-4 col-md-4'>
+      <%= f.input :naturalidade %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :nacionalidade %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :email,:as=>:email %>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12'>
+    <hr>
+  </div>
+
+</div>
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+pessoas_path, :class => 'btn btn-default' %>
 <% end %>

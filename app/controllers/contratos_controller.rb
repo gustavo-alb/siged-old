@@ -87,6 +87,7 @@ def revisar
     else
       @lotacao.destino_type = "Departamento"
     end
+
   end
   respond_to do |format|
     if @lotacao.valid?
@@ -162,7 +163,7 @@ def salvar
       @tipo = "ESPECIAL"
     end
     respond_to do |format|
-      if @pessoa.valid? and @funcionario.valid? and @lotacao.valid? 
+      if @pessoa.valid? and @funcionario.valid? and @lotacao.valid?
         @pessoa.update_attributes(params[:pessoa])
         @funcionario.update_attributes(params[:funcionario])
         @lotacao.update_attributes(params[:lotacao])

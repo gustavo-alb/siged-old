@@ -35,13 +35,65 @@ module PessoasHelper
     if func and func.lotacoes.ativas.none?
       return "NÃO LOTADO"
     elsif func and func.lotacoes.ativas.any?
-      return detalhes(func.lotacoes.ativas.first.destino)
+      return "#{detalhes(func.lotacoes.ativas.first.destino)}"
     elsif func.nil?
       return "NÃO CADASTRADO"
     end
   end
 
+  def lotacao_detalhes(func,opcao)
+    if opcao == "ativa_simples"
+      if func and func.lotacoes.ativas.none?
+        return "NÃO LOTADO"
+      elsif func.nil?
+        return "NÃO CADASTRADO"
+      elsif func and func.lotacoes.ativas.any?
+        return "#{detalhes(func.lotacoes.ativas.first.destino)}"
+      end
+    elsif opcao == "ativa_detalhada"
+      if func and func.lotacoes.ativas.none?
+        return "NÃO LOTADO"
+      elsif func.nil?
+        return "NÃO CADASTRADO"
+      elsif func.lotacoes.ativas.first.destino.municipio.nil?
+        return "#{detalhes(func.lotacoes.ativas.first.destino)}"
+      else !func.lotacoes.ativas.first.destino.municipio.nil?
+        return "#{detalhes(func.lotacoes.ativas.first.destino)} - #{detalhes(func.lotacoes.ativas.first.destino.municipio)}"
+      end
+    elsif opcao == "todas_simples"
+      return "oi"
+    end
+  end
 
+
+
+  # def lotacao_detalhes(func,opcao)
+  #   if func and func.lotacoes.ativas.none?
+  #     return "NÃO LOTADO"
+  #   elsif func.nil?
+  #     return "NÃO CADASTRADO"
+
+
+  #   elsif func and func.lotacoes.ativas.any?
+  #     if opcao == "simples"
+
+
+
+  #       return "#{detalhes(func.lotacoes.ativas.first.destino)}"
+
+
+
+  #     elsif opcao == "detalhado"
+  #       if func.lotacoes.ativas.first.destino.municipio.nil?
+  #         return "#{detalhes(func.lotacoes.ativas.first.destino)}"
+  #       else
+  #         return "#{detalhes(func.lotacoes.ativas.first.destino)} - #{detalhes(func.lotacoes.ativas.first.destino.municipio)}"
+  #       end
+  #     end
+  #   end
+
+
+  # end
 
   def l_ant(func)
     if func and func.lotacoes.inativas.none?

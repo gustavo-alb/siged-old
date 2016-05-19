@@ -224,23 +224,23 @@ Siged20::Application.routes.draw do
     get :autocomplete_disciplina_nome,:on=>:collection
   end
 
-namespace :contratos do
-  get :index
-  get :estatisticas
-  get :relatorio_nominal
-  get :pessoal
-  post :funcional
-  post :lotacao
-  post :revisar
-  get :detalhes
-  get :editar
-  post :salvar
-  post :atualizar
-  delete :apagar
-  get :gerar
-  get :relatorio_docente
-  get :relatorio_nao_docente
-end
+  namespace :contratos do
+    get :index
+    get :estatisticas
+    get :relatorio_nominal
+    get :pessoal
+    post :funcional
+    post :lotacao
+    post :revisar
+    get :detalhes
+    get :editar
+    post :salvar
+    post :atualizar
+    delete :apagar
+    get :gerar
+    get :relatorio_docente
+    get :relatorio_nao_docente
+  end
 
   resources :pessoas do
     get "gerar_relatorio"
@@ -273,6 +273,7 @@ end
           get 'gerar_arquivo'
         end
       end
+
       get "boletim_funcional"
 
       resources :ponto_diarios do
@@ -283,6 +284,7 @@ end
       end
       get "historico"
       get "carta"
+      get "nova_carta"
       get "gerar_boletim"
       post "salvar_boletim"
       get "boletins"
@@ -316,6 +318,7 @@ end
 
   # Sample of regular route:
   get 'lotacoes/autocomplete_escola_nome'
+  get 'relatorio_sem_categoria',:controller=>"funcionarios",:action=>"relatorio_sem_categoria"
   get 'lotacoes/autocomplete_departamento_nome'
   post 'administracao/tarefas/send_data'
   get 'funcionarios/folha'
@@ -380,7 +383,7 @@ end
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-  
+
   authenticated :user do
     root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}, as: :ucolom_root
     root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}, as: :ucada_root

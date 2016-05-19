@@ -1,5 +1,5 @@
 <%model_class = Role%>
 <%content_for :titulo do%>
-  Editando registro de 
+  Editando registro de <%= @role.name unless @role.name.nil? %>
   <%end%>
   <%= render :partial => 'form' %>

@@ -44,6 +44,8 @@ class Lotacao < ActiveRecord::Base
   end
   #scope :inativa, -> { where("ativo = ?",false)}
   scope :ativas, -> { where(:ativo=>true)}
+  # scope :canceladas, -> { joins(:statuses).where("lotacoes.status = 'CANCELADO'")}
+  scope :canceladas, -> {joins(:status).where("statuses.status = 'CANCELADO'")}
   scope :confirmada_fechada, -> { where("finalizada = ? and ativo=?",true,true)}
   scope :verifica, lambda {|func,escola| where("funcionario_id = ? and escola_id=?",func,escola)}
   scope :pro_labore, -> { where("tipo_lotacao = ?","PROLABORE")}

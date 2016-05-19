@@ -1,6 +1,13 @@
 # -*- encoding : utf-8 -*-
 module ApplicationHelper
 
+  def primeiro_ultimo_nome(pessoa)
+    @nome = pessoa.nome.split
+    primeiro_nome = @nome.first
+    ultimo_nome = @nome.last
+    return "#{primeiro_nome.capitalize} #{ultimo_nome.capitalize}"
+  end
+
   def disciplina(func)
     if func.disciplina_contratacao
       return func.disciplina_contratacao.nome
@@ -85,8 +92,6 @@ module ApplicationHelper
 
   def porcentagem_funcional
     html=""
-
-
     html+="<div class='spacer'></div>"
     html+="<article class='module width_quarter'>"
     html+="<div class='overview_today'>"
@@ -289,7 +294,7 @@ module ApplicationHelper
     elsif obj.categoria and ["Sem Vínculo"]
       return "CARGO SEM VÍNCULO"
     else
-      return "INDEFINIDO"   
+      return "INDEFINIDO"
     end
   end
 
@@ -374,5 +379,128 @@ module ApplicationHelper
       return raw("Nada Cadastrado")
     end
   end
+
+  def nome_e_cpf(funcionario)
+    if funcionario.pessoa.present?
+      if funcionario.pessoa.nome.present?
+        if funcionario.pessoa.cpf.present?
+          return "#{detalhes(funcionario.pessoa)} (CPF Nº #{detalhes(funcionario.pessoa.cpf)})"
+        elsif funcionario.pessoa.cpf.nil? or funcionario.pessoa.cpf.blank?
+          return "#{detalhes(funcionario.pessoa)} (CPF não localizado)}"
+        end
+      elsif funcionario.pessoa.nome.nil? or funcionario.pessoa.nome.cpf.blank?
+        return "Nome não localizado"
+      end
+    else
+      return "Nome não localizado"
+    end
+  end
+
+  def cargo_e_matricula(funcionario)
+    if funcionario.matricula.present?
+      if funcionario.categoria.nome == "Ex-Território do Amapá" or funcionario.categoria.nome == "Ministério da Educação"
+        return "#{cargo_disciplina(funcionario)}, SOB A MATRÍCULA SIAPE Nº #{funcionario.matricula}"
+      else
+        return "#{cargo_disciplina(funcionario)}, SOB A MATRÍCULA Nº #{funcionario.matricula}"
+      end
+    elsif funcionario.matricula.nil? or funcionario.matricula.blank?
+      return "#{cargo_disciplina(funcionario)} (MATRÍCULA A SER GERADA PELA SEAD)"
+    end
+  end
+
+  def enquadramento_funcional(funcionario)
+    if funcionario.categoria.present?
+      if funcionario.nivel.present?
+        if funcionario.municipio_id.present?
+          return "#{categoria_funcional(funcionario,'entidade_sigla')} (EM JORNADA DE #{jornada(funcionario.nivel).upcase} COM #{funcionario.municipio.nome.upcase} COMO MUNICIPIO DE OPÇÃO)"
+        else
+          return "#{categoria_funcional(funcionario,'entidade_sigla')} (EM JORNADA DE #{jornada(funcionario.nivel).upcase})"
+        end
+      elsif funcionario.nivel.nil? or funcionario.nivel.blank?
+        return "#{categoria_funcional(funcionario,'entidade_sigla')}"
+      end
+    elsif funcionario.categoria.nil? or funcionario.categoria.blank?
+      return "#{detalhes(funcionario.categoria.nome)}"
+    end
+  end
+
+  def lotacao_anterior(funcionario)
+    if funcionario and !funcionario.lotacoes.inativas.none?
+      ultima = funcionario.lotacoes.inativas.order('data_lotacao desc').first
+      if ultima.destino_type=="Escola" and ultima.destino.municipio
+        return "#{funcionario.lotacoes.inativas.order('data_lotacao desc').first.destino.nome.upcase} (#{detalhes(ultima.destino.municipio)})"
+      else
+        return "#{funcionario.lotacoes.inativas.order('data_lotacao desc').first.destino.nome.upcase}"
+      end
+    else
+      return "Sem registro anterior"
+    end
+  end
+
+  def lotacao_atual(lotacao)
+    if lotacao.destino_type=="Escola"
+      if lotacao.destino.municipio.present?
+        if lotacao.natureza.present?
+          return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)}). NATUREZA DE ATUAÇÃO: #{lotacao.natureza.upcase}"
+        elsif lotacao.natureza.nil? or lotacao.natureza.blank?
+          return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
+        end
+      elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
+        return "#{lotacao.destino.nome.upcase}"
+      end
+    else
+      return "#{lotacao.destino.nome.upcase}"
+    end
+  end
+
+  # "Ex-Ipesap"
+  # "Estado Antigo"
+  # "Contrato Administrativo"
+  # "Ex-Território do Amapá"
+  # "Ministério da Educação"
+  # "Estado Novo"
+  # "992"
+  # "UDE"
+  # "Sem Vínculo"
+  # "Indefinido"
+  # "Ex-Território Federal do Amapá - Comissionado"
+  # "Ministério da Educação - Comissionado"
+  # "Concurso de 2012"
+  # "Prefeitura - Permuta"
+  # "Prefeitura - Cedido"
+  # "Contrato Horista"
+  # "Contrato Horista - Indígena"
+  # "Contrato Horista - Afrodescendente"
+  # "Contrato Gestão - Nível Médio"
+  # "Estágiário"
+
+  def categoria_funcional(funcionario,opcao)
+    if opcao == "simples"
+      return "#{detalhes(funcionario.categoria)}"
+    elsif opcao == "entidade_sigla"
+      if funcionario.categoria.nil? or funcionario.categoria.blank?
+        return "#{detalhes(funcionario.categoria)}"
+      elsif !funcionario.categoria.nil?
+        if funcionario.categoria.entidade.nil?
+          return "#{detalhes(funcionario.categoria.entidade)}/#{detalhes(funcionario.categoria)}"
+        elsif !funcionario.categoria.entidade.nil?
+          return "#{detalhes(funcionario.categoria.entidade.sigla).upcase}/#{detalhes(funcionario.categoria)}"
+        end
+      end
+    elsif opcao == "entidade_nome"
+    end
+  end
+
+  # def quadro_e_jornada(funcionario)
+  #   if !funcionario.matricula.nil?
+  #     if funcionario.categoria.nome == "Ex-Território do Amapá" or funcionario.categoria.nome == "Ministério da Educação"
+  #       return "#{cargo_disciplina(funcionario)} SOB A MATRÍCULA SIAPE No #{funcionario.matricula}"
+  #     else
+  #       return "#{cargo_disciplina(funcionario)} SOB A MATRÍCULA No #{funcionario.matricula}"
+  #     end
+  #   else
+  #     return "#{cargo_disciplina(funcionario)}"
+  #   end
+  # end
 
 end

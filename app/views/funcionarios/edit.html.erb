@@ -1,5 +1,7 @@
 <%model_class = Funcionario%>
-<%content_for :titulo do%>
-  Editando registro de 
-  <%end%>
-  <%= render :partial => 'form' %>
+<div class="page-header" align='center'>
+  <h1><%= @funcionario.pessoa.nome%></h1>
+  <h3>Atualização funcional de registro: <b><%= @funcionario.matricula unless @funcionario.matricula.nil? %></b>
+  </h3>
+</div>
+<%= render :partial => 'form' %>

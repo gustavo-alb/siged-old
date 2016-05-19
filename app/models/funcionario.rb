@@ -24,6 +24,7 @@ class Funcionario < ActiveRecord::Base
 
 
 
+
   scope :efetivos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo"),Categoria.find_by_nome("Concurso de 2012"),Categoria.find_by_nome("992")])}
   scope :federais,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
   scope :contratos,  -> { joins(:categoria).where("categorias.nome ilike ?","%contrato%")}

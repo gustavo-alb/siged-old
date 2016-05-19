@@ -1,6 +1,8 @@
 <%= simple_form_for @role, :html => { :class => 'form-horizontal' } do |f| %>
-<%= f.input :name %>
-<%= f.input :fullname %>
+<%= f.input :name, label: "Código" %>
+<%= f.input :fullname, label: "Nome" %>
+<%= f.input :description, label: "Descrição" %>
+<%= f.input :entidade_id, :collection=>Entidade.all.collect {|z|[z.nome,z.id]}, include_blank: "Selecione a Entidade", label: 'Entidade' %>
 
 <%= f.button :submit, :class => 'btn-primary' %>
 <%= link_to "Cancelar",

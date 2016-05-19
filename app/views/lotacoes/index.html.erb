@@ -2,10 +2,10 @@
   Lotações de <%=@pessoa.nome%>
 <%end%>
 <ul class="nav nav-tabs" role="tablist">
-  <%if can?(:create,Lotacao)%><li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Novo Processo de Lotação</a></li>
-  <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Lotações em Aberto</a></li>
+  <%if can?(:create,Lotacao)%><li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Novo processo</a></li>
+  <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Em andamento</a></li>
   <%end%>
-  <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Histórico de Lotações</a></li>
+  <li role="presentation"><a href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab">Histórico</a></li>
 </ul>
 <!-- Tab panes -->
 <div class="tab-content">

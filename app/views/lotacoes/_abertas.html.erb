@@ -1,27 +1,58 @@
-<table class="table table-striped tabela-colapsavel">
-  <thead>
-    <tr>
-      <th>Destino</th>
-      <th>Data</th>
-      <th>Estafeta</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @lotacoes_abertas.each do |lot| %>
+<br>
+<% if @lotacoes_abertas.count < 1 %>
+<div class="jumbotron" align='center'>
+  <br>
+  <p>Este funcionário não possui lotações em andamento</p>
+  <br>
+  <button role="presentation" type="button" class="btn btn-primary btn-lg" href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab"><i class="fa fa-bars fa-fw fa-2x"></i> Visualizar histórico</button>
+</div>
+<% else %>
+<div class="col-sm-12 col-md-12 well">
+  <table class="table table-striped tabela-colapsavel">
+    <thead>
+      <tr>
+        <th>Destino</th>
+        <th>Data</th>
+        <th>Estafeta</th>
+        <th>Status</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @lotacoes_abertas.each do |lot| %>
       <tr>
         <td><%= detalhes(lot.destino) %></td>
         <td><%= lot.data_lotacao.to_s_br%></td>
         <td><%= detalhes(lot.usuario)%></td>
         <td><%= status_lotacao(lot.status.first.status)%></td>
         <td>
-          <%= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
-          <%= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,lot),:method=>:delete,:class=>"btn btn-danger btn-xs",:'data-confirm'=>"Tem certeza?"%>
-          <%= link_to "Confirmar Lotação", "#",:class=>"btn btn-success btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#confirmacao-#{lot.id}"%>
+          <div class="btn-group">
+            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Escolha <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <%# if can? :carta, @funcionario %>
+              <!-- <li><%#= link_to "<i class='fa fa-rotate-left fa-fw'></i> Cancelar lotação".html_safe, root_path,:method=>:delete,:'data-confirm'=>"Tem certeza?"%></li> -->
+              <%# end %>
+              <% if can? :destroy, lot %>
+              <li><%= link_to "<i class='fa fa-trash fa-fw'></i> Apagar lotação".html_safe, pessoa_funcionario_lotacao_path(@pessoa,@funcionario,lot),:method=>:delete,:'data-confirm'=>"Tem certeza?"%></li>
+              <% end %>
+              <% if can? :carta, @funcionario %>
+              <li><%= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_nova_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li>
+              <% end %>
+              <%# if can? :destroy,Funcionario %>
+              <li><%= link_to "<i class='fa fa-thumbs-o-up fa-fw'></i> Confirmar Lotação".html_safe, "#",:'data-toggle'=>"modal",:'data-target'=>"#confirmacao-#{lot.id}"%></li>
+              <%# end %>
+            </ul>
+          </div>
+          <%#= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
+          <%#= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,lot),:method=>:delete,:class=>"btn btn-danger btn-xs",:'data-confirm'=>"Tem certeza?"%>
         </td>
       </tr>
       <%= render :partial=>"confirmar_lotacao",:locals=>{:lot=>lot}%>
-    <% end%>
-  </tbody>
-</table>
+      <% end%>
+    </tbody>
+  </table>
+</div>
+<% end %>
+
