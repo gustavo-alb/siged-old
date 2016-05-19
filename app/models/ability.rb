@@ -207,7 +207,7 @@ class Ability
     if user.role? :lotacao
       can :manage, Lotacao
       cannot :convalidar,Lotacao
-      can :read,Funcionario
+      can [:read, :carta],Funcionario
       can :manage,Pessoa
       cannot :create,Pessoa
       cannot :edit,Pessoa
@@ -231,7 +231,7 @@ class Ability
       can :manage, Lotacao
       cannot :convalidar,Lotacao
       #cannot :create, Lotacao
-      can :read,Funcionario
+      can [:read, :carta],Funcionario
       can :manage,Pessoa
       cannot :create,Pessoa
       cannot :edit,Pessoa
