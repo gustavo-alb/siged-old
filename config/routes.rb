@@ -385,7 +385,7 @@ Siged20::Application.routes.draw do
   # just remember to delete public/index.html.
 
   authenticated :user do
-    root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}, as: :ucolom_root
+    root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'lotacao')}, as: :ucolom_root
     root :to => "pessoas#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'ucada')}, as: :ucada_root
     root :to => "home#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'chefia_ucolom')}, as: :chefia_ucolom_root
     root :to => "contratos#index",:constraints => lambda{|req| req.env['warden'].user.try(:role?,'bancos')}, as: :bancos_root

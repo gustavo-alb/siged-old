@@ -281,6 +281,28 @@ module ApplicationHelper
     end
   end
 
+    def funcao(func)
+    if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao
+      return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Comissão'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome!="Comissão"
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Administrativo'
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
+      return "#{func.cargo.nome.upcase}"
+    elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo.nil?
+      return "#{func.cargo.nome.upcase}"
+    else
+      return "Nada Cadastrado"
+    end
+  end
+
 
   def categorias_gerais(obj)
     if obj.categoria and ["Concurso de 2012","Estado Antigo","992","Ex-Ipesap","Estado Novo"].include?(obj.categoria.nome)
@@ -307,9 +329,11 @@ module ApplicationHelper
     end
   end
 
-  def jornada(obj)
-    if obj and obj.jornada
+  def jornada(obj,resumido=false)
+    if obj and obj.jornada and resumido==false
       return "#{obj.jornada} horas semanais"
+    elsif obj and obj.jornada and resumido==true
+      return "#{obj.jornada}H"
     else
       return "Nada Cadastrado"
     end
@@ -360,12 +384,12 @@ module ApplicationHelper
 
   def detalhes(obj=nil,sigla=false)
     if obj
-      if obj.respond_to? "nome" and !obj.nome.blank?
-        return obj.nome.upcase
-      elsif obj.respond_to? "sigla" and !obj.sigla.blank? and sigla==true
+      if obj.respond_to? "sigla" and !obj.sigla.blank? and sigla==true
         return obj.sigla.upcase
       elsif obj.respond_to? "codigo" and !obj.codigo.blank? and sigla==true
         return obj.codigo.upcase
+      elsif obj.respond_to? "nome" and !obj.nome.blank?
+        return obj.nome.upcase
       elsif obj.respond_to? "nome" and !obj.nome.blank?
         return obj.nome.upcase
       elsif obj.respond_to? "username" and !obj.username.blank?

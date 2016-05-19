@@ -7,6 +7,7 @@ Novo Contrato Administrativo
 <%= l.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}%>
 <%= l.input :tipo_lotacao,:label=>"Tipo de Destino",:as=>:radio_buttons,:collection=>@tipos,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
 <div id="destino">
+ <%= l.input :natureza,:label=>"Natureza da Lotação",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
 	<%= l.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
 	<%= l.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
 	<%= l.input :destino_id,:as=>:hidden,:input_html=>{:id=>"lotacao_destino_id"}%>
