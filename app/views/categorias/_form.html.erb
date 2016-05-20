@@ -2,6 +2,7 @@
 <%= f.input :nome %>
 <%= f.input :sigla %>
 <%= f.input :lei %>
+<%= f.input :entidade_id,as: :select, :collection=>Entidade.all.collect {|z|[z.nome,z.id]}, include_blank: "Selecione a Entidade", label: 'Entidade da categoria'%>
 
 <%= f.button :submit, :class => 'btn-primary' %>
 <%= link_to "Cancelar",

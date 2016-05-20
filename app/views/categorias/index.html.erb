@@ -1,6 +1,6 @@
 <%content_for :titulo do%>
   Categorias
-  
+
   <div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
     <%= search_form_for @q do |f|%>
       <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
@@ -19,6 +19,7 @@
       <th>nome</th>
       <th>sigla</th>
       <th>lei</th>
+      <th>Entidade</th>
     </tr>
   </thead>
   <tbody>
@@ -27,6 +28,7 @@
         <td><%= c.nome%></td>
         <td><%= c.sigla%></td>
         <td><%= c.lei%></td>
+        <td><%= c.entidade.sigla if c.entidade %></td>
         <td>
           <%= link_to "Editar", edit_categoria_path(c),:class=>"btn btn-primary btn-xs"%>
           <%= link_to "Visualizar",categoria_path(c),:class=>"btn btn-primary btn-xs"%>
