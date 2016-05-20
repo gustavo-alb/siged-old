@@ -2,30 +2,89 @@
 Novo Contrato Administrativo
 <% end %>
 <%= simple_form_for @pessoa, :url=>contratos_funcional_url,:html => { :class => 'form-horizontal' } do |p| %>
-<h3>Dados Pessoais</h3>
-<%= p.input :nome %>
-<%= p.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"]%>
-<%= p.input :endereco,:label=>"Endereço" %>
-<%= p.input :numero %>
-<%= p.input :complemento %>
-<%= p.input :bairro %>
-<%= p.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
-<%= p.input :telefone_celular,:input_html=>{:class=>"celular"}%>
-<%= p.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
-<%= p.input :naturalidade %>
-<%= p.input :nacionalidade,:collection=>["Brasileiro","Outro"] %>
-<%= p.input :cpf ,:input_html=>{:class=>"cpf"}%>
-<%= p.input :rg ,:label=>"RG"%>
-<%= p.input :uf ,:label=>"UF do RG",:collection=>Estado.all.collect{|e|e.sigla}%>
-<%= p.input :pis_pasep ,:label=>"PIS/PASEP"%>
-<%= p.input :cidade_id,:collection=>@municipios,:label=>"Município de Residência"%>
-<%= p.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
-<%= p.input :cep,:input_html=>{:class=>"cep"}%>
-<%= p.input :email,:as=>:email %>
-<%= p.input :pai %>
-<%= p.input :mae,:label=>"Mãe" %>
 
+<h3 align='center'>Dados Pessoais</h3>
+<h4 align='center'><b>Informações essenciais</b></h4>
 
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-12 col-md-12'>
+    <%= p.input :nome %>
+  </div>
+  <div class='col-sm-12 col-md-12 row'>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :cpf ,:input_html=>{:class=>"cpf"}%>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :rg %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"] %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+
+      <%= p.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :pis_pasep,:label=>"PIS/PASEP" %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","Relação Estável"] %>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12 row'>
+    <hr>
+    <div class='col-sm-9 col-md-9'>
+      <%= p.input :endereco,:label=>"Endereço" %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= p.input :numero %>
+    </div>
+
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :complemento %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :bairro %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :cidade_id,:collection=>@municipios%>
+    </div>
+    <div class='col-sm-3 col-md-3'>
+      <%= p.input :uf %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= p.input :cep,:input_html=>{:class=>"cep"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :telefone_celular,:input_html=>{:class=>"celular"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12'>
+    <hr>
+    <h4 align='center'><b>Informações adicionais</b></h4>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :pai %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :mae %>
+    </div>
+    <div class='col-sm-4 col-md-4'>
+      <%= p.input :naturalidade %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= p.input :nacionalidade %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :email,:as=>:email %>
+    </div>
+  </div>
+  <%#= p.input :uf ,:label=>"UF do RG",:collection=>Estado.all.collect{|e|e.sigla}%>
+</div>
 <%= p.button :submit, :class => 'btn-primary' %>
 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
 contratos_index_path, :class => 'btn btn-default' %>

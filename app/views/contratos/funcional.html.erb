@@ -1,27 +1,56 @@
 <%content_for :titulo do%>
 Novo Contrato Administrativo
 <% end %>
+<h3 align="center">Dados Funcionais</h3>
 <%= simple_form_for @funcionario, :url=>contratos_lotacao_url,:html => { :class => 'form-horizontal' } do |f| %>
-<h3>Dados Funcionais</h3>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-7 col-md-7'>
+    <%#= f.input :categoria_id,as: :select, :collection=>@categorias %>
+    <%= f.input :categoria_id,as: :select, :collection=>@categorias_contrato%>
+    <%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
+    <%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
+  </div>
+  <div class='col-sm-5 col-md-5'>
+    <%#= f.input :cargo_id,as: :select, :collection=>@cargos %>
+    <%= f.input :cargo_id,as: :select, :collection=>@cargos,:input_html=>{:id=>"funcionario_cargo_id"}%>
+  </div>
+  <div class='col-sm-12 col-md-12'>
+    <div id='disc'>
+      <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if f.object.cargo  and f.object.cargo.nome=="PROFESSOR"%>
+    </div>
+  </div>
+  <div class='col-sm-6 col-md-6'>
+    <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
+  </div>
+  <div class='col-sm-6 col-md-6 row'>
+    <div id='dist'>
+      <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção" if f.object.municipio and f.object.municipio.distritos.count>0%>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12 row'>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+
+      <%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (f.object.data_nomeacao.strftime("%d/%m/%Y") if !f.object.data_nomeacao.blank?)},:label=>"Admissão"%>
+    </div>
+  </div>
+
+  <div class='col-sm-12 col-md-12'>
+    <div class='col-sm-6 col-md-6'>
+
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <div id='dist'>
+
+        <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+      </div>
+    </div>
+  </div>
+</div>
 <%#=f.input :categoria_id,:as=>:hidden,:input_html=>{:value=>@categoria.id}%>
-<%=f.input :entidade_id,:as=>:hidden,:input_html=>{:value=>@entidade.id}%>
-<%=f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
-
-<%= f.input :categoria_id,as: :select, :collection=>@categorias_contrato%>
-
-<%= f.input :cargo_id,as: :select, :collection=>@cargos,:input_html=>{:id=>"funcionario_cargo_id"}%>
-
-
-<div id='disc'>
-  <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas if f.object.cargo  and f.object.cargo.nome=="PROFESSOR"%>
-</div>
-<%= f.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
-<%= f.input :data_nomeacao,as: :string,input_html: {class: "data",value: (f.object.data_nomeacao.strftime("%d/%m/%Y") if !f.object.data_nomeacao.blank?)},:label=>"Admissão"%>
-<%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção",:input_html=>{:id=>"funcionario_municipio_id"}%>
-<div id='dist'>
-  <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção" if f.object.municipio and f.object.municipio.distritos.count>0%>
-</div>
-
 <!--
 <%= f.simple_fields_for :lotacoes do |l|%>
 <%= l.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
@@ -40,11 +69,11 @@ Novo Contrato Administrativo
 <%= simple_fields_for :pessoa do |f|%>
 <% @atributos_pessoa.each do |atributo|%>
 <%if !@pessoa.send("#{atributo}").blank?%>
-	<%if (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i!=0 and atributo!='cpf' and atributo!='rg' and atributo!='pis_pasep' and atributo!='cep')%>
-	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}").to_i}%>
-	<%elsif (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i==0) or @pessoa.send("#{atributo}").is_a?(Date) or atributo=="cpf" or atributo=="rg" or atributo=="pis_pasep" or atributo=="cep"%>
-	<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}")}%>
-	<%end%>
+<%if (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i!=0 and atributo!='cpf' and atributo!='rg' and atributo!='pis_pasep' and atributo!='cep')%>
+<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}").to_i}%>
+<%elsif (@pessoa.send("#{atributo}").respond_to?(:to_i) and @pessoa.send("#{atributo}").to_i==0) or @pessoa.send("#{atributo}").is_a?(Date) or atributo=="cpf" or atributo=="rg" or atributo=="pis_pasep" or atributo=="cep"%>
+<%= f.input "#{atributo}",:as=>:hidden,:input_html=>{:value=>@pessoa.send("#{atributo}")}%>
+<%end%>
 <%end%>
 <%end%>
 <%end%>
