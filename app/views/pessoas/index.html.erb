@@ -76,15 +76,15 @@ Pessoas
           <div class="row">
             <div class="col-xs-2">
               <dt>MATRÍCULA:</dt>
-              <dd><%=f.matricula%></dd>
+              <dd><%= detalhes(f.matricula) %></dd>
             </div>
             <div class="col-xs-5">
               <dt>CARGO:</dt>
-              <dd><%=cargo_disciplina(f)%></dd>
+              <dd><%= cargo_disciplina(f) %></dd>
             </div>
             <div class="col-xs-3">
               <dt>CATEGORIA:</dt>
-              <dd><%#=detalhes(f.categoria)%><%= categoria_funcional(f,"entidade_sigla")%></dd>
+              <dd><%#=detalhes(f.categoria)%><%= categoria_funcional(f,"entidade_sigla") %></dd>
             </div>
             <div class="col-xs-2">
               <dt></dt>
@@ -113,7 +113,7 @@ Pessoas
             </div>
             <div class="col-xs-5">
               <dt>LOTAÇÃO:</dt>
-              <dd><%#=lotacao(f)%><%= lotacao_detalhes(f,"ativa_detalhada")%></dd>
+              <dd><%#=lotacao(f)%><%= lotacao_detalhes(f,"ativa_detalhada") %></dd>
             </div>
             <div class="col-xs-3">
               <dt>SITUAÇÃO:</dt>
@@ -121,16 +121,8 @@ Pessoas
             </div>
           </div>
           <br/>
-<!--           <div class="footer pull-right">
-            <%= link_to "Editar",edit_pessoa_funcionario_path(p,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and  can? :edit,Funcionario%>
-            <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(p,f),:class=>"btn btn-primary btn-xs" if can? :read,Lotacao%>
-
-          </div> -->
-          <br/>
         </div>
-
         <% end %>
-
       </div>
     </td>
   </tr>

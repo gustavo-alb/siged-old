@@ -5,11 +5,11 @@ Contratos Administrativos
   <%= search_form_for @q,:url=>contratos_index_url do |f|%>
 
   <div class="input-group">
-    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-lg"%> 
+    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-lg"%>
     <div class="input-group-btn">
-    <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-    <span class="glyphicon glyphicon-search"></span>
-    <% end %>
+      <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+      <span class="glyphicon glyphicon-search"></span>
+      <% end %>
     </div>
   </div>
 </div>
@@ -38,10 +38,21 @@ Contratos Administrativos
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.created_at.strftime("%d/%m/%Y %H:%M")%></td>
       <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
       <td>
-        <%#= link_to "Funcionários",pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%>
-        <%= link_to "Editar",contratos_editar_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs" if can? :update,Pessoa%>
-        <%= link_to "Visualizar", contratos_detalhes_path(:pessoa_id=>p.id),:class=>"btn btn-primary btn-xs"%>
-        <%= link_to "Apagar", contratos_apagar_path(:pessoa_id=>p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" if can? :destroy,Pessoa%>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escolha <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><%#= link_to "<i class='fa fa-users fa-fw'></i> Funcionários".html_safe,pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%></li>
+            <% if can? :update,Pessoa %>
+            <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, contratos_editar_path(:pessoa_id=>p.id) %></li>
+            <% end %>
+            <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, contratos_detalhes_path(:pessoa_id=>p.id) %></li>
+            <% if can? :destroy,Pessoa %>
+            <li><%= link_to "Apagar", contratos_apagar_path(:pessoa_id=>p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+            <% end %>
+          </ul>
+        </div>
       </td>
     </tr>
     <tr>
@@ -55,13 +66,31 @@ Contratos Administrativos
               <dt>MATRÍCULA:</dt>
               <dd><%= detalhes(f.matricula)%></dd>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-5">
               <dt>CARGO:</dt>
-              <dd><%=cargo_disciplina(f)%></dd>
+              <dd><%= cargo_disciplina(f) %></dd>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-3">
               <dt>CATEGORIA:</dt>
-              <dd><%=detalhes(f.categoria)%></dd>
+              <dd><%= categoria_funcional(f,"entidade_sigla") %></dd>
+            </div>
+            <div class="col-xs-2">
+              <dt></dt>
+              <dd>
+                <div class="btn-group">
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Mais opções<span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <% if can? :update,Funcionario and  can? :edit,Funcionario %>
+                    <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe,edit_pessoa_funcionario_path(p,f) %></li>
+                    <% end %>
+                    <% if can? :read,Lotacao %>
+                    <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(p,f) %></li>
+                    <% end %>
+                  </ul>
+                </div>
+              </dd>
             </div>
           </div>
           <br/>
@@ -70,21 +99,18 @@ Contratos Administrativos
               <dt>ADMISSÃO:</dt>
               <dd><%=f.data_nomeacao.to_s_br%></dd>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-5">
               <dt>LOTAÇÃO:</dt>
-              <dd><%=lotacao(f)%></dd>
+              <dd><%= lotacao_detalhes(f,"ativa_detalhada") %></dd>
             </div>
             <div class="col-xs-4">
-              <dt>QUADRO:</dt>
-              <dd><%=detalhes(f.entidade)%></dd>
+              <!-- <dt>QUADRO:</dt>
+              <dd><%#=detalhes(f.entidade)%></dd> -->
+              <dt>SITUAÇÃO:</dt>
+              <dd><%=situacao(f)%></dd>
             </div>
           </div>
           <br/>
-          <div class="footer pull-right">
-            <%= link_to "Editar",edit_pessoa_funcionario_path(p,f),:class=>"btn btn-primary btn-xs"  if can? :update,Funcionario and  can? :edit,Funcionario%>
-            <%= link_to "Lotações",pessoa_funcionario_lotacoes_path(p,f),:class=>"btn btn-primary btn-xs" if can? :manage,Lotacao%>
-
-          </div>
           <br/>
         </div>
 
@@ -96,4 +122,4 @@ Contratos Administrativos
   <% end%>
 </tbody>
 </table>
-<%=will_paginate @pessoas%>
+<div align="center"><%=will_paginate @pessoas%></div>
