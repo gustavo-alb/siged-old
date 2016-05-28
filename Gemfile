@@ -64,3 +64,5 @@ gem "iconv"
 gem 'devise-bootstrap-views'
 gem 'wicked'
 gem 'workbook'
+gem 'select2-rails', '~> 4.0', '>= 4.0.1.1'
+# gem 'best_in_place', '~> 3.0.1'

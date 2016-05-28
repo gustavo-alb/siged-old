@@ -212,7 +212,8 @@ class Ability
       cannot :create,Pessoa
       cannot :edit,Pessoa
       cannot :destroy,Pessoa
-      can :manage,Funcionario
+      can :edicao_rapida,Funcionario
+      # can :manage,Funcionario
       cannot :create,Funcionario
       cannot :destroy,Funcionario
       cannot :edit,Funcionario

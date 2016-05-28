@@ -12,7 +12,9 @@
 <%=observe_field "departamento", :url => "/pessoas/departamento/",
       :update => 'qualificar',
       :frequency => 0.25,
-      :with => "'departamento='+value+'&pessoa_id='+#{@pessoa.id}"%>
+      :with => "'departamento='+value+'&pessoa_id='+#{p.id}"
+      # :with => "'departamento='+value+'&pessoa_id='+#{@pessoa.id}"
+      %>
 
 </div>
 </article>

@@ -1,6 +1,96 @@
-<%content_for :titulo do%>
-  Lotações de <%=@pessoa.nome%>
-<%end%>
+<div align="center">
+  <%content_for :titulo do%>
+  Lotações de <%=@pessoa.nome%>&nbsp;&nbsp;&nbsp;
+  <div class="btn-group">
+    <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+      <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+      <% if can? :edicao_rapida, @funcionario %>
+      <li><a role='button' data-toggle='modal' data-target='#automodal'><i class='fa fa-edit fa-fw'></i>  Edição rápida</a></li>
+      <% end %>
+    </ul>
+  </div>
+  <%end%>
+</div>
+<% if can? :edicao_rapida, @funcionario %>
+<div id="automodal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 class="modal-title" align="center">Edição rápida&nbsp;&nbsp;-&nbsp;&nbsp;<%=@pessoa.nome%></h3>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for @funcionario,:url=>edicao_rapida_pessoa_funcionario_path(:pessoa_id=>@pessoa,:id=>@funcionario), :method => :js, :remote => true do |f| %>
+        <div class='col-sm-12 col-md-12 well'>
+          <%= f.simple_fields_for :pessoa do |p|%>
+          <div class='col-sm-3 col-md-3'>
+            <%= p.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"] %>
+          </div>
+          <div class='col-sm-3 col-md-3'>
+            <%= p.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"] %>
+          </div>
+          <div class='col-sm-6 col-md-6'>
+            <%= p.input :endereco %>
+          </div>
+          <div class='col-sm-2 col-md-2'>
+            <%= p.input :numero %>
+          </div>
+          <div class='col-sm-4 col-md-4'>
+            <%= p.input :bairro %>
+          </div>
+          <div class='col-sm-3 col-md-3 row'>
+            <%= p.input :telefone_celular %>
+          </div>
+          <div class='col-sm-3 col-md-3'>
+            <%= p.input :telefone_residencial %>
+          </div>
+          <% end %>
+          <div class='col-sm-12 col-md-12'>
+            <hr>
+          </div>
+          <div class='col-sm-2 col-md-2'>
+            <%= f.input :matricula,:label=>"Matrícula"%>
+          </div>
+          <div class='col-sm-5 col-md-5'>
+            <%#= f.input :categoria_id,as: :select, :collection=>@categorias %>
+            <%= f.label :categoria_id %>
+            <%= f.collection_select :categoria_id, Categoria.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+          </div>
+          <div class='col-sm-5 col-md-5'>
+            <%= f.input :decreto_nomeacao,:label=>"Dec. Nomeação" %>
+          </div>
+
+          <div class='col-sm-6 col-md-6'>
+            <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
+          </div>
+          <div class='col-sm-6 col-md-6'>
+            <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção"%>
+          </div>
+          <div class='col-sm-4 col-md-4'>
+          </div>
+          <div class='col-sm-12 col-md-12'>
+            <div class='col-sm-6 col-md-6 row'>
+              <div id='disc'>
+                <%= f.input :disciplina_contratacao_id,as: :select, :collection=>@disciplinas, label: 'Disciplina de contratação' if !@funcionario.new_record? and @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+              </div>
+            </div>
+            <div class='col-sm-6 col-md-6'>
+              <div id='dist'>
+                <%= f.input :distrito_id,as: :select, :collection=>@distritos,:label=>"Distrito de Opção"  if !@funcionario.new_record? and @funcionario.municipio and @funcionario.municipio.distritos.any?%>
+              </div>
+            </div>
+          </div>
+        </div>
+        <%= f.button :submit, :class => 'btn-primary' %>
+        <%= link_to "Cancelar", pessoa_funcionarios_path(@pessoa), :class => 'btn btn-default' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
 <ul class="nav nav-tabs" role="tablist">
   <%if can?(:create,Lotacao)%><li role="presentation"><a href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab">Novo processo</a></li>
   <li role="presentation"><a href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab">Em andamento</a></li>
@@ -9,7 +99,7 @@
 </ul>
 <!-- Tab panes -->
 <div class="tab-content">
-<%if can?(:create,Lotacao)%>
+  <%if can?(:create,Lotacao)%>
   <div role="tabpanel" class="tab-pane active" id="tab1">
     <%= render :partial=>'nova_lotacao'%>
   </div>

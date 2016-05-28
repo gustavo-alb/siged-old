@@ -386,7 +386,6 @@ end
   # PUT /funcionarios/1
   # PUT /funcionarios/1.xml
   def update
-
     @funcionario = Funcionario.find(params[:id])
     @url = pessoa_funcionario_url(@pessoa,@funcionario)
     if params[:comissionado]
@@ -420,8 +419,20 @@ end
     send_file(relatorio.generate,:filename=>"Relatório de funcionários por disciplina.odt")
   end
 
-  # DELETE /funcionarios/1
-  # DELETE /funcionarios/1.xml
+  def edicao_rapida
+    # @funcionario = Funcionario.find(params[:id])
+    @funcionario = Funcionario.find(params[:id])
+    respond_to do |format|
+       # @funcionario.update_attributes(params[:funcionario])
+      if @funcionario.update_attributes!(params[:funcionario])
+        format.js   { render :layout => false }
+        puts "filho da putaaaaaaaaaaaaaa"
+      else
+        puts "Caraaaaaaaaaaaaaaaaaaaaaaaaaaaaalho"
+      end
+    end
+  end
+
   def destroy
     @funcionario = Funcionario.find(params[:id])
     @funcionario.destroy

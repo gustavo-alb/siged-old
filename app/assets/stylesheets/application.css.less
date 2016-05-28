@@ -1,40 +1,42 @@
 /*
- *= require_self
- *= require jquery-ui.min
- *= require bootstrap_and_overrides
- *= require loading_notice
- *= require auto_complete
- *= require dashboard
- *= require login
+*= require_self
+*= require jquery-ui.min
+*= require bootstrap_and_overrides
+*= require loading_notice
+*= require auto_complete
+*= require dashboard
+*= require select2
+*= require select2-bootstrap
+*= require login
 */
 
 #loadingmessage {
-    display:none;
+display:none;
 }
 
 .hiddenRow {padding: 0 !important;}
 
 @media screen and (max-width: 640px) {
-	table {
-		overflow-x: auto;
-		display: block;
-	}
+table {
+overflow-x: auto;
+display: block;
+}
 }
 
 tr.linha td {
-    /* set border style for separated rows */
-    border-bottom: 1px solid black;
-} 
+/* set border style for separated rows */
+border-bottom: 1px solid black;
+}
 
 .radio,
 .checkbox {
-    padding-left: 20px;
+padding-left: 20px;
 }
 .radio label,
 .checkbox label {
 margin-left: -20px;
-    display: block;
-    padding: 0;
+display: block;
+padding: 0;
 }
 
 #ponto_mes {width: 30%;}

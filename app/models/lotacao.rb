@@ -63,6 +63,8 @@ class Lotacao < ActiveRecord::Base
   scope :em_orgaos, -> { where("destino_type = 'Orgao'")}
   scope :em_setoriais, -> { where("destino_type = 'Departamento'")}
   scope :com_interiorizacao, -> { joins(:funcionario).where("funcionarios.interiorizacao = true")}
+  scope :de_efetivos, -> {joins(:funcionario).where("funcionarios.categoria_id = 1 or funcionarios.categoria_id = 5 or funcionarios.categoria_id = 6 or funcionarios.categoria_id = 15")}
+  scope :de_professores, -> {joins(:funcionario).where("funcionarios.cargo_id = 98")}
   attr_accessor :destino_nome
   #delegate :nome,:to=>:destino
   after_create :codigo

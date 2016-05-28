@@ -15,6 +15,7 @@ Pessoas
 </div>
 <%end%>
 <%=link_to "Criar",new_pessoa_path,:class=>"btn btn-primary" if can? :create, Funcionario %>
+<%=link_to "Lista Teste", teste_lista_lotacao_pessoas_path, :class=>"btn btn-primary" if can? :manage, :all %>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -44,13 +45,19 @@ Pessoas
             <% if can? :read,Funcionario %>
             <li><%= link_to "<i class='fa fa-users fa-fw'></i> Funcionários".html_safe,pessoa_funcionarios_path(p) %></li>
             <% end %>
-            <% if can? :update,Pessoa %>
+            <% if can? :edit, p %>
             <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_pessoa_path(p) %></li>
             <% end %>
             <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, pessoa_path(p) %></li>
             <% if can? :destroy,Pessoa %>
             <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" %></li>
             <% end %>
+
+            <%if can? :qualificar_funcionario,Pessoa -%>
+            <!-- <li><%= link_to "<i class='fa fa-file-text-o fa-fw'></i> Qualificação Funcional".html_safe, pessoa_qualificacao_funcional_path(p) %></li> -->
+            <%end -%>
+
+            <!-- <li><a role="button" data-toggle="modal" data-target="#frequencia-<%= p.id %>-notes">Xunda</a></li> -->
           </ul>
         </div>
         <%#= link_to "Funcionários",pessoa_funcionarios_path(p),:class=>"btn btn-primary btn-xs" if can? :read,Funcionario%>
@@ -130,3 +137,102 @@ Pessoas
 </tbody>
 </table>
 <div align='center'><%=will_paginate @pessoas%></div>
+
+<%@pessoas.each_with_index do |p|%>
+<!-- Modal visualizar -->
+<div class="modal fade" id="frequencia-<%= p.id %>-notes" tabindex="-1" role="dialog" aria-labelledby="frequencia-<%= p.id %>-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="frequencia-<%= p.id %>-label" align='center'><%= p.nome %>
+        </h3>
+      </div>
+      <div class="modal-body">
+        <div class='col-sm-12 col-md-12 well'>
+          <div class='col-sm-6 col-md-6'>
+            <dl class="dl-horizontal">
+              <dt><strong>Sexo:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:sexo, :as => :select, :collection => %w(Masculino Feminino), :place_holder => "Um clique para atualizar!" %></dd>
+              <dt><strong>CPF:</strong></dt>
+              <dd><%= detalhes(Cpf.new(p.cpf).numero) %></dd>
+
+              <dt><strong>Data de Nascimento:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:nascimento, :as => :date, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>RG:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:rg, :place_holder => "Um clique para atualizar!" %></dd>
+              <!-- <dt><strong>UF RG:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:uf, :place_holder => "Um clique para atualizar!" %></dd> -->
+              <dt><strong>PIS:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:pis_pasep, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Naturalidade:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:naturalidade, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Nacionalidade:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:nacionalidade, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Estado Civil:</strong></dt>
+              <dd><%#= best_in_place p, :estado_civil, :place_holder => "Click me to add content!" %>
+              <%#= best_in_place_if can?(:update, p), p,:estado_civil, :as => :select, :collection => [["Solteiro(a)","Solteiro(a)"],["Casado(a)","Divorciado(a)","Casado(a)","Divorciado(a)"],["Viúvo(a)","Viúvo(a)"],["União Estável","União Estável"]], :place_holder => "Um clique para atualizar!" %></dd>
+<!-- :collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"] -->
+            </dl>
+          </div>
+          <div class='col-sm-6 col-md-6 row'>
+            <dl class="dl-horizontal">
+              <dt><strong>Endereço:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:endereco, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Cidade:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:cidade, :place_holder => "Um clique para atualizar!" %>
+                  <%#= best_in_place_if can?(:update, p), p, :cidade_id, :as => :select, :collection=>Componente.tipo_componentes.collect { |s| [s[0].humanize, s[0]] } %>
+              </dd>
+
+              <dt><strong>CEP:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:cep, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Telefone Residencial:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:telefone_residencial, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Telefone Celular:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:telefone_celular, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Email:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:email, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Nome do Pai:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:pai, :place_holder => "Um clique para atualizar!" %></dd>
+
+              <dt><strong>Nome da Mãe:</strong></dt>
+              <dd><%#= best_in_place_if can?(:update, p), p,:mae, :place_holder => "Um clique para atualizar!" %></dd>
+
+            </dl>
+          </div>
+        </div>
+        <!-- <div class="col-sm-12 col-md-12 col-lg-12, well"> -->
+  <!--         endereço
+          numero
+          bairro
+          telefone_residencial
+          telefone_celular
+          funcionarios
+          disciplina_de_contratação
+          disciplina_contratacao_id
+          municipio_de_opção
+          municipio_id
+          distrito_de_opção
+          distrito_id -->
+          <%#= simple_form_for p, url: pessoa_qualificacao_funcional_path(p,:departamento_id=>1), :method => :post do |f| %>
+          <%#= f.input :parametro %>
+          <%#= f.collection_select :parametro, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example',   multiple: false, :style => "width: 100%" %>
+          <%#= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+          <%# end %>
+        <!-- </div> -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    <!-- Modal visualizar-->
+<% end%>

@@ -239,7 +239,11 @@ module ApplicationHelper
 
   def cargo_disciplina(func)
     if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao and func.nivel
-      return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
+      if func.disciplina_contratacao.nome != 'ZIndefinido'
+        return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
+      else
+        return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
+      end
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
       return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
     elsif func.cargo and func.nivel and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Comissão'
@@ -281,7 +285,7 @@ module ApplicationHelper
     end
   end
 
-    def funcao(func)
+  def funcao(func)
     if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao
       return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}"
     elsif func.cargo and func.disciplina_contratacao.nil? and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência'
@@ -448,6 +452,22 @@ module ApplicationHelper
     end
   end
 
+  def jornada_funcional(funcionario,opcao)
+    if opcao == 'tabela'
+      if funcionario.nivel.present?
+        return "(EM JORNADA DE #{jornada(funcionario.nivel).upcase}"
+      elsif funcionario.nivel.nil? or funcionario.nivel.blank?
+        return "Atenção! A referência nível deve ser atualizada."
+      end
+    elsif opcao == 'qualificacao'
+      if funcionario.nivel.present?
+        return ", com jornada semanal de #{jornada(funcionario.nivel)}"
+      elsif funcionario.nivel.nil? or funcionario.nivel.blank?
+        return ""
+      end
+    end
+  end
+
   def lotacao_anterior(funcionario)
     if funcionario and !funcionario.lotacoes.inativas.none?
       ultima = funcionario.lotacoes.inativas.order('data_lotacao desc').first
@@ -477,26 +497,37 @@ module ApplicationHelper
     end
   end
 
-  # "Ex-Ipesap"
-  # "Estado Antigo"
-  # "Contrato Administrativo"
-  # "Ex-Território do Amapá"
-  # "Ministério da Educação"
-  # "Estado Novo"
-  # "992"
-  # "UDE"
-  # "Sem Vínculo"
-  # "Indefinido"
-  # "Ex-Território Federal do Amapá - Comissionado"
-  # "Ministério da Educação - Comissionado"
-  # "Concurso de 2012"
-  # "Prefeitura - Permuta"
-  # "Prefeitura - Cedido"
-  # "Contrato Horista"
-  # "Contrato Horista - Indígena"
-  # "Contrato Horista - Afrodescendente"
-  # "Contrato Gestão - Nível Médio"
-  # "Estágiário"
+  def lotacao_atualizada(lotacao,opcao)
+    if opcao == 'carta'
+      if lotacao.destino_type=="Escola"
+        if lotacao.destino.municipio.present?
+          if lotacao.natureza.present?
+            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)}). NATUREZA DE ATUAÇÃO: #{lotacao.natureza.upcase}"
+          elsif lotacao.natureza.nil? or lotacao.natureza.blank?
+            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
+          end
+        elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
+          return "#{lotacao.destino.nome.upcase}"
+        end
+      else
+        return "#{lotacao.destino.nome.upcase}"
+      end
+    elsif opcao == 'qualificacao'
+      if lotacao.destino_type=="Escola"
+        if lotacao.destino.municipio.present?
+          if lotacao.natureza.present?
+            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
+          elsif lotacao.natureza.nil? or lotacao.natureza.blank?
+            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
+          end
+        elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
+          return "#{lotacao.destino.nome.upcase}"
+        end
+      else
+        return "#{lotacao.destino.nome.upcase}"
+      end
+    end
+  end
 
   def categoria_funcional(funcionario,opcao)
     if opcao == "simples"
@@ -512,19 +543,15 @@ module ApplicationHelper
         end
       end
     elsif opcao == "entidade_nome"
+      if funcionario.categoria.present?
+        if funcionario.categoria.entidade.present?
+          return "#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
+        elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
+          return "#{funcionario.categoria}"
+        end
+      elsif funcionario.categoria.nil? or funcionario.categoria.blank?
+        return "#{detalhes(funcionario.categoria)}"
+      end
     end
   end
-
-  # def quadro_e_jornada(funcionario)
-  #   if !funcionario.matricula.nil?
-  #     if funcionario.categoria.nome == "Ex-Território do Amapá" or funcionario.categoria.nome == "Ministério da Educação"
-  #       return "#{cargo_disciplina(funcionario)} SOB A MATRÍCULA SIAPE No #{funcionario.matricula}"
-  #     else
-  #       return "#{cargo_disciplina(funcionario)} SOB A MATRÍCULA No #{funcionario.matricula}"
-  #     end
-  #   else
-  #     return "#{cargo_disciplina(funcionario)}"
-  #   end
-  # end
-
 end

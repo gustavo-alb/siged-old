@@ -20,6 +20,50 @@ module PessoasHelper
     end
   end
 
+  def telefones_pessoa(pessoa,opcao)
+    if opcao == "tabela"
+      if !pessoa.telefone_celular.blank? and !pessoa.telefone_residencial.blank?
+        return "#{pessoa.telefone_celular}, #{pessoa.telefone_residencial}"
+      elsif !pessoa.telefone_celular.blank?
+        return "#{pessoa.telefone_celular}"
+      elsif !pessoa.telefone_residencial.blank?
+        return "#{pessoa.telefone_residencial}"
+      else
+        return "Nenhum telefone cadastrado."
+      end
+    elsif opcao == "qualificacao"
+      if pessoa.telefone_celular.present?
+        if pessoa.telefone_residencial.present?
+          return ", tendo #{pessoa.telefone_celular} e #{pessoa.telefone_residencial} como números de contato"
+        elsif pessoa.telefone_residencial.blank? or pessoa.telefone_residencial.nil?
+          return ", tendo #{pessoa.telefone_celular} como número de contato"
+        end
+      elsif pessoa.telefone_celular.blank? or pessoa.telefone_celular.nil?
+        if  pessoa.telefone_residencial.present?
+          return ", tendo #{pessoa.telefone_residencial} como número de contato"
+        elsif pessoa.telefone_residencial.blank? or pessoa.telefone_residencial.nil?
+          return ", sem nenhum contato cadastrado"
+        end
+      end
+    end
+  end
+
+  def orgao_do_funcionario(funcionario)
+    if funcionario.orgao.present?
+      return "#{funcionario.orgao.nome}"
+    elsif funcionario.orgao.blank? or funcionario.orgao.nil?
+      return "Secretaria de Estado da Educação do Amapá"
+    end
+  end
+
+  def data_nomeacao(funcionario)
+    if funcionario.data_nomeacao.present?
+      return ", admitido em #{funcionario.data_nomeacao}"
+    elsif funcionario.data_nomeacao.blank? or funcionario.data_nomeacao.nil?
+      return ""
+    end
+  end
+
   def local(func)
     texto=""
     if !func.lotacoes.atual.none? and func.status_lotacao=="LOTADO" or func.status_lotacao=="EM TRÂNSITO"
@@ -65,36 +109,6 @@ module PessoasHelper
     end
   end
 
-
-
-  # def lotacao_detalhes(func,opcao)
-  #   if func and func.lotacoes.ativas.none?
-  #     return "NÃO LOTADO"
-  #   elsif func.nil?
-  #     return "NÃO CADASTRADO"
-
-
-  #   elsif func and func.lotacoes.ativas.any?
-  #     if opcao == "simples"
-
-
-
-  #       return "#{detalhes(func.lotacoes.ativas.first.destino)}"
-
-
-
-  #     elsif opcao == "detalhado"
-  #       if func.lotacoes.ativas.first.destino.municipio.nil?
-  #         return "#{detalhes(func.lotacoes.ativas.first.destino)}"
-  #       else
-  #         return "#{detalhes(func.lotacoes.ativas.first.destino)} - #{detalhes(func.lotacoes.ativas.first.destino.municipio)}"
-  #       end
-  #     end
-  #   end
-
-
-  # end
-
   def l_ant(func)
     if func and func.lotacoes.inativas.none?
       return "NADA CADASTRADO"
@@ -124,6 +138,12 @@ module PessoasHelper
   def negritar(pessoa)
     html=""
     html+="<b>#{pessoa.nome}</b>"
+    return raw(html)
+  end
+
+  def negritacao(objeto)
+    html=""
+    html+="<b>#{objeto}</b>"
     return raw(html)
   end
 

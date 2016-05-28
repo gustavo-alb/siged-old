@@ -16,6 +16,9 @@
 // require loading_notice
 //= require ie10-viewport-bug-workaround
 //= require ie-emulation-modes-warning
+//= require select2
+//= require jquery
+//= require best_in_place
 //= require autocomplete-rails
 
 jQuery(function() {
@@ -51,3 +54,24 @@ var activeTab = null;
 jQuery('a[data-toggle="tab"]').on('shown', function (e) {
   activeTab = e.target;
 })
+
+$(document).ready(function() {
+  $('select#placeholder-example').select2({
+    placeholder: "Digite algo aqui ;)",
+  theme: "bootstrap",
+  allowClear: true
+});
+});
+
+$(document).ready(function() {
+  /* Activating Best In Place */
+  jQuery(".best_in_place").best_in_place();
+});
+
+// $('.best_in_place').bind("ajax:success", function () {$(this).closest('tr').effect('highlight'); });
+
+// automodal
+$(document).ready(function(){
+  $("#automodal").modal('show');
+});
+// automodal

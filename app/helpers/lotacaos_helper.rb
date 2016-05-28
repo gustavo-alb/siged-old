@@ -111,8 +111,8 @@ end
 
 
 def destino_ponto(lotacao)
-   if lotacao
-       if lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.departamento.nil? and lotacao.escola.nil?
+ if lotacao
+     if lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.departamento.nil? and lotacao.escola.nil?
         return "#{lotacao.departamento.sigla}/#{lotacao.orgao.sigla}"
     elsif lotacao.tipo_lotacao=="ESPECIAL" and !lotacao.escola.nil?
         return "#{lotacao.escola.nome}/#{lotacao.orgao.sigla}"
@@ -138,5 +138,5 @@ end
 
 
 
-end 
+end
 

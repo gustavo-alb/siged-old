@@ -6,7 +6,11 @@ Siged20::Application.routes.draw do
   resources :situacoes
 
 
-  resources :escolas
+  resources :escolas do
+    get :lotacoes_por_escola,:on=>:collection
+    get :relatorios,:on=>:collection
+    put "saida_relatorios/:escolas_ids/"=>'escolas#saida_relatorios', as: :saida_relatorios,:on=>:collection
+  end
 
 
   resources :requisicoes do
@@ -243,11 +247,15 @@ Siged20::Application.routes.draw do
   end
 
   resources :pessoas do
+    get "dashboard",:on=>:collection
     get "gerar_relatorio"
     get "nao_lotados",:on=>:collection
+    get  "teste_lista_lotacao", :on => :collection
     resources :fotos,:only => [:index, :show, :novo, :create,:new] do
       post 'upload',:on=>:collection
     end
+    # put 'qualificacao_funcional/:parametro'=>'pessoas#qualificacao_funcional', as: :qualificacao_funcional
+    post 'qualificacao_funcional'=>'pessoas#qualificacao_funcional', as: :qualificacao_funcional
     get "gerar_boletim"
     get "qualificar"
     get "edicao_rapida"
@@ -262,6 +270,9 @@ Siged20::Application.routes.draw do
     post "salvar_lista"
     resources :formacoes
     resources :funcionarios do
+      member do
+        post :edicao_rapida
+      end
       post :ativar_funcionario
       post :desativar_funcionario
       post :verificar_funcionario
@@ -302,6 +313,7 @@ Siged20::Application.routes.draw do
         post "salvar_convalidacao"
         post "salvar_especificacao"
         get  "apagar_especificacao"
+        # get  "teste_lista_lotacao", :on => :collection
         #get "turmas"
         resources :pontos do
           get 'gerar_arquivo'

@@ -17,11 +17,12 @@ class Funcionario < ActiveRecord::Base
   scope :da_pessoa, lambda {|id|where("pessoa_id = ?",id) }
   scope :diretores, lambda { |q| where("diretor = ?" , true) }
   scope :disciplina_def, -> {  where("disciplina_contratacao_id is not ?",nil)}
+  scope :disciplina_indef, -> {  where("disciplina_contratacao_id is ?",nil)}
   scope :sem_categoria,  -> { where("categoria_id is ?",nil)}
   scope :sem_lotacao,  -> { includes(:lotacoes).where(:lotacaos => { :funcionario_id => nil })}
   scope :da_escola,lambda {|id|joins(:lotacoes).where("lotacaos.escola_id = ?",id) }
   scope :ativos, -> { where(:ativo=>true)}
-
+  scope :sao_professores, -> {  where("cargo_id = 98",nil)}
 
 
 
@@ -64,6 +65,7 @@ class Funcionario < ActiveRecord::Base
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
   has_one :contrato
   accepts_nested_attributes_for :lotacoes
+  accepts_nested_attributes_for :pessoa
   scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}
   after_create :criar_comissionado
   #attr_accessor(:rsn) {self.regencia_semanal_nominal}

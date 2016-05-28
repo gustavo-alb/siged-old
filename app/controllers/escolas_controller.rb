@@ -248,6 +248,115 @@ class EscolasController < ApplicationController
     end
   end
 
+  def lotacoes_por_escola
+    @escolas = Escola.find(1473,1539).sort_by{|g|g.nome}
+    identificacoes = CombinePDF.new
+    @escolas.sort_by{|g|g.nome}.each do |escola|
+      # escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.each do | lotacoes |
+
+        f = 0
+        identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
+          r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
+          r.add_field "ESCOLA", escola.nome
+          r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
+          r.add_field "INEP",view_context.detalhes(escola.codigo)
+          r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
+          r.add_field "EMISSOR", current_user.name
+          # r.add_field "TESTE", data
+
+          r.add_section("DISCIPLINAS", escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }) do |s|
+            s.add_field ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
+            s.add_field ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
+            s.add_field ("CARGO") { |s| view_context.cargo_disciplina(s.funcionario) }
+            s.add_field ("CATEGORIA") { |s| view_context.categorias_gerais(s.funcionario) }
+          end
+          #       r.add_table("PARTICIPANTES", frequencias.sort_by{|g|g.participacao.pessoa.nome} ) do |t|
+          #         t.add_column("PARTICIPANTE") { |t|t.participacao.pessoa.nome.upcase }
+          #         t.add_column("ORDEM"){|a| f && f+=1}
+          # end
+        end
+        arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{escola.object_id}.odt")
+        system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
+        identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
+
+      # end
+
+    end
+    send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
+  end
+
+  def lotacoes_por_escolab
+    @escolas = Escola.find(1473,1539).sort_by{|g|g.nome}
+    identificacoes = CombinePDF.new
+    @escolas.sort_by{|g|g.nome}.each do |escola|
+      escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.group_by{|g| [g.funcionario.disciplina_contratacao.nome] }.each do | data, frequencias |
+
+        f = 0
+        identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
+          r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
+          r.add_field "ESCOLA", escola.nome
+          r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
+          r.add_field "INEP",view_context.detalhes(escola.codigo)
+          r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
+          r.add_field "EMISSOR", current_user.name
+          r.add_field "TESTE", data
+
+          r.add_section("DISCIPLINAS", frequencias) do |s|
+            s.add_field ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
+            s.add_field ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
+            s.add_field ("CARGO") { |s| view_context.cargo_disciplina(s.funcionario) }
+            s.add_field ("CATEGORIA") { |s| view_context.categorias_gerais(s.funcionario) }
+          end
+          #       r.add_table("PARTICIPANTES", frequencias.sort_by{|g|g.participacao.pessoa.nome} ) do |t|
+          #         t.add_column("PARTICIPANTE") { |t|t.participacao.pessoa.nome.upcase }
+          #         t.add_column("ORDEM"){|a| f && f+=1}
+          # end
+        end
+        arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{escola.object_id}.odt")
+        system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
+        identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
+      end
+
+    end
+    send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
+  end
+
+  def lotacoes_por_escolaa
+    @escola = Escola.find(1473,1539)
+    @lotacoes = @escola.lotacoes.ativas.de_efetivos.de_professores
+
+    f = 0
+    identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola.odt") do |r|
+      r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
+      r.add_field "ESCOLA", @escola.nome
+      r.add_field "MUNICIPIO",view_context.detalhes(@escola.municipio)
+      r.add_field "INEP",view_context.detalhes(@escola.codigo)
+      r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
+      r.add_field "EMISSOR", current_user.name
+      r.add_table("PARTICIPANTES", @lotacoes.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] } ) do |t|
+        t.add_column("ORDEM"){|a| f && f+=1}
+        t.add_column("MATRICULA") { |t| view_context.detalhes(t.funcionario.matricula) }
+        t.add_column("FUNCIONARIO") { |t| view_context.detalhes(t.funcionario.pessoa) }
+        t.add_column("CARGO") { |t| view_context.cargo_disciplina(t.funcionario) }
+        t.add_column("CATEGORIA") { |t| view_context.categorias_gerais(t.funcionario) }
+        # t.add_column("FUNCIONARIO") { |t|t.funcionario.id }
+      end
+
+
+    #     end
+    #     arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{componente.object_id}.odt")
+    #     system "unoconv -f pdf /tmp/identificacao-#{componente.object_id}.odt"
+    #     identificacoes << CombinePDF.load("/tmp/identificacao-#{componente.object_id}.pdf")
+  end
+
+    # end
+    # send_data identificacoes.to_pdf, filename: "Listas de frequências - #{ @evento.nome }.pdf ", type: "application/pdf"
+    arquivo_iestudantil = identificacao.generate("/tmp/iestudantil_do_aluno-#{@escola.id}.odt")
+    system "unoconv -f pdf /tmp/iestudantil_do_aluno-#{@escola.id}.odt"
+    f = File.open("/tmp/iestudantil_do_aluno-#{@escola.id}.pdf",'r')
+    send_file(f,:filename=>"Identidade Estudantil - #{@escola.id}.pdf",:content_type=>"application/pdf")
+  end
+
   # PUT /escolas/1
   # PUT /escolas/1.xml
   def update

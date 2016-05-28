@@ -37,9 +37,9 @@ Funcionários
           <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_pessoa_funcionario_path(@pessoa,f)%></li>
           <% end %>
           <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe,pessoa_funcionario_path(@pessoa,f) %></li>
-          <%# if can? :destroy,Funcionario %>
+          <% if can? :destroy, f %>
           <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_funcionario_path(@pessoa,f),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
-          <%# end %>
+          <% end %>
           <% if can? :read,Lotacao %>
           <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(@pessoa,f) %></li>
           <% end %>

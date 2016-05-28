@@ -4,7 +4,9 @@
     <%= f.input :matricula,:label=>"Matrícula"%>
   </div>
   <div class='col-sm-5 col-md-5'>
-    <%= f.input :categoria_id,as: :select, :collection=>@categorias %>
+    <%#= f.input :categoria_id,as: :select, :collection=>@categorias %>
+    <%= f.label :categoria_id %>
+    <%= f.collection_select :categoria_id, Categoria.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
 
   </div>
   <div class='col-sm-5 col-md-5'>
@@ -16,6 +18,8 @@
   </div>
   <div class='col-sm-4 col-md-4'>
     <%= f.input :cargo_id,as: :select, :collection=>@cargos %>
+    <%#= f.label :cargo_id %>
+    <%#= f.collection_select :cargo_id, Cargo.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
   </div>
   <div class='col-sm-6 col-md-6'>
     <%= f.input :municipio_id,as: :select, :collection=>@municipios,:label=>"Município de Opção"%>
