@@ -57,11 +57,7 @@ Pessoas&nbsp;&nbsp;&nbsp;
             <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_pessoa_path(p) %></li>
             <% end %>
             <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, pessoa_path(p) %></li>
-<<<<<<< HEAD
             <% if can? :destroy, p %>
-=======
-            <% if can? :destroy,Pessoa %>
->>>>>>> 4e1a2d27e3301f2c619e86b59cdc31077aa515f3
             <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_path(p),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
             <% end %>
             <% if can? :qualificacao_funcional, p %>
