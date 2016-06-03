@@ -317,8 +317,5 @@ DEPENDENCIES
   wkhtmltopdf (~> 0.1.2)
   workbook
 
-RUBY VERSION
-   ruby 2.1.1p76
-
 BUNDLED WITH
    1.12.5
