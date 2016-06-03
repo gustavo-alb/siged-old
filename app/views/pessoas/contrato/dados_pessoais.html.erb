@@ -1,0 +1,65 @@
+<div class="page-header" align='center'>
+  <h1>Contrato Administrativo - Dados pessoais</h1>
+</div>
+<%= simple_form_for @pessoa, :url => wizard_path do |f| %>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-12 col-md-12 row'>
+    <div class='col-sm-9 col-md-9'>
+      <%= f.input :nome, input_html: {disabled: true} %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= f.input :cpf,:input_html=>{:class=>"cpf"}, input_html: {disabled: true} %>
+    </div>
+  </div>
+  <div class='col-sm-12 col-md-12'>
+    <div class='col-sm-3 col-md-3  row'>
+      <%= f.input :rg %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+    </div>
+    <div class='col-sm-3 col-md-3'>
+      <%= f.input :nacionalidade %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"] %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"] %>
+    </div>
+  </div>
+  <div class='col-sm-12 col-md-12 row'>
+    <hr>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :endereco %>
+    </div>
+    <div class='col-sm-2 col-md-2'>
+      <%= f.input :numero %>
+    </div>
+    <div class='col-sm-4 col-md-4'>
+      <%= f.input :complemento %>
+    </div>
+    <div class='col-sm-4 col-md-4'>
+      <%= f.input :bairro %>
+    </div>
+    <div class='col-sm-4 col-md-4'>
+      <%= f.label :cidade_id %>
+      <%= f.collection_select :cidade_id, Municipio.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+    </div>
+    <div class='col-sm-1 col-md-1'>
+      <%= f.input :uf, label: 'UF' %>
+    </div>
+    <div class='col-sm-3 col-md-3 row'>
+      <%= f.input :cep,:input_html=>{:class=>"cep"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :telefone_celular,:input_html=>{:class=>"celular"}%>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= f.input :telefone_residencial,:input_html=>{:class=>"telefone"}%>
+    </div>
+  </div>
+</div>
+<%= f.submit "Confirmar",:class => 'btn btn-primary' %>
+<%= link_to 'Cancelar', pessoa_cancelar_pessoa_contrato_path(:pessoa_id=>@pessoa.id),:class => 'btn btn-default btn-xs', method: :put %>
+<% end %>

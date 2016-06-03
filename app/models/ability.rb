@@ -26,8 +26,8 @@ class Ability
     end
 
 
-      if user.role? :chefia_ucada
-        can :manage,Funcionario
+    if user.role? :chefia_ucada
+      can :manage,Funcionario
         #cannot :destroy,Funcionario
         can :manage,Pessoa
         #cannot :destroy,Pessoa
@@ -57,7 +57,10 @@ class Ability
         cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
           l.privada==true and (l.role_ids & user.role_ids).none?
         end
-        can :qualificar_funcionario, Pessoa
+        can [:qualificar_funcionario, :qualificacao_funcional], Pessoa
+        # can [:qualificacao_funcional], Pessoa do |pessoa|
+          # pessoa.funcionario.entidade_id == current_user.entidade_id
+        # end
       end
 
       if user.role? :ucada_alt
@@ -303,6 +306,13 @@ class Ability
       can :manage, Escola
       cannot [:create,:update,:destroy,:configuracoes],Escola
       can :manage,Matriz
+    end
+
+    if user.role? :contratos_criacao_gea
+      can [:read, :contratos_administrativos , :criar_pessoa_contrato, :cancelar_pessoa_contrato, :contrato_novo], Pessoa
+      can [:destroy, :edit], Pessoa do |pessoa|
+        pessoa.registro_valido? == false
+      end
     end
 
   end

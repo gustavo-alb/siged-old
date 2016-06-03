@@ -18,7 +18,7 @@
 //= require ie-emulation-modes-warning
 //= require select2
 //= require jquery
-//= require best_in_place
+// require best_in_place
 //= require autocomplete-rails
 
 jQuery(function() {
@@ -63,10 +63,10 @@ $(document).ready(function() {
 });
 });
 
-$(document).ready(function() {
+// $(document).ready(function() {
   /* Activating Best In Place */
-  jQuery(".best_in_place").best_in_place();
-});
+  // jQuery(".best_in_place").best_in_place();
+// });
 
 // $('.best_in_place').bind("ajax:success", function () {$(this).closest('tr').effect('highlight'); });
 

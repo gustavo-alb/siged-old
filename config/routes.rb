@@ -3,6 +3,10 @@ Siged20::Application.routes.draw do
 
 
 
+  get "contrato/show"
+
+  get "contrato/update"
+
   resources :situacoes
 
 
@@ -78,29 +82,19 @@ Siged20::Application.routes.draw do
   resources :home, :only=>:index
 
   namespace :folha do resources :fonte_recursos end
-
     namespace :arquivo do resources :documentos end
-
       namespace :administracao do
         resources :migracoes
       end
-
       resources :categorias do
         resources :textos
       end
-
-
       resources :configuracao_pontos
-
       resources :entidades
       get "administracao/tarefas/funcionarios"
       namespace :administracao do resources :tarefas end
-
         get "administracao/index"
-
-
         get "administracao/atualizar_informacao"
-
         namespace :folha do resources :competencias end
           namespace :folha do
             resources :financeiros do
@@ -109,18 +103,14 @@ Siged20::Application.routes.draw do
             end
           end
           resources :vencimentos
-
-
           namespace :folha do
             resources :folhas do
               get "imprimir_financeiros"
               resources :financeiros do
 
               end
-
       #fim do resource folhas
     end
-
     #fim do namespace folha
   end
 
@@ -247,6 +237,11 @@ Siged20::Application.routes.draw do
   end
 
   resources :pessoas do
+    member do
+      get "contratos_administrativos"
+      put 'contrato_novo'
+    end
+    resources :contrato, only: [:show, :update], controller: 'pessoas/contrato'
     get "dashboard",:on=>:collection
     get "gerar_relatorio"
     get "nao_lotados",:on=>:collection
@@ -254,8 +249,10 @@ Siged20::Application.routes.draw do
     resources :fotos,:only => [:index, :show, :novo, :create,:new] do
       post 'upload',:on=>:collection
     end
+    post "criar_pessoa_contrato", :on=>:collection
+    put "cancelar_pessoa_contrato"
     # put 'qualificacao_funcional/:parametro'=>'pessoas#qualificacao_funcional', as: :qualificacao_funcional
-    post 'qualificacao_funcional'=>'pessoas#qualificacao_funcional', as: :qualificacao_funcional
+    post 'qualificacao_funcional'#=>'pessoas#qualificacao_funcional', as: :qualificacao_funcional
     get "gerar_boletim"
     get "qualificar"
     get "edicao_rapida"
@@ -273,6 +270,8 @@ Siged20::Application.routes.draw do
       member do
         post :edicao_rapida
       end
+      resources :contrato, only: [:show, :update], controller: 'funcionarios/contrato'
+      get "gerar_contrato"
       post :ativar_funcionario
       post :desativar_funcionario
       post :verificar_funcionario

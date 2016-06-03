@@ -1,0 +1,28 @@
+<%= @pessoa.nome%>
+<%= simple_form_for @pessoa, :url => wizard_path do |f| %>
+    <%= f.simple_fields_for :funcionario do |p| %>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-3 col-md-3'>
+    <%= p.input :matricula,:label=>"Matrícula"%>
+  </div>
+  <div class='col-sm-7 col-md-7 row'>
+    <%= p.label :cargo_id %>
+    <%= p.collection_select :cargo_id, Cargo.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+  </div>
+  <div class='col-sm-2 col-md-2'><%= p.input :data_nomeacao, as: :string, input_html: {class: "data"},:label=>"Admissão"%>
+  </div>
+  <div class='col-sm-12 col-md-12'>
+    <div class='col-sm-6 col-md-6 row'>
+      <%= p.label "Município de Opção" %>
+      <%= p.collection_select :municipio_id, Municipio.all.sort, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+    </div>
+    <div class='col-sm-6 col-md-6'>
+      <%= p.input :nivel_id,as: :select, :collection=>@niveis,:label=>"Referência/Nível" %>
+    </div>
+  </div>
+</div>
+<% end %>
+<%= f.submit "Confirmar",:class => 'btn btn-primary' %>
+<%= link_to 'Não há nada a ser atualizado', next_wizard_path,:class => 'btn btn-default btn-xs' %>
+<% end %>
+<%#= link_to '<i class="fa fa-edit fa-fw"></i> Acompanhar contrato'.html_safe,pessoa_funcionario_contrato_path(@pessoa,@funcionario.id,:dados_pessoais) %>

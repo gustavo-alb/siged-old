@@ -35,9 +35,6 @@ GEM
     arel (3.0.3)
     barby (0.6.2)
     bcrypt (3.1.10)
-    best_in_place (3.0.3)
-      actionpack (>= 3.2)
-      railties (>= 3.2)
     bootstrap-will_paginate (0.0.10)
       will_paginate
     brI18n (3.1.0)
@@ -271,7 +268,6 @@ PLATFORMS
 DEPENDENCIES
   ajax_pagination
   barby
-  best_in_place (~> 3.0.1)
   bootstrap-will_paginate (= 0.0.10)
   brazilian-rails (= 3.1.0)
   calendar_date_select

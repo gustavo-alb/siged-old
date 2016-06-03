@@ -1,17 +1,37 @@
 <%= simple_form_for @usuario, :html => { :class => 'form-horizontal' } do |f| %>
-  <%= f.input :name %>
-  <%= f.input :username %>
-  <%= f.input :email %>
-  <%= f.input :password %>
-  <%= f.input :password_confirmation %>
-  
-  <label>Grupos</label><br/>
-  <div class="well">
-  <%= f.collection_check_boxes :role_ids,@roles,:id,:name%>
+<div class="col-sm-12 col-md-12 well">
+  <div class="col-sm-12 col-md-12">
+    <%= f.input :name, label: 'Nome' %>
   </div>
-  <%= f.input :enabled,:label=>"Habilitado"%>
-  <%= f.button :submit, :class => 'btn-primary' %>
+  <div class="col-sm-6 col-md-6">
+    <%= f.input :username %>
+    <%= f.input :password, label: 'Senha' %>
+  </div>
+  <div class="col-sm-6 col-md-6 row">
+    <%= f.input :email %>
+    <%= f.input :password_confirmation, label: 'Confirmação de senha' %>
+  </div>
+  <div class="col-sm-12 col-md-12 row">
+    <div class="col-sm-6 col-md-6 row">
+      <%= f.label 'Grupos' %>
+      <%= f.collection_select :role_ids, Role.all, :id, :name, {include_blank: true}, id: 'placeholder-example', multiple: true, :style => "width: 100%" %>
+    </div>
+    <div class="col-sm-6 col-md-6">
+      <%= f.label 'Limite de atividade' %>
+      <%= f.collection_select :entidade_id, Entidade.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: true, :style => "width: 100%" %>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-12">
+  <br>
+    <%= f.input :enabled,:label=>" Habilitado?"%>
+  </div>
+  <!-- <div class="well"> -->
+    <%#= f.collection_check_boxes :role_ids,@roles,:id,:name%>
+  <!-- </div> -->
 
-  <%= link_to "Cancelar",
+</div>
+<%= f.button :submit, :class => 'btn-primary' %>
+
+<%= link_to "Cancelar",
 usuarios_path, :class => 'btn btn-default' %>
 <% end %>

@@ -1,6 +1,6 @@
 <div class="page-header" align='center'>
-  <h1 align='center'><%=@pessoa.nome%></h1>
-  <h3>Informações pessoais</h3>
+  <h1>Contrato Administrativo - Confirmação</h1>
+  <h3><%= @pessoa.nome%></h3>
 </div>
 <div class='col-sm-12 col-md-12 well'>
   <div class='col-sm-6 col-md-6'>
@@ -15,10 +15,7 @@
       <dd><%= detalhes(@pessoa.nascimento.to_s_br) %></dd>
 
       <dt><strong>RG:</strong></dt>
-      <dd><%= detalhes(@pessoa.rg) %></dd>
-
-      <dt><strong>UF RG:</strong></dt>
-      <dd><%= detalhes(@pessoa.uf) %></dd>
+      <dd><%= detalhes(@pessoa.rg) %> <%= detalhes(@pessoa.uf) %></dd>
 
       <dt><strong>PIS:</strong></dt>
       <dd><%= detalhes(@pessoa.pis_pasep) %></dd>
@@ -53,23 +50,10 @@
 
       <dt><strong>Email:</strong></dt>
       <dd><%= detalhes(@pessoa.email) %></dd>
-
-      <dt><strong>Nome do Pai:</strong></dt>
-      <dd><%= detalhes(@pessoa.pai) %></dd>
-
-      <dt><strong>Nome da Mãe:</strong></dt>
-      <dd><%= detalhes(@pessoa.mae) %></dd>
-
     </dl>
   </div>
 </div>
-
-<%= link_to "Voltar",
-pessoas_path, :class => 'btn btn-default'   if can?(:edit,Pessoa)%>
-<%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe,
-edit_pessoa_path(@pessoa), :class => 'btn btn-default' %>
-<%= link_to "<i class='fa fa-erase fa-fw'></i> Apagar".html_safe,
-pessoa_path(@pessoa),
-:method => 'delete',
-:data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
-:class => 'btn btn-danger'  if can?(:destroy,Pessoa)%>
+<%= simple_form_for @pessoa, :url => wizard_path do |f| %>
+<%= link_to 'Retornar à etapa anterior', previous_wizard_path,:class => 'btn btn-default btn-xs' %>
+<%= f.submit "Confirmar e inserir informações funcionais",:class => 'btn btn-primary' %>
+<% end  %>

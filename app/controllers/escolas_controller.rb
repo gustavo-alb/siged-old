@@ -6,7 +6,6 @@ class EscolasController < ApplicationController
     escolas = Escola.where('nome ilike ? or codigo ilike ?', "%#{term}%","%#{term}%").order(:nome).all
     render :json => escolas.map { |escola| {:id => escola.id, :label => "#{escola.nome} - #{escola.municipio_nome}", :value => escola.nome, :tipo=>"Escola"} }
   end
-
   # GET /escolas
   # GET /escolas.xml
   before_filter :dados_essenciais#,:funcionarios
@@ -18,8 +17,6 @@ class EscolasController < ApplicationController
       format.xml  { render :xml => @escolas }
     end
   end
-
-
   # GET /escolas/1
   # GET /escolas/1.xml
   def show
@@ -31,7 +28,6 @@ class EscolasController < ApplicationController
     @funcionarios_cargos_principais = @escola.funcionarios.where("cargo_id in (?)",@cargos_principais).group_by{|t|t.cargo}
     @funcionarios_outros = @escola.funcionarios.where("cargo_id in (?)",@outros_cargos)
     @ambientes = @escola.ambientes
-
     @encaminhados = @escola.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",false,true)
     if !@escola.ambientes.none?
       @ambiente = @escola.ambientes.find_by_nome("Sala de Aula")
@@ -44,9 +40,7 @@ class EscolasController < ApplicationController
       format.xml  { render :xml => @escola }
     end
   end
-
   def ctrl_ch_resumido
-
     @escola = Escola.find(params[:escola_id])
     @matrizes = @escola.matrizes
     @user = User.usuario_atual
@@ -76,7 +70,6 @@ class EscolasController < ApplicationController
     relatorio = relatorio.generate
     send_file(relatorio,:content_type=>"application/vnd.oasis.opendocument.text",:filename=>"Controle de Carga Horária.odt")
   end
-
   def ctrl_ch_detalhado
     @escola = Escola.find_by_slug(params[:escola_id])
     @matrizes = @escola.matrizes
@@ -95,16 +88,13 @@ class EscolasController < ApplicationController
     @template = File.open("#{Rails.public_path}/relatorios/controle_ch_detalhado.odt")
     @relatorio ="#{Rails.public_path}/relatorios/relatorio-#{Time.now.strftime("%d%m%H%M%S")}.odt"
     render_odt(@template.path.to_s,@relatorio.to_s)
-
     if Rails.env=="production"
       system("sudo -u www-data chmod 0777 #{@relatorio.to_s}")
     end
-
     @arq1 = File.open(@relatorio)
     send_file(@arq1.path,:content_type=>"application/vnd.oasis.opendocument.text",:filename=>"Controle de Carga Horária Detalhado - #{@escola.codigo}.odt")
     #@relatorio.close
   end
-
   def controle_turma
     @escola = Escola.find(params[:escola_id])
     @turma = @escola.turmas.find_by_nome(params[:turma])
@@ -114,7 +104,6 @@ class EscolasController < ApplicationController
       page.replace_html "tab-three", :partial=>"controle_turma"
     end
   end
-
   def controle_ambiente
     @escola = Escola.find(params[:escola_id])
     @ambiente = @escola.ambientes.find_by_id(params[:ambiente])
@@ -124,7 +113,6 @@ class EscolasController < ApplicationController
       page.replace_html "tab-six", :partial=>"controle_ambiente"
     end
   end
-
   def gerar_controle_ch
     @escola = Escola.find(params[:escola_id])
     @matrizes = @escola.matrizes
@@ -145,8 +133,6 @@ class EscolasController < ApplicationController
       page.replace_html "tab-five",:partial=>'controle_ch_resumido'
     end
   end
-
-
   def incluir_turma
     @escola = Escola.find params[:escola_id]
     if !@escola.ambientes.none?
@@ -156,7 +142,6 @@ class EscolasController < ApplicationController
     end
     render :partial=>"turma"
   end
-
   def matrizes
     @escola = Escola.find_by_slug(params[:escola_id])
     if !params[:matrix].blank?
@@ -167,7 +152,6 @@ class EscolasController < ApplicationController
       render :nothing=>true
     end
   end
-
   def salvar_turma
     @escola = Escola.find(params[:escola_id])
     @ambiente = @escola.ambientes.find_by_nome("Sala de Aula")
@@ -178,7 +162,6 @@ class EscolasController < ApplicationController
       redirect_to("#{escola_path(@escola)}#tab-tres",:alert => "Turma não pode ser criada.")
     end
   end
-
   def excluir_turma
     @escola = Escola.find(params[:escola_id])
     @ambiente = @escola.ambientes.find params[:ambiente_id]
@@ -190,7 +173,6 @@ class EscolasController < ApplicationController
       end
     end
   end
-
   def listar_turmas
     @escola = Escola.find(params[:escola_id])
     @turmas = Turma.find(:all,:joins=>[:serie],:conditions=>["ambiente_id= ? and escola_id = ?",@ambiente.id,@escola.id],:order => 'turno,series.nome')
@@ -199,7 +181,6 @@ class EscolasController < ApplicationController
       page.replace_html "tab-three", :partial=>"turmas"
     end
   end
-
   def listar_ambientes
     @escola = Escola.find(params[:escola_id])
     @ambientes = @escola.ambientes - @escola.ambientes.where(:nome=>"Sala de Aula")
@@ -209,34 +190,28 @@ class EscolasController < ApplicationController
       page.replace_html "tab-six", :partial=>"ambientes"
     end
   end
-
   def configuracoes
     @escola = Escola.find_by_slug(params[:escola_id])
     @matrizes = Matriz.find(:all,:joins=>:nivel,:order=>['niveis_ensinos.nome asc',:codigo])
     render :layout=>'facebox'
   end
-
   # GET /escolas/new
   # GET /escolas/new.xml
   def new
     @escola = Escola.new
-
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @escola }
     end
   end
-
   # GET /escolas/1/edit
   def edit
     @escola = Escola.find(params[:id])
   end
-
   # POST /escolas
   # POST /escolas.xml
   def create
     @escola = Escola.new(params[:escola])
-
     respond_to do |format|
       if @escola.save
         format.html { redirect_to(@escola, :notice => 'Escola cadastrada com sucesso.') }
@@ -247,23 +222,26 @@ class EscolasController < ApplicationController
       end
     end
   end
-
   def lotacoes_por_escola
-    @escolas = Escola.find(1473,1539).sort_by{|g|g.nome}
+    @escolas = Escola.find(1473,1669).sort_by{|g|g.nome}
+    # @escolas = Escola.find(1475,1669)
+      # , 1660, 1414, 1464, 1476, 1707, 1420, 1429, 1394, 1657, 2082, 1656, 1474, 1665, 1672, 1479, 1530, 1485, 1392, 1522, 1641, 1661, 1666, 1368, 1490, 1569, 1373, 1711, 1467, 1494, 1335, 1318, 1444, 1500, 1539, 1367, 1663, 1659, 1537, 1674, 1514, 1516, 1570, 1499, 1671, 2083, 1511, 1662, 1305, 1399, 1644, 1538, 1473, 1477, 1491, 1652, 1673, 1679, 1299, 1638, 1520, 1647, 1512, 1670, 1643, 1518, 1326, 1675, 2078, 1633, 1469, 1480,
+      # 1321)#.sort_by{|g|g.nome}
+    # @escolas = Escola.find([lista]).sort_by{|g|g.nome}
+    # @escolas = lista.split.sort_by{|g|g.nome}
     identificacoes = CombinePDF.new
-    @escolas.sort_by{|g|g.nome}.each do |escola|
+    @escolas.each do |escola|
+      # @escolas.sort_by{|g|g.nome}.each do |escola|
       # escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.each do | lotacoes |
-
         f = 0
         identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
           r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
-          r.add_field "ESCOLA", escola.nome
+          # r.add_field "ESCOLA", escola.nome
           r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
           r.add_field "INEP",view_context.detalhes(escola.codigo)
           r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
           r.add_field "EMISSOR", current_user.name
           # r.add_field "TESTE", data
-
           r.add_section("DISCIPLINAS", escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }) do |s|
             s.add_field ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
             s.add_field ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
@@ -278,19 +256,15 @@ class EscolasController < ApplicationController
         arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{escola.object_id}.odt")
         system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
         identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
-
       # end
-
     end
     send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
   end
-
   def lotacoes_por_escolab
     @escolas = Escola.find(1473,1539).sort_by{|g|g.nome}
     identificacoes = CombinePDF.new
     @escolas.sort_by{|g|g.nome}.each do |escola|
       escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.group_by{|g| [g.funcionario.disciplina_contratacao.nome] }.each do | data, frequencias |
-
         f = 0
         identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
           r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
@@ -300,7 +274,6 @@ class EscolasController < ApplicationController
           r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
           r.add_field "EMISSOR", current_user.name
           r.add_field "TESTE", data
-
           r.add_section("DISCIPLINAS", frequencias) do |s|
             s.add_field ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
             s.add_field ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
@@ -316,15 +289,12 @@ class EscolasController < ApplicationController
         system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
         identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
       end
-
     end
     send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
   end
-
   def lotacoes_por_escolaa
     @escola = Escola.find(1473,1539)
     @lotacoes = @escola.lotacoes.ativas.de_efetivos.de_professores
-
     f = 0
     identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola.odt") do |r|
       r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
@@ -341,14 +311,11 @@ class EscolasController < ApplicationController
         t.add_column("CATEGORIA") { |t| view_context.categorias_gerais(t.funcionario) }
         # t.add_column("FUNCIONARIO") { |t|t.funcionario.id }
       end
-
-
     #     end
     #     arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{componente.object_id}.odt")
     #     system "unoconv -f pdf /tmp/identificacao-#{componente.object_id}.odt"
     #     identificacoes << CombinePDF.load("/tmp/identificacao-#{componente.object_id}.pdf")
   end
-
     # end
     # send_data identificacoes.to_pdf, filename: "Listas de frequências - #{ @evento.nome }.pdf ", type: "application/pdf"
     arquivo_iestudantil = identificacao.generate("/tmp/iestudantil_do_aluno-#{@escola.id}.odt")
@@ -356,7 +323,6 @@ class EscolasController < ApplicationController
     f = File.open("/tmp/iestudantil_do_aluno-#{@escola.id}.pdf",'r')
     send_file(f,:filename=>"Identidade Estudantil - #{@escola.id}.pdf",:content_type=>"application/pdf")
   end
-
   # PUT /escolas/1
   # PUT /escolas/1.xml
   def update
@@ -376,17 +342,14 @@ class EscolasController < ApplicationController
       end
     end
   end
-
   # DELETE /escolas/1
   # DELETE /escolas/1.xml
   def destroy
     @escola = Escola.find(params[:id])
     @escola.destroy
-
     respond_to do |format|
       format.html { redirect_to(escolas_url) }
       format.xml  { head :ok }
     end
   end
-
 end

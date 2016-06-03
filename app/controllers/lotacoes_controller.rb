@@ -345,10 +345,12 @@ class LotacoesController < ApplicationController
     @processos = @funcionario.processos.order("created_at ASC, processo ASC")
     @url = pessoa_funcionario_lotacoes_path(@pessoa,@funcionario)
     @lotacao = Lotacao.new(params[:lotacao])
+
     respond_to do |format|
       if @lotacao.save
-        format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.
-          Destino: ") }
+        puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAé aqui"
+        format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa), :notice => "O Funcionário foi lotado com sucesso.
+          Destino: #{@lotacao.destino.nome}") }
         format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
       else
         format.html { render :action => "index",:danger=>"Lotação não criada" }

@@ -312,6 +312,84 @@ end
     send_file(arquivo.path,:filename=>"Relatório Servidores sem Categoria Funcional.xls",:type=>"application/vnd.ms-excel")
   end
 
+  def gerar_contrato
+    @funcionario = Funcionario.find(params[:funcionario_id])
+    @pessoa = Pessoa.find(params[:pessoa_id])
+    # @contrato = Contrato.find_by_lotacao_id(@lotacao.id)||Contrato.create(:lotacao_id=>@lotacao.id,:funcionario_id=>@funcionario.id,:numero=>Contrato.count+1)
+
+    # File.open("/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png", 'wb'){|f| f.write @lotacao.img_codigo }
+    if ["ASSISTENTE ADMINISTRATIVO","ANALISTA ADMINISTRATIVO"].include?(@funcionario.cargo.nome)
+      @modelo = "#{Rails.public_path}/modelos/contrato_nm.odt"
+    else
+      @modelo = "#{Rails.public_path}/modelos/contrato.odt"
+    end
+    contrato = ODFReport::Report.new(@modelo) do |r|
+      r.add_field "NOME", @pessoa.nome
+
+      # r.add_field "CONTRATO",@contrato.numero
+      r.add_field "NOME", @pessoa.nome
+      r.add_field "NACIONALIDADE",@pessoa.nacionalidade
+      r.add_field "ESTCIVIL",@pessoa.estado_civil
+      r.add_field "RG",@pessoa.rg
+      r.add_field "CPF", @pessoa.cpf
+      r.add_field "ENDERECO", view_context.endereco(@pessoa)
+      r.add_field "MRESID",view_context.detalhes(@pessoa.cidade)
+      r.add_field "CEP",@pessoa.cep
+      r.add_field "CONTATO", view_context.contato(@pessoa)
+      r.add_field "DESTINO",view_context.lotacao(@funcionario)
+      r.add_field "MOPCAO",view_context.municipio(@funcionario)
+      r.add_field "MLOTACAO",view_context.municipio_destino(@lotacao.destino)
+      r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
+      r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
+      r.add_field "DATA",@funcionario.data_nomeacao.to_s_br
+      r.add_field "USER", (@lotacao.usuario.name.upcase if @lotacao.usuario)
+      r.add_field "ANO", Date.today.year
+
+      # r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
+    end
+    arquivo_carta = carta.generate("/tmp/carta-#{@funcionario.matricula}.odt")
+    system "unoconv -f pdf /tmp/carta-#{@funcionario.matricula}.odt"
+    f = File.open("/tmp/carta-#{@funcionario.matricula}.pdf",'r')
+    send_file(f,:filename=>"Carta de Apresentaçao - #{@pessoa.nome} - #{@funcionario.matricula}.pdf",:content_type=>"application/pdf")
+    # @funcionario = Funcionario.find(params[:id])
+    # @pessoa = @funcionario.pessoa
+    # # @pessoa = Pessoa.find(params[:pessoa_id])
+    # # @funcionario = @pessoa.funcionarios.first
+    # @lotacao = @funcionario.lotacoes.ativas.first
+    # @contrato = Contrato.find_by_lotacao_id(@lotacao.id)||Contrato.create(:lotacao_id=>@lotacao.id,:funcionario_id=>@funcionario.id,:numero=>Contrato.count+1)
+    # File.open("/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png", 'wb'){|f| f.write @lotacao.img_codigo }
+    # if ["ASSISTENTE ADMINISTRATIVO","ANALISTA ADMINISTRATIVO"].include?(@funcionario.cargo.nome)
+    #   @modelo = "#{Rails.public_path}/modelos/contrato_nm.odt"
+    # else
+    #   @modelo = "#{Rails.public_path}/modelos/contrato.odt"
+    # end
+    # contrato = ODFReport::Report.new(@modelo) do |r|
+    #   r.add_field "CONTRATO",@contrato.numero
+    #   r.add_field "NOME", @pessoa.nome
+    #   r.add_field "NACIONALIDADE",@pessoa.nacionalidade
+    #   r.add_field "ESTCIVIL",@pessoa.estado_civil
+    #   r.add_field "RG",@pessoa.rg
+    #   r.add_field "CPF", @pessoa.cpf
+    #   r.add_field "ENDERECO", view_context.endereco(@pessoa)
+    #   r.add_field "MRESID",view_context.detalhes(@pessoa.cidade)
+    #   r.add_field "CEP",@pessoa.cep
+    #   r.add_field "CONTATO", view_context.contato(@pessoa)
+    #   r.add_field "DESTINO",view_context.lotacao(@funcionario)
+    #   r.add_field "MOPCAO",view_context.municipio(@funcionario)
+    #   r.add_field "MLOTACAO",view_context.municipio_destino(@lotacao.destino)
+    #   r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
+    #   r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
+    #   r.add_field "DATA",@funcionario.data_nomeacao.to_s_br
+    #   r.add_field "USER", (@lotacao.usuario.name.upcase if @lotacao.usuario)
+    #   r.add_field "ANO", Date.today.year
+    #   r.add_image :codigo_barras,  "/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png"
+    # # end
+    # arquivo_contrato = contrato.generate("/tmp/contrato-#{@funcionario.matricula}.odt")
+    # system "unoconv -f pdf /tmp/contrato-#{@funcionario.matricula}.odt"
+    # f = File.open("/tmp/contrato-#{@funcionario.matricula}.pdf",'r')
+    # send_file(f,:filename=>"Contrato Nº #{@contrato.numero}- #{@pessoa.nome}.pdf",:content_type=>"application/pdf")
+  end
+
   def boletins
     @funcionario = Funcionario.find(params[:funcionario_id])
     @boletins = BoletimFuncional.do_func(@funcionario.id).all.paginate :page => params[:page], :per_page => 10
@@ -424,7 +502,7 @@ end
     @funcionario = Funcionario.find(params[:id])
     respond_to do |format|
        # @funcionario.update_attributes(params[:funcionario])
-      if @funcionario.update_attributes!(params[:funcionario])
+       if @funcionario.update_attributes!(params[:funcionario])
         format.js   { render :layout => false }
         puts "filho da putaaaaaaaaaaaaaa"
       else
@@ -439,9 +517,11 @@ end
 
     respond_to do |format|
       format.html { redirect_to(pessoa_funcionarios_url(@pessoa)) }
-      format.xml  { head :ok }
+      format.json { head :no_content }
+      format.js   { render :layout => false }
     end
   end
+
   private
   def pessoa
     @pessoa = Pessoa.find_by_slug(params[:pessoa_id])

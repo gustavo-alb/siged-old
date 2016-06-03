@@ -512,19 +512,23 @@ module ApplicationHelper
       else
         return "#{lotacao.destino.nome.upcase}"
       end
-    elsif opcao == 'qualificacao'
-      if lotacao.destino_type=="Escola"
-        if lotacao.destino.municipio.present?
-          if lotacao.natureza.present?
-            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
-          elsif lotacao.natureza.nil? or lotacao.natureza.blank?
-            return "#{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})"
+    elsif opcao == 'qualificacao' #and lotacao.nil?
+      if !lotacao.nil?
+        if lotacao.destino_type=="Escola"
+          if lotacao.destino.municipio.present?
+            if lotacao.natureza.present?
+              return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
+            elsif lotacao.natureza.nil? or lotacao.natureza.blank?
+              return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase} (#{detalhes(lotacao.destino.municipio)})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
+            end
+          elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
+            return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
           end
-        elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
-          return "#{lotacao.destino.nome.upcase}"
+        else
+          return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
         end
-      else
-        return "#{lotacao.destino.nome.upcase}"
+      elsif lotacao.nil?
+        return ", atualmente sem lotação definida"
       end
     end
   end
@@ -548,6 +552,16 @@ module ApplicationHelper
           return "#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
         elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
           return "#{funcionario.categoria}"
+        end
+      elsif funcionario.categoria.nil? or funcionario.categoria.blank?
+        return "#{detalhes(funcionario.categoria)}"
+      end
+    elsif opcao == "qualificacao"
+      if funcionario.categoria.present?
+        if funcionario.categoria.nome == ''
+          return "/#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
+        elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
+          return "/#{funcionario.categoria}"
         end
       elsif funcionario.categoria.nil? or funcionario.categoria.blank?
         return "#{detalhes(funcionario.categoria)}"

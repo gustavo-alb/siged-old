@@ -1,0 +1,43 @@
+<div class="page-header" align='center'>
+  <h1>Contrato Administrativo - Confirmação<!-- &nbsp;&nbsp;&nbsp;
+    <div class="btn-group">
+      <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <%# if can? :contrato_novo, @pessoa %>
+        <li><%#= link_to '<i class="fa fa-user fa-fw"></i> Novo contrato'.html_safe, contrato_novo_pessoa_path(@pessoa), :method => :put, :remote => true %></li>
+        <%# end %>
+      </ul>
+    </div> -->
+  </h1>
+  <h3><%= @pessoa.nome%></h3>
+</div>
+<%= simple_form_for @lotacao, :url => wizard_path do |f| %>
+<div class='col-sm-12 col-md-12 well'>
+  <div class="col-sm-4 col-md-4">
+    <%= f.label "Tipo"%>
+    <%= f.input :tipo_lotacao, label: false, :as => :radio_buttons_inline, :collection=>@tipos,:checked=>'REGULAR' %>
+    <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}, label: "Data" if current_user.role? :chefia_ucolom or current_user.role? :admin%>
+    <%= f.input :data_lotacao,:as=>:hidden,:input_html=>{:class=>"data",:value=>Date.today} if !current_user.role?(:chefia_ucolom)%>
+    <%= f.input :data_lotacao,:as=>:string,:input_html=>{:class=>"data",:value=>Date.today}, label: "Data da Lotação" %>
+  </div>
+  <div class="col-sm-8 col-md-8">
+    <div id="destino">
+      <%= f.input :natureza,:label=>"Natureza da Lotação",:collection=>@naturezas,:checked=>'REGULAR', item_wrapper_class: 'inline'%>
+      <%= f.input :destino_nome,:label=>"Escola",:as=>:autocomplete,:url=>lotacoes_autocomplete_escola_nome_path,:input_html=>{:class=>"string form-control"},:id_element=>"#lotacao_destino_id",:required=>true%>
+      <%= f.input :destino_id,:as=>:hidden%>
+      <%= f.input :destino_id,:as=>:hidden,:input_html=>{:id=>"lotacao_destino_id"}%>
+      <%= f.input :destino_type,:as=>:hidden,:input_html=>{:value=>"Escola"}%>
+    </div>
+  </div>
+  <%= f.input :usuario_id,:as=>:hidden,:input_html=>{:value=>current_user.id}%>
+  <%= f.input :funcionario_id,:as=>:hidden,:input_html=>{:value=>@funcionario.id}%>
+  <div class="col-sm-12 col-md-12">
+    <%= f.input :motivo,:label=>"Observações",:input_html=>{:size=>"2x3"}%>
+  </div>
+</div>
+<%= link_to 'Retornar à etapa anterior', previous_wizard_path,:class => 'btn btn-default btn-xs' %>
+<%= f.submit "Confirmar",:class => 'btn btn-primary' %>
+<%= link_to 'Cancelar e ir para Funcionários', pessoa_funcionarios_path,:class => 'btn btn-default btn-xs' %>
+<% end %>

@@ -1,0 +1,76 @@
+<div class="page-header" align='center'>
+  <h1>Contrato Administrativo - Confirmação<!-- &nbsp;&nbsp;&nbsp;
+    <div class="btn-group">
+      <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-right" role="menu">
+        <%# if can? :contrato_novo, @pessoa %>
+        <li><%#= link_to '<i class="fa fa-user fa-fw"></i> Novo contrato'.html_safe, contrato_novo_pessoa_path(@pessoa), :method => :put, :remote => true %></li>
+        <%# end %>
+      </ul>
+    </div> -->
+  </h1>
+  <h3><%= @pessoa.nome%></h3>
+</div>
+<div class='col-sm-12 col-md-12 well'>
+  <div class='col-sm-5 col-md-5'>
+    <h4 align="center">Infomações atualizadas</h4>
+    <br>
+    <dl class="dl-horizontal">
+      <dt><strong>Matricula:</strong></dt>
+      <dd><%= @funcionario.matricula %></dd>
+      <dt><strong>Cargo:</strong></dt>
+      <dd><%= detalhes(@funcionario.cargo) %></dd>
+      <%if @funcionario.cargo and @funcionario.cargo.nome=="PROFESSOR"%>
+      <dt><strong>Disciplina</strong></dt>
+      <dd><%= detalhes(@funcionario.disciplina_contratacao) %></dd>
+      <%end%>
+      <dt><strong>Subárea:</strong></dt>
+      <dd><%= detalhes(@funcionario.distrito) %></dd>
+      <dt><strong>Categoria:</strong></dt>
+      <dd><%= categoria_funcional(@funcionario,"entidade_sigla") %></dd>
+      <dt><strong>Referência/Nivel:</strong></dt>
+      <dd><%= detalhes(@funcionario.nivel) %></dd>
+      <!--     <dt><strong>Decreto de Nomeação:</strong></dt>
+      <dd><%= @funcionario.decreto_nomeacao %></dd> -->
+      <!--     <dt><strong>Termo de Posse:</strong></dt>
+      <dd><%= detalhes(@funcionario.termo_posse) %></dd> -->
+      <!--       <dt><strong>Orgão:</strong></dt>
+      <dd><%= detalhes(@funcionario.orgao) %></dd> -->
+      <dt><strong>Admissão:</strong></dt>
+      <dd><%= @funcionario.data_nomeacao.to_s_br %></dd>
+      <dt><strong>Município de Opção:</strong></dt>
+      <dd><%= detalhes(@funcionario.municipio) %></dd>
+      <!--     <dt><strong>Observacao:</strong></dt>
+      <dd><%= detalhes(@funcionario.observacao) %></dd> -->
+      <dt><strong>Situação:</strong></dt>
+      <dd><%=situacao(@funcionario)%></dd>
+    </dl>
+  </div>
+  <div class='col-sm-7 col-md-7'>
+    <!-- <h4 align="center">Infomações pendentes</h4> -->
+    <br>
+
+    <% if @funcionario.lotacoes.em_aberto.count < 1 %>
+    <div class="jumbotron" align='center'>
+      <br>
+      <p>Este funcionário ainda não possui lotações para movimentar</p>
+      <br>
+      <%= simple_form_for @funcionario, :url => wizard_path do |f| %>
+      <%= f.input :ativo,:as=>:hidden,:input_html=>{:value=>true}%>
+      <%= f.input :situacao_id,:as=>:hidden,:input_html=>{:value=>@situacao.id}%>
+      <%= f.submit "Ativar funcionário e ir para lotações",:class => 'btn btn-primary btn-lg' %>
+      <% end %>
+    </div>
+    <% elsif @funcionario.lotacoes.em_aberto.count > 0 %>
+    <div class="jumbotron" align='center'>
+      <br>
+      <p>Este funcionário já possui lotações para movimentar</p>
+      <br>
+      <%= link_to 'Ir para funcionários', pessoa_funcionario_lotacoes_path(@pessoa),:class => 'btn btn-primary btn-lg' %>
+    </div>
+    <% end %>
+  </div>
+</div>
+<%= link_to 'Retornar à etapa anterior', previous_wizard_path,:class => 'btn btn-default btn-xs' %>

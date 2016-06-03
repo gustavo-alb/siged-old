@@ -29,6 +29,9 @@ class Funcionario < ActiveRecord::Base
   scope :efetivos,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Ipesap"), Categoria.find_by_nome("Estado Antigo"), Categoria.find_by_nome("Estado Novo"),Categoria.find_by_nome("Concurso de 2012"),Categoria.find_by_nome("992")])}
   scope :federais,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Ex-Território do Amapá"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
   scope :contratos,  -> { joins(:categoria).where("categorias.nome ilike ?","%contrato%")}
+  scope :contratos_adm,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Horista"), Categoria.find_by_nome("Contrato Horista - Indígena"), Categoria.find_by_nome("
+    Contrato Horista - Afrodescendente"), Categoria.find_by_nome("Contrato Gestão - Nível Médio"), Categoria.find_by_nome("Contrato Administrativo")])}
+
   scope :em_comissao,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
 
 
@@ -63,7 +66,7 @@ class Funcionario < ActiveRecord::Base
   has_many :processos,:dependent=>:destroy
   has_many :boletins, :class_name=>"BoletimFuncional",:dependent=>:nullify
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
-  has_one :contrato
+  has_one :contrato, :dependent => :destroy
   accepts_nested_attributes_for :lotacoes
   accepts_nested_attributes_for :pessoa
   scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}
@@ -85,10 +88,6 @@ class Funcionario < ActiveRecord::Base
       self.situacao = Situacao.find_by_nome("Ativo")
     end
   end
-
-
-
-
 
   def aposentadoria
     self.data_nomeacao.months_since(300)
@@ -324,65 +323,83 @@ class Funcionario < ActiveRecord::Base
         return "À DISPOSIÇÃO DO NUPES"
       end
     end
-    else
-      return "NÃO LOTADO"
-    end
-
-    def ids_disciplinas
-      disciplinas=[]
-      if !self.disciplina_contratacao.nil?
-        disc = self.disciplina_contratacao.disciplinas
-        disc.each do |d|
-          disciplinas.push d.id
-        end
-        return disciplinas
-      end
-    end
-
-
-
-    private
-    def criar_comissionado
-      processo = self.funcoes_comissionadas.new
-      processo.tipo = "COMISSÃO"
-      if self.cargo_em_comissao.to_s=="true"
-        if self.tipo_comissao=="DIRETORIA"
-          processo.natureza="COMISSÃO/DIRETORIA"
-          if self.tipo_comissao=="DIRETORIA ADJUNTA"
-            processo.natureza="COMISSÃO/DIRETORIA"
-          elsif self.tipo_comissao=="SECRETARIA"
-            processo.natureza="COMISSÃO/SECRETARIA"
-          elsif self.tipo_comissao=="CHEFIA"
-            processo.natureza="COMISSÃO/CHEFIA"
-            self.comissao_ativa=true
-            self.save!
-          end
-          processo.funcionario_id=self.id
-          processo.ano_processo=self.data_decreto_nomeacao.year
-          processo.encaminhado_em=self.data_decreto_nomeacao
-          processo.data_decreto_nomeacao=self.data_decreto_nomeacao
-          processo.decreto_nomeacao=self.decreto_nomeacao
-          if processo.save!
-            num=processo.id
-            cod=Num.new
-            if self.tipo_comissao=="DIRETORIA"
-              processo.processo="CD#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
-            elsif self.tipo_comissao=="SECRETARIA"
-              processo.processo="CS#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
-            elsif self.tipo_comissao=="CHEFIA"
-              processo.processo="CC#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
-            elsif self.tipo_comissao=="DIRETORIA ADJUNTA"
-              processo.processo="CA#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
-            end
-            processo.save!
-          end
-        end
-      end
-    end
-
-
-
-
-
-
+  else
+    return "NÃO LOTADO"
   end
+
+  def ids_disciplinas
+    disciplinas=[]
+    if !self.disciplina_contratacao.nil?
+      disc = self.disciplina_contratacao.disciplinas
+      disc.each do |d|
+        disciplinas.push d.id
+      end
+      return disciplinas
+    end
+  end
+
+  def categoria_contrato?
+    if self.categoria.nome.include?('Contrato')
+      puts "muito verdade"
+      return true
+    else
+      puts "muito falso"
+      return false
+    end
+  end
+
+  def cargo_nat_especial?
+    if self.cargo.nome.include?('NAT ESPECIAL')
+      puts "muito verdade"
+      return true
+    else
+      puts "muito falso"
+      return false
+    end
+  end
+
+  private
+  def criar_comissionado
+    processo = self.funcoes_comissionadas.new
+    processo.tipo = "COMISSÃO"
+    if self.cargo_em_comissao.to_s=="true"
+      if self.tipo_comissao=="DIRETORIA"
+        processo.natureza="COMISSÃO/DIRETORIA"
+        if self.tipo_comissao=="DIRETORIA ADJUNTA"
+          processo.natureza="COMISSÃO/DIRETORIA"
+        elsif self.tipo_comissao=="SECRETARIA"
+          processo.natureza="COMISSÃO/SECRETARIA"
+        elsif self.tipo_comissao=="CHEFIA"
+          processo.natureza="COMISSÃO/CHEFIA"
+          self.comissao_ativa=true
+          self.save!
+        end
+        processo.funcionario_id=self.id
+        processo.ano_processo=self.data_decreto_nomeacao.year
+        processo.encaminhado_em=self.data_decreto_nomeacao
+        processo.data_decreto_nomeacao=self.data_decreto_nomeacao
+        processo.decreto_nomeacao=self.decreto_nomeacao
+        if processo.save!
+          num=processo.id
+          cod=Num.new
+          if self.tipo_comissao=="DIRETORIA"
+            processo.processo="CD#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
+          elsif self.tipo_comissao=="SECRETARIA"
+            processo.processo="CS#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
+          elsif self.tipo_comissao=="CHEFIA"
+            processo.processo="CC#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
+          elsif self.tipo_comissao=="DIRETORIA ADJUNTA"
+            processo.processo="CA#{cod.numero(num)}/#{self.data_decreto_nomeacao.year}"
+          end
+          processo.save!
+        end
+      end
+    end
+  end
+
+
+
+
+
+
+end

@@ -147,4 +147,78 @@ module PessoasHelper
     return raw(html)
   end
 
+  def listagem_contratos(pessoa)
+    table_head = %{
+      <br>
+    }
+    table_body = ""
+    table_body << "<div class='col-sm-12 col-md-12, well'>"
+    table_body << "<br>"
+    table_body << "<table class='table table-striped table-hover table-bordered table-condensed'>"
+    # table_body << "<table class='table table-striped'>"
+    table_body << "<thead>"
+    table_body << "<tr>"
+    table_body << "<th>MATRÍCULA</th>"
+    table_body << "<th>CARGO</th>"
+    table_body << "<th>OBSERVAÇÕES</th>"
+    table_body << "<th>Ações</th>"
+    table_body << "</tr>"
+    table_body << "</thead>"
+    table_body << "<tbody>"
+    if pessoa.funcionarios.contratos_adm.count > 0
+      pessoa.funcionarios.contratos_adm.each do |funcionario|
+        table_body << "<tr>"
+        table_body << "<td>#{detalhes(funcionario.matricula)}</td>"
+        table_body << "<td>#{detalhes(funcionario.cargo)}</td>"
+        table_body << "<td>#{observacao_contrato(funcionario,'tabela')}</td>"
+        table_body << "<td>"
+        table_body << "<div class='btn-group'>"
+        table_body << "<button class='btn btn-default btn-xs dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Opções<span class='caret'></span></button>"
+        table_body << "<ul class='dropdown-menu dropdown-menu-right'>"
+        table_body << "<li>#{link_to '<i class="fa fa-edit fa-fw"></i> Acompanhar contrato'.html_safe,pessoa_funcionario_contrato_path(pessoa,funcionario.id,:dados_pessoais)}</li>"
+
+        table_body << "<li>#{link_to '<i class="fa fa-edit fa-fw"></i> Testar contrato'.html_safe,pessoa_funcionario_contrato_path(pessoa,funcionario.id,:first,:flow=>"facebook")}</li>"
+        if can? :destroy, funcionario
+          table_body << "<li>#{link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_funcionario_path(pessoa,funcionario), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'deletar_este'}</li>"
+        end
+        table_body << "</ul>"
+        table_body << "</div>"
+        table_body << "</td>"
+        table_body << "</tr>"
+      end
+    else
+      table_body << "<tr><td colspan='3'>Este funcionário não possui vínculos por Contrato Administrativo</td>"
+      if pessoa.funcionarios.count > 0
+        table_body << "<td>#{link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, pessoa_funcionarios_path(pessoa), :class => 'btn btn-default btn-xs'}</td>"
+      else
+        table_body << "<td><a class='btn btn-default btn-xs' data-toggle='tooltip' data-placement='left' title='Esta pessoa não possui nenhum registro funcional'><i class='fa fa-meh-o fa-fw'></i>Nenhum registro</a></td>"
+      end
+      table_body << "</tr>"
+
+
+
+
+    end
+    table_body << "</tbody>"
+    table_body << "</table>"
+    table_body << "</div>"
+    #               <%# if can? :update,Funcionario and  can? :edit,Funcionario %>
+    #               <%# end %>
+    #               <%# if can? :read,Lotacao %>
+    #               <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(@pessoa,funcionario) %></li>
+    #               <%# end %>
+    #               <% if funcionario.categoria_contrato? %>
+    #               <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(@pessoa,funcionario) %></li>
+    #               <% else %>
+    #               bunda
+    #               <% end %>
+
+    #   </table>
+    #
+    html = table_head + table_body
+    raw(html)
+  end
+
+
+
 end
