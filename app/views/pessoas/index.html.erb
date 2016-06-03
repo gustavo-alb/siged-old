@@ -50,7 +50,7 @@ Pessoas
             <% end %>
             <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, pessoa_path(p) %></li>
             <% if can? :destroy,Pessoa %>
-            <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_path(p),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+            <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_path(p),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
             <% end %>
 
             <%if can? :qualificar_funcionario,Pessoa -%>
