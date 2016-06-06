@@ -19,7 +19,11 @@
      <td><%= f.matricula %></td>
      <td><%= detalhes(f.pessoa) %></td>
      <td><%= cargo_resumido(f) %></td>
+     <%if @tipo=="departamento"%>
      <td><%= destino(f.lotacoes.where("destino_id = ? or destino_id in (?)",@objeto.id,@objeto.departamentos_filho_ids).last) %></td>
+     <%else%>
+      <td><%= destino(f.lotacoes.ativas.last) %></td>
+     <%end%>
      <td>
      <%if can? :manage,Lotacao and !@objeto.lotacoes.ativas.find_by_funcionario_id(f.id).nil?%>
      <%= link_to "Devolver Funcionário", pessoa_funcionario_lotacao_devolver_funcionario_path(f.pessoa,f,@objeto.lotacoes.ativas.find_by_funcionario_id(f.id))  %>
