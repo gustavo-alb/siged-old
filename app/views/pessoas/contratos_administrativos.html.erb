@@ -5,10 +5,15 @@
         <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-right" role="menu">
-        <% if can? :contrato_novo, @pessoa %>
-        <li><%= link_to '<i class="fa fa-user fa-fw"></i> Novo contrato'.html_safe, contrato_novo_pessoa_path(@pessoa), :method => :put, :remote => true %></li>
+        <% if can? :criar_funcionario_contrato, Funcionario %>
+        <li><a role="button" data-toggle="modal" data-target="#criar_pessoa_contrato-notes"><i class='fa fa-plus fa-fw'></i> Novo contrato administrativo</a></li>
         <% end %>
+        <% if can? :contrato_novo, @pessoa %>
+        <li><%#= link_to '<i class="fa fa-user fa-fw"></i> Novo contrato'.html_safe, contrato_novo_pessoa_path(@pessoa), :method => :put, :remote => true %></li>
+        <% end %>
+        <% if @pessoa.funcionarios.contratos_adm.count < 1 %>
         <li><%= link_to '<i class="fa fa-times fa-fw"></i> Cancelar'.html_safe, pessoa_cancelar_pessoa_contrato_path(:pessoa_id=>@pessoa.id), method: :put %></li>
+        <% end %>
       </ul>
     </div>
   </h1>
@@ -20,3 +25,47 @@
 <div class="modal_observacao_contrato">
   <%= modal_observacao_contrato_p(@pessoa) %>
 </div>
+<!-- Modal criar_pessoa_contrato -->
+<div class="modal fade" id="criar_pessoa_contrato-notes" tabindex="-1" role="dialog" aria-labelledby="criar_pessoa_contrato-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" align="center">
+        <h3 class="modal-title" id="criar_pessoa_contrato-label" align='center'>Novo Contrato Administrativo Temporário</h3>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :funcionario_contrato, url: criar_funcionario_contrato_pessoa_funcionarios_path(:pessoa_id=>@pessoa.id), :method => :post do |f| %>
+        <div class='col-sm-12 col-md-12 well'>
+          <div class='col-sm-12 col-md-12'>
+           <%= f.label :cargo_id %>
+           <%= f.collection_select :cargo_id, Cargo.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+         </div>
+         <div class='col-sm-12 col-md-12'>
+          <br>
+          <div class='col-sm-4 col-md-4 row'>
+           <%= f.input :categoria_id, as: :select, :collection=>@categorias_contrato, include_blank: "Selecione a categoria", label: 'Categoria funcional', selected: :blank %>
+         </div>
+         <div class='col-sm-4 col-md-4  row'>
+          <%= f.input :nivel_id,as: :select, :collection=>@niveis, include_blank: "Selecione a referência", label: 'Referência/Nível', selected: :blank  %>
+        </div>
+        <div class='col-sm-4 col-md-4'>
+          <%= f.input :data_nomeacao, input_html: {class: "data"} %>
+          <%= f.input :entidade_id, input_html: { value: current_user.entidade_id },:as=>:hidden %>
+          <%#= f.input :pessoa_id, input_html: { value: @pessoa.id },:as=>:hidden %>
+        </div>
+      </div>
+    </div>
+    <div class='col-sm-12 col-md-12'>
+      <% if current_user.entidade? == true %>
+      <%= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+      <% else %>
+      <a class='btn btn-default' data-toggle='tooltip' data-placement='left' title='Seu usuário não tem Entidade definida. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Confirmação indisponível</a>
+      <% end %>
+    </div>
+    <% end %>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+    </div>
+  </div>
+</div>
+</div>
+</div>    <!-- Modal criar_pessoa_contrato-->

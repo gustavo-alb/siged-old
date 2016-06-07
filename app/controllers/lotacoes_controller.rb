@@ -348,6 +348,9 @@ class LotacoesController < ApplicationController
 
     respond_to do |format|
       if @lotacao.save
+        if @funcionario.categoria_contrato? and @funcionario.contrato.lotacao_id.blank?
+          @funcionario.contrato.update_attributes(:lotacao_id=>@lotacao.id)
+        end
         puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAé aqui"
         format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa), :notice => "O Funcionário foi lotado com sucesso.
           Destino: #{@lotacao.destino.nome}") }
@@ -520,6 +523,8 @@ class LotacoesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+
 
   private
 

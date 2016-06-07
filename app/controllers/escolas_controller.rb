@@ -222,53 +222,47 @@ class EscolasController < ApplicationController
       end
     end
   end
+
   def lotacoes_por_escola
-    @escolas = Escola.find(1473,1669).sort_by{|g|g.nome}
-    # @escolas = Escola.find(1475,1669)
-      # , 1660, 1414, 1464, 1476, 1707, 1420, 1429, 1394, 1657, 2082, 1656, 1474, 1665, 1672, 1479, 1530, 1485, 1392, 1522, 1641, 1661, 1666, 1368, 1490, 1569, 1373, 1711, 1467, 1494, 1335, 1318, 1444, 1500, 1539, 1367, 1663, 1659, 1537, 1674, 1514, 1516, 1570, 1499, 1671, 2083, 1511, 1662, 1305, 1399, 1644, 1538, 1473, 1477, 1491, 1652, 1673, 1679, 1299, 1638, 1520, 1647, 1512, 1670, 1643, 1518, 1326, 1675, 2078, 1633, 1469, 1480,
-      # 1321)#.sort_by{|g|g.nome}
-    # @escolas = Escola.find([lista]).sort_by{|g|g.nome}
-    # @escolas = lista.split.sort_by{|g|g.nome}
+    @escolas = Escola.lotacoes_ativas.uniq.municipal.all.sort_by{|g|[g.municipio.nome,g.nome]}
     identificacoes = CombinePDF.new
     @escolas.each do |escola|
-      # @escolas.sort_by{|g|g.nome}.each do |escola|
-      # escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.each do | lotacoes |
-        f = 0
-        identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
-          r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
-          # r.add_field "ESCOLA", escola.nome
-          r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
-          r.add_field "INEP",view_context.detalhes(escola.codigo)
-          r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
-          r.add_field "EMISSOR", current_user.name
-          # r.add_field "TESTE", data
-          r.add_section("DISCIPLINAS", escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }) do |s|
-            s.add_field ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
-            s.add_field ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
-            s.add_field ("CARGO") { |s| view_context.cargo_disciplina(s.funcionario) }
-            s.add_field ("CATEGORIA") { |s| view_context.categorias_gerais(s.funcionario) }
-          end
-          #       r.add_table("PARTICIPANTES", frequencias.sort_by{|g|g.participacao.pessoa.nome} ) do |t|
-          #         t.add_column("PARTICIPANTE") { |t|t.participacao.pessoa.nome.upcase }
-          #         t.add_column("ORDEM"){|a| f && f+=1}
-          # end
+      f = 0
+      identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
+        r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
+        r.add_field "ESCOLA", escola.nome
+        r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
+        r.add_field "INEP",view_context.detalhes(escola.codigo)
+        r.add_field "N_SERVIDORES", escola.lotacoes.ativas.count
+        r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
+        r.add_field "EMISSOR", current_user.name
+        r.add_table("FUNCIONARIOS", escola.lotacoes.ativas.sort_by{|g|g.funcionario.pessoa.nome}) do |t|
+        # r.add_table("FUNCIONARIOS", escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }) do |t|
+          t.add_column("ORDEM"){|a| f && f+=1}
+          t.add_column ("MATRICULA") { |s| view_context.detalhes(s.funcionario.matricula) }
+          t.add_column ("FUNCIONARIO") { |s| view_context.detalhes(s.funcionario.pessoa) }
+          t.add_column ("CARGO") { |s| view_context.cargo_disciplina(s.funcionario) }
+          t.add_column ("CATEGORIA") { |s| view_context.categoria_funcional(s.funcionario,"simples") }
         end
-        arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{escola.object_id}.odt")
-        system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
-        identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
+      end
+      arquivo_iestudantis = identificacao.generate("/tmp/identificacao-#{escola.object_id}.odt")
+      system "unoconv -f pdf /tmp/identificacao-#{escola.object_id}.odt"
+      identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
       # end
     end
-    send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
+    send_data identificacoes.to_pdf, filename: "Listagem de lotações - em #{Time.now.strftime("%d de %B de %Y às %H:%M").downcase}.pdf ", type: "application/pdf"
   end
+
   def lotacoes_por_escolab
-    @escolas = Escola.find(1473,1539).sort_by{|g|g.nome}
+    @escolas = Escola.municipal#.sort_by{|g|g.nome}
     identificacoes = CombinePDF.new
-    @escolas.sort_by{|g|g.nome}.each do |escola|
+    # @escolas.sort_by{|g|g.nome}.each do |escola|
+    @escolas.each do |escola|
       escola.lotacoes.ativas.de_efetivos.de_professores.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] }.group_by{|g| [g.funcionario.disciplina_contratacao.nome] }.each do | data, frequencias |
         f = 0
         identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
           r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
-          r.add_field "ESCOLA", escola.nome
+          r.add_field "ESCOLA", view_context.detalhes(escola)
           r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
           r.add_field "INEP",view_context.detalhes(escola.codigo)
           r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
@@ -290,10 +284,10 @@ class EscolasController < ApplicationController
         identificacoes << CombinePDF.load("/tmp/identificacao-#{escola.object_id}.pdf")
       end
     end
-    send_data identificacoes.to_pdf, filename: "Listas de frequências -.pdf ", type: "application/pdf"
+    send_data identificacoes.to_pdf, filename: "Listas de frequências -  em #{Time.now.strftime("%d de %B de %Y às %H:%M").downcase}.pdf ", type: "application/pdf"
   end
   def lotacoes_por_escolaa
-    @escola = Escola.find(1473,1539)
+    @escola = Escola.find(params[:escola_id])
     @lotacoes = @escola.lotacoes.ativas.de_efetivos.de_professores
     f = 0
     identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola.odt") do |r|
@@ -303,7 +297,7 @@ class EscolasController < ApplicationController
       r.add_field "INEP",view_context.detalhes(@escola.codigo)
       r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
       r.add_field "EMISSOR", current_user.name
-      r.add_table("PARTICIPANTES", @lotacoes.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] } ) do |t|
+      r.add_table("FUNCIONARIOS", @lotacoes.sort_by{|g| [g.funcionario.disciplina_contratacao.nome, g.funcionario.pessoa.nome ] } ) do |t|
         t.add_column("ORDEM"){|a| f && f+=1}
         t.add_column("MATRICULA") { |t| view_context.detalhes(t.funcionario.matricula) }
         t.add_column("FUNCIONARIO") { |t| view_context.detalhes(t.funcionario.pessoa) }

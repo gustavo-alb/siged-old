@@ -1,49 +1,128 @@
-
 <div class='col-sm-12 col-md-12 col-lg-12'>
-  <div class='col-sm-6 col-md-6 col-lg-6'>
-    <i class='fa fa-home fa-fw fa-5x'></i>
-    <br>Bem vindo azul
+  <div id="myTab1">
+    <div class="col-sm-4 col-md-4 col-lg-4">
+      <div class=' active div_fixa_2x' style="background-color: #000099; text-align: center; color: white" href="#principal" data-toggle="tab">
+        <br>
+        <i class='fa fa-home fa-fw fa-5x'></i>
+        <h4>Bem vindo, <b><%= current_user.name.split(/ /)[0].titleize %></b></h4>
+        <br>
+        Sua última sessão ocorreu em: <b><%= current_user.last_sign_in_at.strftime("%d/%m/%Y às %H:%M") %></b>.<br>
+        Com este, você soma <b><%= current_user.sign_in_count %></b> acessos.<br>
+      </div>
+    </div>
+    <div class='col-sm-8 col-md-8 col-lg-8'>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <!-- <div class=" div_fixa" style="background-color: #28b779; text-align: center; color: white" href="#sobre" data-toggle="tab"> -->
+        <!-- <div class=" div_fixa" style="background-color: #28b779; text-align: center; color: white"> -->
+        <%= link_to '<div class=" div_fixa" style="background-color: #28b779; text-align: center; color: white"><i class="fa fa-search fa-fw fa-3x"></i><br><br>Localizar uma pessoa</div>'.html_safe, pessoas_path %>
+        <!-- <i class='fa fa-search fa-fw fa-3x'></i> -->
+        <!-- <br> -->
+        <!-- <br>Localizar uma pessoa -->
+        <!-- </div> -->
+      </div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+<!--         <div class="div_fixa" style="background-color: #ffb848; text-align: center; color: white" href="#escola_departamento" data-toggle="tab">
+          <i class='fa fa-sitemap fa-fw fa-3x'></i>
+          <br>
+          <br>Escolas ou departamentos
+        </div> -->
+        <%= link_to '<div class="div_fixa" style="background-color: #ffb848; text-align: center; color: white"><i class="fa fa-sitemap fa-fw fa-3x"></i><br><br>Escolas</div>'.html_safe, escolas_path %>
+      </div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <%= link_to "<div class='div_fixa' style='background-color: #666699; text-align: center; color: white'><i class='fa fa-user fa-fw fa-3x'></i><br><br>Atualizar meu perfil</div>".html_safe,edit_user_registration_url %>
+      <!--   <div class="div_fixa" style="background-color: #852b99; text-align: center; color: white" href="#organizacao" data-toggle="tab">
+          <i class='fa fa-user fa-fw fa-3x'></i>
+          <br>
+          <br>Atualizar meu perfil
+        </div> -->
+      </div>
+      <div class='col-sm-12 col-md-12 col-lg-12'>
+      </div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="div_fixa" style="background-color: #852b99; text-align: center; color: white" href="#confirmar_lotacao" data-toggle="tab">
+          <i class='fa fa-check-square-o fa-fw fa-3x'></i>
+          <br>
+          <br>Confirmar uma lotação
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="div_fixa" style="background-color: #cc3300; text-align: center; color: white" href="#ponto_diario" data-toggle="tab">
+          <i class='fa fa-file-text-o fa-fw fa-3x'></i>
+          <br>
+          <br>Ponto diário
+        </div>
+      </div>
+      <div class="col-sm-4 col-md-4 col-lg-4">
+        <div class="div_fixa" style="background-color: #000000; text-align: center; color: white" href="#relatorios" data-toggle="tab">
+          <i class='fa fa-print fa-fw fa-3x'></i>
+          <br>
+          <br>Relatórios
+        </div>
+      </div>
+    </div>
   </div>
-  <div class='col-sm-6 col-md-6 col-lg-6'>
-
-    <div class='col-sm-12 col-md-12 col-lg-12'>
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-      <i class='fa fa-search fa-fw'></i>
-        <br>
-        localizar uma pessoa
+</div>
+<div class='col-sm-12 col-md-12 col-lg-12'>
+  <br>
+  <div id="myTabContent" class="tab-content">
+    <div class="tab-pane fade active in" id="principal">
+<!--       <dl class="dl-horizontal">
+        <dt>Lotações em aberto</dt>
+        <dd><%= Lotacao.em_aberto.count %></dd>
+        <dt>Lotações ativas</dt>
+        <dd><%= Lotacao.ativas.count %></dd>
+        <dt>Lotações finalizadas</dt>
+        <dd><%= Lotacao.finalizadas.count %></dd>
+        <dt>Lotações em escolas rurais</dt>
+        <dd><%= Lotacao.em_escolas_rurais.count %></dd>
+        <dt>Lotações em prefeituras</dt>
+        <dd><%= Lotacao.em_prefeituras.count %></dd>
+        <dt>Lotações em aberto</dt>
+        <dd><%= Lotacao.em_orgaos.count %></dd>
+        <dt>Lotações em setoriais</dt>
+        <dd><%= Lotacao.em_setoriais.count %></dd>
+        <dt>Lotações servidores efetivos</dt>
+        <dd><%= Lotacao.de_efetivos.count %></dd>
+        <dt>Lotações de professores</dt>
+        <dd><%= Lotacao.de_professores.count %></dd>
+        <dt>Total de lotações</dt>
+        <dd><%= Lotacao.count %></dd>
+      </dl> -->
+    </div>
+    <div class="tab-pane fade" id="sobre">
+      <%#= render :partial => 'pessoas/xindex.html.erb' %>dd
+    </div>
+    <%# if @evento.componentes.present? %>
+    <div class="tab-pane fade" id="escola_departamento">
+    </div>
+    <div class="tab-pane fade" id="confirmar_lotacao">
+      <div class='col-sm-12 col-md-12 col-lg-12 well' align="center">
+        <div class="buscar_confirmacao_cod_barra">
+        <%= render :partial=>'lotacao_localizar'%>
+          <%#= simple_form_for :buscar_cod_barra, url: buscar_cod_barra_pessoas_path, :method => :js, :remote => true do |f|%>
+          <%#= f.input :codigo_barra,:autofocus=>true,:placeholder=>"Escaneie o código de barras"%>
+          <%#= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+          <%# end %>
+        </div>
       </div>
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-        <i class='fa fa-check-square-o fa-fw'></i>
-        <br>
-        confirmar uma lotação
-      </div>
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-        <i class='fa fa-sitemap fa-fw'></i>
-        <br>localizar uma escola ou departamento
-      </div>
-
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-
-        <i class='fa fa-user fa-fw'></i>
-        <br>
-        atualizar meu perfil
-      </div>
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-        <i class='fa fa-file-text-o fa-fw'></i>
-        <br>
-        ponto diário
-      </div>
-      <div class='col-sm-4 col-md-4 col-lg-4'>
-
-       <i class='fa fa-print fa-fw'></i>
-       <br>
-       Relatórios
+    </div>
+    <div class="tab-pane fade" id="ponto_diario">
+     <div class='col-sm-12 col-md-12 col-lg-12 well' align="center">
+       Em breve!
      </div>
    </div>
- </div>
+   <div class="tab-pane fade" id="relatorios">
+    <div class='col-sm-12 col-md-12 col-lg-12 well' align="center">
+      <p><%= link_to "Relatório Geral de Lotação", relatorios_geral_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+      <p><%= link_to "Relatório de Funcionários Sem Lotação", relatorios_sem_lotacao_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+      <% if can? :lotacoes_por_escola, Escola %>
+      <p><%= link_to "Relatório de Funcionários em escolas municipais", lotacoes_por_escola_escolas_path,:class=>"btn btn-lg btn-primary" if user_signed_in? %></p>
+      <% end %>
+      <p><%= link_to "Relatório de Lotação - SEED e Anexos", relatorios_seed_anexos_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+      <p><%= link_to "Relatório de Lotação - Cargos Comissionados", relatorios_cargos_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+      <p><%= link_to "Relatório de Contrato Administrativo Docente", relatorios_contrato_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+      <p><%= link_to "Relatório de Contrato Administrativo Não Docente", relatorios_contrato_nao_docente_path,:class=>"btn btn-lg btn-primary" if user_signed_in?%></p>
+    </div>
+  </div>
+</div>
 </div>

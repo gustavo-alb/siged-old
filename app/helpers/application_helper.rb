@@ -239,7 +239,7 @@ module ApplicationHelper
 
   def cargo_disciplina(func)
     if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao and func.nivel
-      if func.disciplina_contratacao.nome != 'ZIndefinido'
+      if func.disciplina_contratacao.nome != ' Não Definido'
         return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
       else
         return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"

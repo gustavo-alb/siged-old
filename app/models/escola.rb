@@ -43,6 +43,11 @@ class Escola < ActiveRecord::Base
   scope :em_comissao,  -> { joins(:funcionarios).where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
   scope :estadual,  -> { where("rede ilike ?","estadual")}
 
+  scope :lotacoes_ativas,  -> { joins(:lotacoes).where("lotacaos.ativo = 'true'")}
+  # scope :com_turma, -> {joins(:turma).where("turmas.nome is not null")}
+  # .where("lotacoes.ativo = true")
+  # scope :do_integral, -> {joins(:turma).where("turmas.turno = 4")}
+
   ZONA=[["Urbana","Urbana"],["Rural","Rural"]]
 
 

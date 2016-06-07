@@ -1,7 +1,7 @@
 <%model_class = Usuario%>
 <%content_for :titulo do%>
-  Detalhes de 
-  <%end%>
+Detalhes de
+<%end%>
 <dl class="dl-horizontal">
   <dt><strong>Name:</strong></dt>
   <dd><%= @usuario.name %></dd>
@@ -9,11 +9,13 @@
   <dd><%= @usuario.username %></dd>
   <dt><strong>Email:</strong></dt>
   <dd><%= @usuario.email %></dd>
+  <dt><strong>Entidade:</strong></dt>
+  <dd><%= @usuario.entidade.nome if @usuario.entidade%></dd>
 </dl>
 <%= link_to 'Voltar', usuarios_path, :class => 'btn btn-default'  %>
 <%= link_to 'Editar', edit_usuario_path(@usuario), :class => 'btn btn-default' %>
 <%= link_to "Apagar",
-              usuario_path(@usuario),
-              :method => 'delete',
-              :data => { :confirm => "Você tem certeza?" },
-              :class => 'btn btn-danger' %>
+usuario_path(@usuario),
+:method => 'delete',
+:data => { :confirm => "Você tem certeza?" },
+:class => 'btn btn-danger' %>

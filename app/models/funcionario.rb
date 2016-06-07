@@ -7,8 +7,10 @@ class Funcionario < ActiveRecord::Base
   #default_scope joins(:pessoa).order('pessoas.nome asc')
   #default_scope where('funcionarios.entidade_id in (?)',User.usuario_atual.entidade_ids)
   validates_presence_of  :cargo_id,:categoria_id,:nivel_id,:entidade_id,:data_nomeacao,:message=>"Não pode ficar em branco!"
-  validates_presence_of :disciplina_contratacao_id,:if=>Proc.new{|f|f.cargo and f.cargo.nome=="Professor"}
-  validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id,Categoria.find_by_nome("Contrato Administrativo").id].include?(f.categoria.id) if f.categoria}
+  # validates_presence_of :disciplina_contratacao_id,:if=>Proc.new{|f|f.cargo and f.cargo.nome=="Professor"}
+  validates_presence_of :disciplina_contratacao_id,:if=>Proc.new{|f|f.cargo and f.cargo.nome=="Professor"},:on=>:update
+  # validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id,Categoria.find_by_nome("Contrato Administrativo").id].include?(f.categoria.id) if f.categoria}
+  validates_presence_of :municipio_id,:if=>Proc.new{|f|[Categoria.find_by_nome("Concurso de 2012").id,Categoria.find_by_nome("Estado Novo").id,Categoria.find_by_nome("Contrato Administrativo").id].include?(f.categoria.id) if f.categoria},:on=>:update
   validates_uniqueness_of :matricula,:message=>"já existente",:on=>:create,:if => Proc.new {|f| not f.matricula.blank?}
   #audited :associated_with => :pessoa
   #has_associated_audits
@@ -358,6 +360,30 @@ class Funcionario < ActiveRecord::Base
     end
   end
 
+  def lotavel?
+    if self.ativo == true and self.situacao == Situacao.find_by_nome("Ativo")
+      return true
+    else
+      return false
+    end
+  end
+
+  def lotado_ativamente?
+    if self.lotacoes.ativas.count > 0 #ativo == true and self.situacao == Situacao.find_by_nome("Ativo")
+      return true
+    else
+      return false
+    end
+  end
+
+  def contrato_completo?
+    if self.contrato and self.contrato.lotacao
+      return true
+    else
+      return false
+    end
+  end
+
   private
   def criar_comissionado
     processo = self.funcoes_comissionadas.new
@@ -396,10 +422,5 @@ class Funcionario < ActiveRecord::Base
       end
     end
   end
-
-
-
-
-
 
 end

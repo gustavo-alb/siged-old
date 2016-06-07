@@ -1,0 +1,18 @@
+<%model_class = Relatorio%>
+<%content_for :titulo do%>
+  Detalhes de 
+  <%end%>
+  <dl class="dl-horizontal">
+          <dt><strong>Index:</strong></dt>
+      <dd><%= @relatorio.index %></dd>
+          <dt><strong>Show:</strong></dt>
+      <dd><%= @relatorio.show %></dd>
+    
+  </dl>
+  <%= link_to 'Voltar', relatorios_path, :class => 'btn btn-default'  %>
+  <%= link_to 'Editar', edit_relatorio_path(@relatorio), :class => 'btn btn-default' %>
+  <%= link_to "Apagar",
+              relatorio_path(@relatorio),
+              :method => 'delete',
+              :data => { :confirm => "Você tem certeza?" },
+              :class => 'btn btn-danger' %>

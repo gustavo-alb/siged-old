@@ -1,0 +1,4 @@
+<%= simple_form_for :buscar_cod_barra, url: buscar_cod_barra_pessoas_path, :method => :js, :remote => true do |f|%>
+<%= f.input :codigo_barra,:autofocus=>true,:placeholder=>"Escaneie o código de barras"%>
+<%= f.submit "Confirmar!!!", :class => 'btn btn-primary' %>
+<% end %>

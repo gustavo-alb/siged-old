@@ -49,12 +49,13 @@
     </dl>
   </div>
   <div class='col-sm-7 col-md-7'>
-    <!-- <h4 align="center">Infomações pendentes</h4> -->
     <br>
-
-    <% if @funcionario.lotacoes.em_aberto.count < 1 %>
     <div class="jumbotron" align='center'>
       <br>
+
+      <% if can? :read, Lotacao %>
+
+      <% if @funcionario.lotacoes.em_aberto.count < 1 %>
       <p>Este funcionário ainda não possui lotações para movimentar</p>
       <br>
       <%= simple_form_for @funcionario, :url => wizard_path do |f| %>
@@ -62,15 +63,19 @@
       <%= f.input :situacao_id,:as=>:hidden,:input_html=>{:value=>@situacao.id}%>
       <%= f.submit "Ativar funcionário e ir para lotações",:class => 'btn btn-primary btn-lg' %>
       <% end %>
-    </div>
-    <% elsif @funcionario.lotacoes.em_aberto.count > 0 %>
-    <div class="jumbotron" align='center'>
-      <br>
+      <% elsif @funcionario.lotacoes.em_aberto.count > 0 %>
       <p>Este funcionário já possui lotações para movimentar</p>
       <br>
       <%= link_to 'Ir para funcionários', pessoa_funcionario_lotacoes_path(@pessoa),:class => 'btn btn-primary btn-lg' %>
+      <% end %>
+      <% else %>
+      <p>Seu perfil não permite acesso ao controle de lotações</p>
+      <br>
+      <%= link_to 'Voltar para o início', pessoas_path,:class => 'btn btn-primary btn-lg' %>
+      <% end %>
+
+
     </div>
-    <% end %>
   </div>
 </div>
 <%= link_to 'Retornar à etapa anterior', previous_wizard_path,:class => 'btn btn-default btn-xs' %>

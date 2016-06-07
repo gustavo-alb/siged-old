@@ -7,14 +7,14 @@
     </button>
     <ul class="dropdown-menu dropdown-menu-right" role="menu">
       <% if can? :edicao_rapida, @funcionario %>
-      <li><a role='button' data-toggle='modal' data-target='#automodal'><i class='fa fa-edit fa-fw'></i>  Edição rápida</a></li>
+      <li><a role='button' data-toggle='modal' data-target='#edicao_rapida'><i class='fa fa-edit fa-fw'></i>  Edição rápida</a></li>
       <% end %>
     </ul>
   </div>
   <%end%>
 </div>
 <% if can? :edicao_rapida, @funcionario %>
-<div id="automodall" class="modal fade">
+<div id="edicao_rapida" class="modal fade">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">

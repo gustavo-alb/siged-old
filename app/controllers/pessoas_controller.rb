@@ -57,7 +57,26 @@ class PessoasController < ApplicationController
   end
 
   def dashboard
-
+    @q = Pessoa.ransack(params[:q])
+    if params[:q] and params[:q].size>0
+      @busca = params[:q][:nome_or_cpf_or_rg_or_funcionarios_matricula_cont]
+      if params[:sem_lotacao]=="true" and params[:mais_de_um_vinculo].nil?
+        @pessoas = @q.result.order('nome ASC').sem_lotacao.uniq.paginate :page => params[:page], :per_page => 10
+      elsif params[:mais_de_um_vinculo]=="true" and params[:sem_lotacao].nil?
+        @pessoas = @q.result.order('nome ASC').mais_de_um_vinculo.uniq.paginate :page => params[:page], :per_page => 10
+      elsif params[:sem_lotacao]=="true" and params[:mais_de_um_vinculo]=="true"
+        @pessoas = @q.result.order('nome ASC').sem_lotacao_com_mais_de_um_vinculo.uniq.paginate :page => params[:page], :per_page => 10
+      else
+        @pessoas = @q.result(distinct: true).order('nome ASC').paginate :page => params[:page], :per_page => 10
+      end
+    else
+      @pessoas = Pessoa.order("nome asc").paginate :page => params[:page], :per_page => 10
+    end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.js { render :partial => "pessoas" }
+      format.xml  { render :xml => @pessoas }
+    end
   end
 
   def departamento
@@ -153,9 +172,12 @@ class PessoasController < ApplicationController
       r.add_field "ENDERECO", view_context.endereco(@pessoa)
       r.add_field "TELEFONE", view_context.telefones_pessoa(@pessoa,"qualificacao")
       r.add_field "USER", @usuario.name
+      r.add_field "DATA", Time.now.strftime("%d de %B de %Y").downcase
+      r.add_field "DATAHORA", Time.now.strftime("%d/%m/%Y às %H:%M:%S").downcase
       r.add_table("FUNCIONARIOS", @funcionarios) do |t|
         t.add_column("CARGO_E_MATRICULA") { |t| view_context.cargo_e_matricula(t) }
         t.add_column("QUADRO") { |t| view_context.qualificacao_funcional_regime(t,"qualificacao") }
+        t.add_column("MUNICIPIO_OPCAO") { |t| view_context.municipio_opcao(t) }
         t.add_column("ADMISSÃO") { |t| view_context.data_nomeacao(t) }
         t.add_column("ORGAO") { |t| view_context.orgao_do_funcionario(t) }
         t.add_column("LOTACAO") { |t| view_context.lotacao_atualizada(t.lotacoes.last,"qualificacao") }
@@ -195,7 +217,7 @@ class PessoasController < ApplicationController
   def cancelar_pessoa_contrato
     @pessoa = Pessoa.find(params[:pessoa_id])
     # if !@pessoa.registro_valido?
-      @pessoa.destroy
+    @pessoa.destroy
     # end
     redirect_to pessoas_path, :alert => 'Processo cancelado. As informações produzidas foram descartadas.'
   end
@@ -352,7 +374,8 @@ class PessoasController < ApplicationController
   end
 
   def contratos_administrativos
-
+    @categorias_contrato = Categoria.where("nome ilike ?","%contrato%").collect{|c|[c.nome,c.id]}
+    @niveis = ReferenciaNivel.order(:codigo).collect{|n|["#{n.nome} - #{n.codigo} - #{n.jornada}H",n.id]}
   end
 
   def contrato_novo
@@ -456,6 +479,29 @@ class PessoasController < ApplicationController
     arquivo = File.open("/tmp/relatorio-#{Time.now.strftime("%d-%m-%Y-%H-%M-%S")}.xls",'w')
     pasta.write_to_xls("#{arquivo.path}")
     send_file(arquivo.path,:filename=>"Relatório Contratos Docentes.xls",:type=>"application/vnd.ms-excel")
+  end
+
+
+  def buscar_cod_barra
+    @lotacao = Lotacao.find_by_codigo_barra(params[:buscar_cod_barra][:codigo_barra])
+
+    respond_to do |format|
+      if @lotacao
+        format.html { render :partial => "lotacao_confirmar", :notice => 'Pessoa cadastrada com sucesso.' }
+        format.js   { render :layout => false }
+        puts "fsssssssssilho da putaaaaaaaaaaaaaa"
+      else
+        puts "Caraaaaaaaaaaaaaaaaaaaaaaaaaaaaalho"
+        redirect_to dashboard_pessoas_path, alert: "Algo não aconteceu como deveria. Que tal tentar novamente?"
+      end
+    end
+
+    # if @lotacao
+    #   puts "#{@lotacao}"
+    #   # render html: "<strong>#{@lotacao.id}</strong>".html_safe
+    # else
+    #   puts "Nada aqui"
+    # end
   end
 
 end
