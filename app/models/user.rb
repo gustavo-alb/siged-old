@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   #attr_accessible :email, :password, :password_confirmation, :remember_me,:name,:username,:role_ids,:entidade_ids,:grupos_educacional_ids,:orgao_id,:departamento_id,:enabled,:escola_id,:funcionario_id,:gerar_ponto,:unidade_organizacional_id,:unidade_organizacional_type,:tipo_uo
 
-
   def active_for_authentication?
     enabled?
   end

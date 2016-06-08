@@ -1,4 +1,5 @@
 <%content_for :titulo do%>
+<%= javascript_include_tag "highcharts.js", "chartkick" %>
 Pessoas&nbsp;&nbsp;&nbsp;
 <div class="btn-group">
   <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -123,11 +124,8 @@ Pessoas&nbsp;&nbsp;&nbsp;
                     <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar Funcionário".html_safe, pessoa_funcionario_path(p,f),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
                     <% end %>
                     <% if f.contrato_completo? %>
-                    <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>p.id,:funcionario_id=>f,:contrato_id=>f.contrato.id) %>
-                      <% end %>
-
-                     <!-- /pessoas/:pessoa_id/funcionarios/:funcionario_id/contrato/:contrato_id/gerar_contrato
-                     GET    /pessoas/:pessoa_id/funcionarios/:funcionario_id/gerar_contrato</li>> -->
+                    <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>p.id,:funcionario_id=>f,:contrato_id=>f.contrato.id) %></li>
+                    <% end %>
                    </ul>
                  </div>
                </dd>

@@ -352,7 +352,7 @@ class LotacoesController < ApplicationController
           @funcionario.contrato.update_attributes(:lotacao_id=>@lotacao.id)
         end
         puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAé aqui"
-        format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa), :notice => "O Funcionário foi lotado com sucesso.
+        format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.
           Destino: #{@lotacao.destino.nome}") }
         format.xml  { render :xml => @lotacao, :status => :created, :location => @lotacao }
       else

@@ -14,7 +14,7 @@ class Funcionarios::ContratoController < ApplicationController
       @entidade = Entidade.find_by_nome("Governo do Estado do Amapá")
     when :dados_adicionais
       @disciplinas = DisciplinaContratacao.order(:nome).collect{|p|[p.nome,p.id]}
-      # @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]}
+      @distritos = @funcionario.municipio.distritos.all.collect{|m|[m.nome,m.id]}
     when :termino
       @situacao = Situacao.find_by_nome('Ativo')
     end

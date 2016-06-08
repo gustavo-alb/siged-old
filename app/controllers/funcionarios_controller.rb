@@ -341,7 +341,7 @@ end
       r.add_field "MLOTACAO",view_context.municipio_destino(@lotacao.destino)
       r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
       r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
-      r.add_field "DATA",@funcionario.data_nomeacao.to_s_br
+      r.add_field "DATA",@funcionario.data_nomeacao.strftime("%d de %B de %Y").downcase
       r.add_field "USER", (@lotacao.usuario.name.upcase if @lotacao.usuario)
       r.add_field "ANO", Date.today.year
 
@@ -544,6 +544,7 @@ end
 
       @funcionario = @pessoa.funcionarios.new(:cargo_id=>@cargo_id,:categoria_id=>@categoria_id,:nivel_id=>@nivel_id,:entidade_id=>@entidade_id,:data_nomeacao=>@data_nomeacao,:ativo=>false,:situacao=>@situacao_id)
       if @funcionario.save!
+        @contrato = Contrato.create!(:funcionario_id=>@funcionario.id,:numero=>(if Contrato.last then Contrato.last.numero+1 else 1 end))
         puts "chupa essa --> #{@pessoa}"
         redirect_to pessoa_funcionario_contrato_path(@pessoa,@funcionario.id,:dados_funcionais), notice: "Funcionário cadastrado com sucesso!"
       else

@@ -1,3 +1,105 @@
+<%content_for :titulo do%>
+<%= javascript_include_tag "highcharts.js", "chartkick" %>
+<%end%>
+<!-- <div class="row">
+  <div class="col-sm-12 col-md-12 col-lg-12">
+    <div align='center'>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="panel" style="background-color: #852b99; text-align: center; color: white">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3">
+                <%= image_tag("eventos.png", width: '400%') %>
+              </div> -->
+              <!-- eventos -->
+<!--               <div class="col-xs-9 text-right">
+                <div class="huge"><%#= @eventos.disponiveis.count %></div>
+                <div>E-ventos</div>
+              </div>
+            </div>
+          </div>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">Detalhes</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3"> -->
+                <!-- <i class="fa fa-comments fa-4x"></i> -->
+<!--                 <%= image_tag("noticias.png", width: '380%') %>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%#= Noticia.destaque.count%></div>
+                <div>Notícias</div>
+              </div>
+            </div>
+          </div>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">View Detalhes</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="panel" style="background-color: #28b779; text-align: center; color: white">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3"> -->
+                <!-- <i class="fa fa-comments fa-4x"></i> -->
+<!--                 <%= image_tag("projetos.png", width: '380%') %>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%#= @eventos.count%></div>
+                <div>Projetos</div>
+              </div>
+            </div>
+          </div>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">Detalhes</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <div class="panel" style="background-color: #ffb848; text-align: center; color: white">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-xs-3"> -->
+                <!-- <i class="fa fa-comments fa-4x"></i> -->
+<!--                 <%= image_tag("caneta.png", width: '330%') %>
+              </div>
+              <div class="col-xs-9 text-right">
+                <div class="huge"><%#= @eventos.count%></div>
+                <div>Solicitações</div>
+              </div>
+            </div>
+          </div>
+          <a href="#">
+            <div class="panel-footer">
+              <span class="pull-left">Detalhes</span>
+              <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+              <div class="clearfix"></div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
 <div class='col-sm-12 col-md-12 col-lg-12'>
   <div id="myTab1">
     <div class="col-sm-4 col-md-4 col-lg-4">
@@ -66,7 +168,9 @@
   <br>
   <div id="myTabContent" class="tab-content">
     <div class="tab-pane fade active in" id="principal">
-<!--       <dl class="dl-horizontal">
+    <h4 align="center">Demonstrativo de lotações</h4>
+    <%= pie_chart Lotacao.includes(:usuario).group('users.name').count, label: "lotações" %>
+    <!--       <dl class="dl-horizontal">
         <dt>Lotações em aberto</dt>
         <dd><%= Lotacao.em_aberto.count %></dd>
         <dt>Lotações ativas</dt>

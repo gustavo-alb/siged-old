@@ -14,9 +14,7 @@
 </div>
 
 <%= simple_form_for :confirmacao,:url=>pessoa_funcionario_lotacao_salvar_confirmacao_url(@lotacao.funcionario.pessoa,@lotacao.funcionario,@lotacao.id), :html => { :class => 'form-vertical' } do |f| %>
-<!-- , :method => :js, :remote => true -->
 <%= f.input :codigo_barra, input_html: {value: @lotacao.codigo_barra}, as: :hidden %>
-
 <% if @lotacao.finalizada == true %>
 <%= link_to "<i class='fa fa-remove fa-fw'></i> Cancelar".html_safe, dashboard_pessoas_path, :class => 'btn btn-default btn-xs' %>
 <a class="btn btn-primary" data-toggle='tooltip' data-placement='left' title='Este código de barras já foi confirmado.'><i class='fa fa-meh-o fa-fw'></i> Lotação já confirmada</a>

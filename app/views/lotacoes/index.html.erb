@@ -6,9 +6,12 @@
       <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
     </button>
     <ul class="dropdown-menu dropdown-menu-right" role="menu">
-      <% if can? :edicao_rapida, @funcionario %>
-      <li><a role='button' data-toggle='modal' data-target='#edicao_rapida'><i class='fa fa-edit fa-fw'></i>  Edição rápida</a></li>
+      <% if @funcionario.contrato_completo? %>
+      <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>@pessoa.id,:funcionario_id=>@funcionario,:contrato_id=>@funcionario.contrato.id) %></li>
       <% end %>
+      <%# if can? :edicao_rapida, @funcionario %>
+      <!-- <li><a role='button' data-toggle='modal' data-target='#edicao_rapida'><i class='fa fa-edit fa-fw'></i>  Edição rápida</a></li> -->
+      <%# end %>
     </ul>
   </div>
   <%end%>

@@ -229,11 +229,11 @@ class EscolasController < ApplicationController
     @escolas.each do |escola|
       f = 0
       identificacao = ODFReport::Report.new("#{Rails.public_path}/modelos/modelo_lotacao_por_escola1.odt") do |r|
-        r.add_field "RELATORIO", "Relação de servidores efetivos por escola"
+        r.add_field "RELATORIO", "Relação de servidores em escolas municipais"
         r.add_field "ESCOLA", escola.nome
         r.add_field "MUNICIPIO",view_context.detalhes(escola.municipio)
         r.add_field "INEP",view_context.detalhes(escola.codigo)
-        r.add_field "N_SERVIDORES", escola.lotacoes.ativas.count
+        r.add_field "N_SERVIDORES", view_context.contagem_servidores(escola.lotacoes.ativas.count)
         r.add_field "DATA", Time.now.strftime("%d de %B de %Y")
         r.add_field "EMISSOR", current_user.name
         r.add_table("FUNCIONARIOS", escola.lotacoes.ativas.sort_by{|g|g.funcionario.pessoa.nome}) do |t|
