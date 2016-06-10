@@ -132,7 +132,7 @@ class PontosController < ApplicationController
       @obj_tipo = "Escola"
     end
     @data = data
-    if @tipo!="departamento"
+    if @tipo=="departamento"
       @atuais = @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true)
       @filhos_atuais = @objeto.lotacoes_filhos.ativas.where("lotacaos.finalizada = ?  and lotacaos.destino_id in (?) and lotacaos.destino_type = ?",true,@objeto.departamentos_filho_ids,"Departamento")
       if params[:ponto][:subordinados] and params[:ponto][:subordinados]=="1"
