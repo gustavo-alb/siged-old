@@ -148,7 +148,7 @@ class PontosController < ApplicationController
       ponto = l.pontos.find_by_data(data)||l.funcionario.pontos.create(:data=>data,:funcionario_id=>l.funcionario.id,:lotacao_id=>l.id,:usuario=>current_user)
       @pdf << CombinePDF.parse(ponto.arquivo_ponto.file.read)
     end
-    send_data @pdf.to_pdf,:filename=>"Ponto Mensal - #{@objeto.sigla} - #{ I18n.l(data,:format=>"%B de %Y").upcase}.pdf",:type=> 'application/pdf'
+    send_data @pdf.to_pdf,:filename=>"Ponto Mensal - #{@objeto.nome} - #{ I18n.l(data,:format=>"%B de %Y").upcase}.pdf",:type=> 'application/pdf'
   end
 
   def funcionarios
