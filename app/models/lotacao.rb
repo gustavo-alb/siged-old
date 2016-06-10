@@ -26,6 +26,7 @@ class Lotacao < ActiveRecord::Base
   has_many :todos_processos,:class_name=>"Processo"
   has_many :status,:class_name=>"Status",:through=>:processos,:source=>"status"
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
+  has_many :lot_observacoes, :dependent => :destroy
   has_one :contrato,:dependent=>:destroy
   has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
@@ -60,11 +61,11 @@ class Lotacao < ActiveRecord::Base
   scope :interiorizacao_urbana, -> { joins(:funcionario).where("funcionarios.interiorizacao = true and destino_type = 'Escola' and lotacaos.destino_id in (?)",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Urbana'"))}
   scope :em_escolas_rurais, -> { where("destino_id in (?) and destino_type = 'Escola'",Escola.joins(:municipio).where("municipios.nome = 'Macapá' or municipios.nome = 'Santana' and zona = 'Rural'"))}
   scope :em_prefeituras, -> { where("destino_id in (?) and destino_type = 'Orgao'",Orgao.where("nome ilike 'Prefeitura%'"))}
-  scope :em_orgaos, -> { where("destino_type = 'Orgao'")}
   scope :em_setoriais, -> { where("destino_type = 'Departamento'")}
   scope :com_interiorizacao, -> { joins(:funcionario).where("funcionarios.interiorizacao = true")}
   scope :de_efetivos, -> {joins(:funcionario).where("funcionarios.categoria_id = 1 or funcionarios.categoria_id = 5 or funcionarios.categoria_id = 6 or funcionarios.categoria_id = 15")}
   scope :de_professores, -> {joins(:funcionario).where("funcionarios.cargo_id = 98")}
+  scope :state_vazio, -> { where("state IS NOT NULL")}
   attr_accessor :destino_nome
   #delegate :nome,:to=>:destino
   after_create :codigo
@@ -224,18 +225,60 @@ class Lotacao < ActiveRecord::Base
   # end
   # end
 
-  # state_machine :initial => :a_confirmar do
+def pontualidade_apresentacao
+  limite = self.data_lotacao+3.day
+  if self.data_confirmacao < limite
+    return "Apresentaçao feita dentro do prazo"
+  else
+    tempo = self.data_confirmacao - limite
+    if tempo == 1
+      return "Apresentaçao feita fora do prazo (#{tempo.to_i} dia)"
+    elsif tempo > 1
+      return "Apresentaçao feita fora do prazo (#{tempo.to_i} dias)"
+    end
+  end
+end
 
-  #   event :confirmar do
-  #     transition :a_confirmar => :lotado
-  #   end
-  #   event :devolver do
-  #     transition :lotado => :a_disposicao
-  #   end
-  #   event :cancelar do
-  #     transition :a_confirmar => :a_disposicao
-  #   end
-  # end
+def status_para_state
+  if self.status.last.status == 'ENCAMINHADO' or self.status.last.status == 'EM TRÂNSITO'
+    self.encaminhar
+    self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'CANCELADO'
+    self.cancelar
+    self.lot_observacoes.create(:item=>'Cancelado',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'LOTADO'
+    self.confirmar
+    self.lot_observacoes.create(:item=>'Lotado',:descricao=>"",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'À DISPOSIÇÃO DO NUPES' or self.status.last.status == 'NÃO LOTADO'
+    self.devolver
+    self.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+  end
+end
+
+  state_machine :state, :initial => nil do
+    event :encaminhar do
+      transition any => :encaminhado
+    end
+    event :cancelar do
+      # transition :encaminhado => :cancelado
+      transition any => :cancelado
+    end
+    event :confirmar do
+      # transition :encaminhado => :confirmado
+      transition any => :confirmado
+    end
+    event :devolver do
+      # transition :confirmado => :devolvido
+      transition any => :devolvido
+    end
+    after_transition nil => :encaminhado do |lotacao, transition|
+      # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{lotacao.destino.nome}",:responsavel=>"#{lotacao.usuario.name}")
+    end
+    after_transition :confirmado => :devolvido do |lotacao, transition|
+
+    end
+  end
+
   private
   def lotacao_regular
     #self.img_codigo

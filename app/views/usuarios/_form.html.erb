@@ -18,15 +18,32 @@
     </div>
     <div class="col-sm-6 col-md-6">
       <%= f.label 'Limite de atividade' %>
-      <%= f.collection_select :entidade_id, Entidade.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: true, :style => "width: 100%" %>
+      <%= f.collection_select :entidade_id, Entidade.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+    </div>
+    <div class="col-sm-12 col-md-12">
+      <br>
+    </div>
+    <% if !can? :manage, :all %>
+    <div class="col-sm-6 col-md-6 row">
+      <%= f.label 'Órgão' %>
+      <%= f.collection_select :orgao_id, Orgao.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%", input_html: {disabled: true} %>
+      <% else %>
+      <div class="col-sm-6 col-md-6">
+       <%= f.input :orgao_id, :collection=>Orgao.all.collect {|z|[z.nome,z.id]},:prompt=>"Selecione o Órgão", label: 'Nível de ensino do curso', input_html: {disabled: true} %>
+       </div>
+       <% end %>
+
+    <div class="col-sm-6 col-md-6">
+      <%= f.label 'Departamento' %>
+      <%= f.collection_select :unidade_organizacional_id, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
     </div>
   </div>
   <div class="col-sm-12 col-md-12">
-  <br>
+    <br>
     <%= f.input :enabled,:label=>" Habilitado?"%>
   </div>
   <!-- <div class="well"> -->
-    <%#= f.collection_check_boxes :role_ids,@roles,:id,:name%>
+  <%#= f.collection_check_boxes :role_ids,@roles,:id,:name%>
   <!-- </div> -->
 
 </div>

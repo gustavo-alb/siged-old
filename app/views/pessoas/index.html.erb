@@ -1,17 +1,22 @@
 <%content_for :titulo do%>
+<%= javascript_include_tag "highcharts.js", "chartkick" %>
 Pessoas&nbsp;&nbsp;&nbsp;
-<% if can? :manage, :all %>
 <div class="btn-group">
   <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
     <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
   </button>
   <ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <% if can? :create, Pessoa %>
+    <li><%= link_to "<i class='fa fa-user fa-fw'></i> Cadastrar pessoa".html_safe, new_pessoa_path %></li>
+    <% end %>
     <% if can? :criar_pessoa_contrato, Pessoa %>
-    <li><a role="button" data-toggle="modal" data-target="#criar_pessoa_contrato-notes"><i class='fa fa-user fa-fw'></i> Novo contrato</a></li>
+    <li><a role="button" data-toggle="modal" data-target="#criar_pessoa_contrato-notes"><i class='fa fa-plus fa-fw'></i> Novo contrato administrativo</a></li>
+    <% end %>
+    <% if can? :manage, :all %>
+    <li><%= link_to "Lista Teste", teste_lista_lotacao_pessoas_path %></li>
     <% end %>
   </ul>
 </div>
-<% end %>
 <div class="input-group col-md-4 pull-right">
   <%= search_form_for @q do |f|%>
   <div class="input-group">
@@ -24,8 +29,8 @@ Pessoas&nbsp;&nbsp;&nbsp;
   </div>
 </div>
 <%end%>
-<%=link_to "Criar",new_pessoa_path,:class=>"btn btn-primary" if can? :create, Funcionario %>
-<%=link_to "Lista Teste", teste_lista_lotacao_pessoas_path, :class=>"btn btn-primary" if can? :manage, :all %>
+
+
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -110,16 +115,24 @@ Pessoas&nbsp;&nbsp;&nbsp;
                     <% if can? :update, f and  can? :edit,Funcionario %>
                     <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe,edit_pessoa_funcionario_path(p,f) %></li>
                     <% end %>
-                    <% if can? :read, Lotacao %>
+                    <% if can? :read, Lotacao and f.lotavel? %>
                     <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(p,f) %></li>
+                    <% elsif can? :read, Lotacao and !f.lotavel? %>
+                    <li><a data-toggle='tooltip' data-placement='left' title='Servidor com status inativo. Lotação indisponível. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Lotação indisponível</a></li>
                     <% end %>
-                  </ul>
-                </div>
-              </dd>
-            </div>
-          </div>
-          <br/>
-          <div class="row">
+                    <% if can? :destroy, f %>
+                    <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar Funcionário".html_safe, pessoa_funcionario_path(p,f.id),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+                    <% end %>
+                    <% if f.contrato_completo? %>
+                    <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>p.id,:funcionario_id=>f,:contrato_id=>f.contrato.id) %></li>
+                    <% end %>
+                   </ul>
+                 </div>
+               </dd>
+             </div>
+           </div>
+           <br/>
+           <div class="row">
             <div class="col-xs-2">
               <dt>ADMISSÃO:</dt>
               <dd><%=f.data_nomeacao.to_s_br%></dd>
@@ -190,7 +203,7 @@ Pessoas&nbsp;&nbsp;&nbsp;
           </div>
           <div class='col-sm-12 col-md-12'>
             <div class='col-sm-3 col-md-3  row'>
-            <%= f.input :rg %>
+              <%= f.input :rg %>
             </div>
             <div class='col-sm-2 col-md-2'>
               <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
@@ -207,7 +220,11 @@ Pessoas&nbsp;&nbsp;&nbsp;
           </div>
         </div>
         <div class='col-sm-12 col-md-12'>
+          <% if current_user.entidade? == true %>
           <%= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+          <% else %>
+          <a class='btn btn-default' data-toggle='tooltip' data-placement='left' title='Seu usuário não tem Entidade definida. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Confirmação indisponível</a>
+          <% end %>
         </div>
         <% end %>
         <div class="modal-footer">

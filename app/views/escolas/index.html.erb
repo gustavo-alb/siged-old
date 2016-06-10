@@ -1,16 +1,32 @@
 <%content_for :titulo do%>
-Escolas
-<div class="input-group col-md-4 pull-right" style="margin-right: 20px;">
-  <%= search_form_for @q do |f|%>
-  <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
-  <span class="input-group-btn">
-    <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
-    <span class="glyphicon glyphicon-search"></span>
+Escolas<% if can? :create, Escola %>&nbsp;&nbsp;&nbsp;
+<div class="btn-group">
+  <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <% if can? :create, Escola %>
+    <li><%= link_to "<i class='fa fa-plus fa-fw'></i> Cadastrar nova escola".html_safe, new_escola_path %></li>
     <% end %>
-  </span>
+    <% if can? :manage, :all %>
+    <li><%= link_to "Lotações em escolas municipais", lotacoes_por_escola_escolas_path %></li>
+    <li><%#= link_to "Relatórios", relatorios_escolas_path,:class=>"btn btn-primary btn-xs"%></li>
+    <% end %>
+  </ul>
+</div><% end %>
+
+<div class="input-group col-md-4 pull-right">
+  <%= search_form_for @q do |f|%>
+  <div class="input-group">
+    <%= f.search_field :nome_cont,:class=>"form-control input-lg"%>
+    <div class="input-group-btn">
+      <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+      <span class="glyphicon glyphicon-search"></span>
+      <% end %>
+    </div>
+  </div>
 </div>
 <%end%>
-<%= link_to "Criar",new_escola_path,:class=>"btn btn-primary"%>
 <%end%>
 <table class="table table-striped tabela-colapsavel">
   <thead>
@@ -42,14 +58,24 @@ Escolas
       <td><%= detalhes(e.municipio)%></td>
 
       <td>
-        <%= link_to "Editar", edit_escola_path(e),:class=>"btn btn-primary btn-xs"%>
-        <%= link_to "Visualizar",escola_path(e),:class=>"btn btn-primary btn-xs"%>
-        <%= link_to "Apagar", escola_path(e),:class=>"btn btn-danger btn-xs",:method=>:delete,:confirm=>"Tem Certeza?"%>
-        <%= link_to "Lotações ativas", lotacoes_por_escola_escolas_path,:class=>"btn btn-primary btn-xs"%>
-        <%#= link_to "Relatórios", relatorios_escolas_path,:class=>"btn btn-primary btn-xs"%>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escolha <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <% if can? :edit, e %>
+            <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_escola_path(e) %></li>
+            <% end %>
+            <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, escola_path(e) %></li>
+            <% if can? :destroy, e %>
+            <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, escola_path(e),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+            <% end %>
+          </ul>
+        </div>
+
       </td>
     </tr>
     <% end%>
   </tbody>
 </table>
-<%= will_paginate @escola%>
+<div align="center"><%= will_paginate @escola%></div>

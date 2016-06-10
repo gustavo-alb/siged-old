@@ -148,14 +148,59 @@ module ApplicationHelper
       message+="<span class='label label-important'>#{status}</span>"
     elsif status=='EM TRÂNSITO'
       message+="<span class='label label-warning'>#{status}</span>"
-
     else
       message=status
     end
     raw(message)
   end
 
+  def novo_state_lotacao(lotacao,opcao)
+    state = lotacao.state
+    message=""
+    if opcao == 'historico'
+      if state=='encaminhado'
+        message+="<span class='label label-info'>Em trânsito para o destino há #{contar_dias(lotacao.data_lotacao,'simples')}</span>"
+      elsif state=='cancelado'
+        message+="<span class='label label-danger'>Procedimento cancelado</span>"
+      elsif state=='confirmado'
+        message+="<span class='label label-success'>Ativo e confirmado</span> "
+      elsif state=='devolvido'
+        message+="<span class='label label-default'>Finalizado com devolução</span>"
+      else
+        message=state
+      end
+    elsif opcao == 'informacao'
+      # if state=='encaminhado'
+      #   message+="em trânsito para o destino"
+      if state=='cancelado'
+        message+="processo de lotação foi finalizado com cancelamento"
+      # elsif state=='confirmado'
+        # message+="Ativo e confirmado"
+      elsif state=='devolvido'
+        message+="processo de lotação foi finalizado com devolução"
+      else
+        message=state
+      end
+    end
+    raw(message)
+  end
 
+  def contar_dias(data,opcao)
+    diferenca = DateTime.now - data
+    if opcao == 'simples'
+      if diferenca == 1
+        return "#{diferenca.to_i} dia"
+      elsif diferenca > 1
+        return "#{diferenca.to_i} dias"
+      end
+    elsif opcao == 'informacao'
+      if diferenca == 1
+        return ". Assim, contabiliza-se #{diferenca.to_i} dia sem labor efetivo"
+      elsif diferenca > 1
+        return ", Assim, contabiliza-se #{diferenca.to_i} dias sem labor efetivo"
+      end
+    end
+  end
 
   def compativel(mess,comp)
     message=""
@@ -239,7 +284,7 @@ module ApplicationHelper
 
   def cargo_disciplina(func)
     if func.cargo and func.cargo.tipo and func.cargo.tipo.nome=='Magistério/Docência' and func.disciplina_contratacao and func.nivel
-      if func.disciplina_contratacao.nome != 'ZIndefinido'
+      if func.disciplina_contratacao.nome != ' Não Definido'
         return "#{func.cargo.nome.upcase} DE #{func.disciplina_contratacao.nome.upcase}, #{func.nivel.nome.upcase}"
       else
         return "#{func.cargo.nome.upcase}, #{func.nivel.nome.upcase}"
@@ -523,49 +568,49 @@ module ApplicationHelper
             end
           elsif lotacao.destino.municipio.nil? or lotacao.destino.municipio.blank?
             return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
-          end
-        else
-          return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
-        end
-      elsif lotacao.nil?
-        return ", atualmente sem lotação definida"
-      end
-    end
-  end
+end
+else
+  return ", exercendo sua atividade funcional no (a) #{lotacao.destino.nome.upcase})#{jornada_funcional(lotacao.funcionario,"qualificacao")}"
+end
+elsif lotacao.nil?
+  return ", atualmente sem lotação definida"
+end
+end
+end
 
-  def categoria_funcional(funcionario,opcao)
-    if opcao == "simples"
+def categoria_funcional(funcionario,opcao)
+  if opcao == "simples"
+    return "#{detalhes(funcionario.categoria)}"
+  elsif opcao == "entidade_sigla"
+    if funcionario.categoria.nil? or funcionario.categoria.blank?
       return "#{detalhes(funcionario.categoria)}"
-    elsif opcao == "entidade_sigla"
-      if funcionario.categoria.nil? or funcionario.categoria.blank?
-        return "#{detalhes(funcionario.categoria)}"
-      elsif !funcionario.categoria.nil?
-        if funcionario.categoria.entidade.nil?
-          return "#{detalhes(funcionario.categoria.entidade)}/#{detalhes(funcionario.categoria)}"
-        elsif !funcionario.categoria.entidade.nil?
-          return "#{detalhes(funcionario.categoria.entidade.sigla).upcase}/#{detalhes(funcionario.categoria)}"
-        end
-      end
-    elsif opcao == "entidade_nome"
-      if funcionario.categoria.present?
-        if funcionario.categoria.entidade.present?
-          return "#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
-        elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
-          return "#{funcionario.categoria}"
-        end
-      elsif funcionario.categoria.nil? or funcionario.categoria.blank?
-        return "#{detalhes(funcionario.categoria)}"
-      end
-    elsif opcao == "qualificacao"
-      if funcionario.categoria.present?
-        if funcionario.categoria.nome == ''
-          return "/#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
-        elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
-          return "/#{funcionario.categoria}"
-        end
-      elsif funcionario.categoria.nil? or funcionario.categoria.blank?
-        return "#{detalhes(funcionario.categoria)}"
+    elsif !funcionario.categoria.nil?
+      if funcionario.categoria.entidade.nil?
+        return "#{detalhes(funcionario.categoria.entidade)}/#{detalhes(funcionario.categoria)}"
+      elsif !funcionario.categoria.entidade.nil?
+        return "#{detalhes(funcionario.categoria.entidade.sigla).upcase}/#{detalhes(funcionario.categoria)}"
       end
     end
+  elsif opcao == "entidade_nome"
+    if funcionario.categoria.present?
+      if funcionario.categoria.entidade.present?
+        return "#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
+      elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
+        return "#{funcionario.categoria}"
+      end
+    elsif funcionario.categoria.nil? or funcionario.categoria.blank?
+      return "#{detalhes(funcionario.categoria)}"
+    end
+  elsif opcao == "qualificacao"
+    if funcionario.categoria.present?
+      if funcionario.categoria.nome == ''
+        return "/#{funcionario.categoria.entidade.nome}/#{funcionario.categoria.nome}"
+      elsif funcionario.categoria.entidade.nil? or funcionario.categoria.entidade.blank?
+        return "/#{funcionario.categoria}"
+      end
+    elsif funcionario.categoria.nil? or funcionario.categoria.blank?
+      return "#{detalhes(funcionario.categoria)}"
+    end
   end
+end
 end

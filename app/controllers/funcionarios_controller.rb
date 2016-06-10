@@ -315,9 +315,9 @@ end
   def gerar_contrato
     @funcionario = Funcionario.find(params[:funcionario_id])
     @pessoa = Pessoa.find(params[:pessoa_id])
-    # @contrato = Contrato.find_by_lotacao_id(@lotacao.id)||Contrato.create(:lotacao_id=>@lotacao.id,:funcionario_id=>@funcionario.id,:numero=>Contrato.count+1)
+    @contrato = Contrato.find_by_lotacao_id(@lotacao.id)||Contrato.create(:lotacao_id=>@lotacao.id,:funcionario_id=>@funcionario.id,:numero=>Contrato.count+1)
 
-    # File.open("/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png", 'wb'){|f| f.write @lotacao.img_codigo }
+    File.open("/tmp/barcode-#{@funcionario.matricula}-#{@lotacao.id}.png", 'wb'){|f| f.write @lotacao.img_codigo }
     if ["ASSISTENTE ADMINISTRATIVO","ANALISTA ADMINISTRATIVO"].include?(@funcionario.cargo.nome)
       @modelo = "#{Rails.public_path}/modelos/contrato_nm.odt"
     else
@@ -341,7 +341,7 @@ end
       r.add_field "MLOTACAO",view_context.municipio_destino(@lotacao.destino)
       r.add_field "CARGO", view_context.cargo_disciplina(@funcionario)
       r.add_field "FUNCAO", view_context.cargo_disciplina(@funcionario)
-      r.add_field "DATA",@funcionario.data_nomeacao.to_s_br
+      r.add_field "DATA",@funcionario.data_nomeacao.strftime("%d de %B de %Y").downcase
       r.add_field "USER", (@lotacao.usuario.name.upcase if @lotacao.usuario)
       r.add_field "ANO", Date.today.year
 
@@ -519,6 +519,41 @@ end
       format.html { redirect_to(pessoa_funcionarios_url(@pessoa)) }
       format.json { head :no_content }
       format.js   { render :layout => false }
+    end
+  end
+
+  def criar_funcionario_contrato
+
+    # @cargo = Cargo.find_by_nome('CARGO NAT ESPECIAL')
+    # @categoria = Categoria.find_by_nome('Contrato Administrativo')
+    # @nivel = ReferenciaNivel.find_by_nome('Natureza Especial')
+    # @municipio = Municipio.find_by_nome('Macapá')
+    # @entidade = Entidade.find_by_nome('Governo do Estado do Amapá')
+    # @orgao = Orgao.find_by_nome('Secretaria de Estado da Educação')
+    # @situacao = Situacao.find_by_nome("Inativo")
+
+    if params[:funcionario_contrato] and current_user.entidade? == true
+      # @pessoa = Pessoa.find(params[:id])
+      @pessoa = Pessoa.find(params[:pessoa_id])
+      @cargo_id = params[:funcionario_contrato][:cargo_id]
+      @categoria_id = params[:funcionario_contrato][:categoria_id]
+      @nivel_id = params[:funcionario_contrato][:nivel_id]
+      @entidade_id = params[:funcionario_contrato][:entidade_id]
+      @data_nomeacao = params[:funcionario_contrato][:data_nomeacao]
+      @situacao_id = Situacao.find_by_nome("Inativo")
+
+      @funcionario = @pessoa.funcionarios.new(:cargo_id=>@cargo_id,:categoria_id=>@categoria_id,:nivel_id=>@nivel_id,:entidade_id=>@entidade_id,:data_nomeacao=>@data_nomeacao,:ativo=>false,:situacao=>@situacao_id)
+      if @funcionario.save!
+        @contrato = Contrato.create!(:funcionario_id=>@funcionario.id,:numero=>(if Contrato.last then Contrato.last.numero+1 else 1 end))
+        puts "chupa essa --> #{@pessoa}"
+        redirect_to pessoa_funcionario_contrato_path(@pessoa,@funcionario.id,:dados_funcionais), notice: "Funcionário cadastrado com sucesso!"
+      else
+        redirect_to pessoas_path, alert: "Algo saiu como não deveria. Que tal tentar novamento? :~( "
+      end
+    elsif params[:funcionario_contrato] and current_user.entidade? == false
+      redirect_to pessoas_path, alert: "Este usuário não possui Entidade definida. Favor entrar em contato com o Administrador do Sistema. :~( "
+    else
+      redirect_to pessoas_path, alert: "Algo saiu como não deveria. Que tal tentar novamento? :~( "
     end
   end
 

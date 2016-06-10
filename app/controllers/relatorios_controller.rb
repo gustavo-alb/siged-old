@@ -1,6 +1,10 @@
 # -*- encoding : utf-8 -*-
 class RelatoriosController < ApplicationController
-  
+
+  def index
+
+  end
+
   def sem_lotacao
     pasta = Workbook::Book.open("public/modelos/relatorio_sem_lotacao.xls")
     planilha = pasta.sheet.table

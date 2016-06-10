@@ -176,8 +176,6 @@ module PessoasHelper
         table_body << "<button class='btn btn-default btn-xs dropdown-toggle' type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Opções<span class='caret'></span></button>"
         table_body << "<ul class='dropdown-menu dropdown-menu-right'>"
         table_body << "<li>#{link_to '<i class="fa fa-edit fa-fw"></i> Acompanhar contrato'.html_safe,pessoa_funcionario_contrato_path(pessoa,funcionario.id,:dados_pessoais)}</li>"
-
-        table_body << "<li>#{link_to '<i class="fa fa-edit fa-fw"></i> Testar contrato'.html_safe,pessoa_funcionario_contrato_path(pessoa,funcionario.id,:first,:flow=>"facebook")}</li>"
         if can? :destroy, funcionario
           table_body << "<li>#{link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_funcionario_path(pessoa,funcionario), method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'deletar_este'}</li>"
         end

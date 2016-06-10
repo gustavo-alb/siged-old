@@ -1,5 +1,5 @@
-<%model_class = Pessoa%>
-<%content_for :titulo do%>
-Editando <%=@pessoa.nome%>
-<%end%>
+<div class="page-header" align='center'>
+  <h1><%= @pessoa.nome%></h1>
+  <h3>Atualização de registro pessoal</h3>
+</div>
 <%= render :partial => 'form' %>

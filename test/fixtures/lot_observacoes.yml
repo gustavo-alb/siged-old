@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  lotacao_id: 1
+  item: MyString
+  descricao: MyString
+
+two:
+  lotacao_id: 1
+  item: MyString
+  descricao: MyString

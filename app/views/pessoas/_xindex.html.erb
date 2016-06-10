@@ -1,0 +1,278 @@
+<%#content_for :titulo do%>
+Pessoas&nbsp;&nbsp;&nbsp;
+<div class="btn-group">
+  <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <% if can? :create, Pessoa %>
+    <li><%= link_to "<i class='fa fa-user fa-fw'></i> Cadastrar pessoa".html_safe, new_pessoa_path %></li>
+    <% end %>
+    <% if can? :criar_pessoa_contrato, Pessoa %>
+    <li><a role="button" data-toggle="modal" data-target="#criar_pessoa_contrato-notes"><i class='fa fa-plus fa-fw'></i> Novo contrato administrativo</a></li>
+    <% end %>
+    <% if can? :manage, :all %>
+    <li><%= link_to "Lista Teste", teste_lista_lotacao_pessoas_path %></li>
+    <% end %>
+  </ul>
+</div>
+<div class="input-group col-md-4 pull-right">
+  <%= search_form_for @q do |f|%>
+  <div class="input-group">
+    <%= f.search_field :nome_or_cpf_or_rg_or_funcionarios_matricula_or_lotacoes_codigo_barra_cont,:class=>"form-control input-lg"%>
+    <div class="input-group-btn">
+      <%= button_tag(type: 'submit', class: "btn btn-info btn-lg") do %>
+      <span class="glyphicon glyphicon-search"></span>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%#end%>
+<%end%>
+<div class="col-sm-12 col-md-12 col-lg-12">
+<br>
+</div>
+<table class="table table-striped tabela-colapsavel">
+  <thead>
+    <tr>
+      <th>NOME</th>
+      <th>CPF</th>
+      <th>RG</th>
+      <th>NASCIMENTO</th>
+      <th>Nº DE FUNC.</th>
+      <th>AÇÕES</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%@pessoas.each_with_index do |p,i|%>
+    <tr class="accordion-toggle">
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;"><%= p.nome%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.cpf%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.rg%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><%= p.nascimento.to_s_br%></td>
+      <td data-toggle="collapse" data-target="#demo<%=i%>" style="cursor: pointer;" ><span class="badge"><%= p.funcionarios.count%></span></td>
+      <td>
+        <div class="btn-group">
+          <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Escolha <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <% if can? :read, Funcionario %>
+            <li><%= link_to "<i class='fa fa-users fa-fw'></i> Funcionários".html_safe,pessoa_funcionarios_path(p) %></li>
+            <% end %>
+            <% if can? :edit, p %>
+            <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe, edit_pessoa_path(p) %></li>
+            <% end %>
+            <li><%= link_to "<i class='fa fa-eye fa-fw'></i> Visualizar".html_safe, pessoa_path(p) %></li>
+            <% if can? :destroy, p %>
+            <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar".html_safe, pessoa_path(p),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+            <% end %>
+            <% if can? :qualificacao_funcional, p %>
+            <li><a role="button" data-toggle="modal" data-target="#qualificacao-<%= p.id %>-notes"><i class='fa fa-certificate fa-fw'></i> Qualificação</a></li>
+            <% end -%>
+            <%if can? :contratos_administrativos, p%>
+            <li><%= link_to "<i class='fa fa-file-text-o fa-fw'></i> Gerenciar contratos".html_safe, contratos_administrativos_pessoa_path(:id=>p) %></li>
+            <%end -%>
+          </ul>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="10" class="hiddenRow">
+        <div class="accordion-body collapse" id="demo<%=i%>">
+         <br/>
+         <% p.funcionarios.each.with_index(1) do |f,i|%>
+         <div class="well">
+          <div id='verificado-<%=f.matricula%>'>
+            <%if f.verificado%>
+            <%= button_to "Invalidar Funcionário",pessoa_funcionario_desverificar_funcionario_path(p,f),:remote=>true,:method=>:post,:class=>'btn btn-default btn-xs btn-danger'%>
+            <%else !f.verificado%>
+            <%= button_to "Validar Funcionário",pessoa_funcionario_verificar_funcionario_path(p,f),:remote=>true,:method=>:post,:class=>'btn btn-default btn-xs btn-success'%>
+            <%end%>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-xs-2">
+              <dt>MATRÍCULA:</dt>
+              <dd><%= detalhes(f.matricula) %></dd>
+            </div>
+            <div class="col-xs-5">
+              <dt>CARGO:</dt>
+              <dd><%= cargo_disciplina(f) %></dd>
+            </div>
+            <div class="col-xs-3">
+              <dt>CATEGORIA:</dt>
+              <dd><%#=detalhes(f.categoria)%><%= categoria_funcional(f,"entidade_sigla") %></dd>
+            </div>
+            <div class="col-xs-2">
+              <dt></dt>
+              <dd>
+                <div class="btn-group">
+                  <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Mais opções<span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu dropdown-menu-right">
+                    <% if can? :update, f and  can? :edit,Funcionario %>
+                    <li><%= link_to "<i class='fa fa-edit fa-fw'></i> Editar".html_safe,edit_pessoa_funcionario_path(p,f) %></li>
+                    <% end %>
+                    <% if can? :read, Lotacao and f.lotavel? %>
+                    <li><%= link_to "<i class='fa fa-exchange fa-fw'></i> Lotações".html_safe,pessoa_funcionario_lotacoes_path(p,f) %></li>
+                    <% elsif can? :read, Lotacao and !f.lotavel? %>
+                    <li><a data-toggle='tooltip' data-placement='left' title='Servidor com status inativo. Lotação indisponível. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Lotação indisponível</a></li>
+                    <% end %>
+                    <% if can? :destroy, f %>
+                    <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar Funcionário".html_safe, pessoa_funcionario_path(p,f),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+                    <% end %>
+                    <% if f.contrato_completo? %>
+                    <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>p.id,:funcionario_id=>f,:contrato_id=>f.contrato.id) %>
+                      <% end %>
+
+                     <!-- /pessoas/:pessoa_id/funcionarios/:funcionario_id/contrato/:contrato_id/gerar_contrato
+                     GET    /pessoas/:pessoa_id/funcionarios/:funcionario_id/gerar_contrato</li>> -->
+                   </ul>
+                 </div>
+               </dd>
+             </div>
+           </div>
+           <br/>
+           <div class="row">
+            <div class="col-xs-2">
+              <dt>ADMISSÃO:</dt>
+              <dd><%=f.data_nomeacao.to_s_br%></dd>
+            </div>
+            <div class="col-xs-5">
+              <dt>LOTAÇÃO:</dt>
+              <dd><%#=lotacao(f)%><%= lotacao_detalhes(f,"ativa_detalhada") %></dd>
+            </div>
+            <div class="col-xs-3">
+              <dt>SITUAÇÃO:</dt>
+              <dd><%=situacao(f)%></dd>
+            </div>
+          </div>
+          <br/>
+        </div>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+  <% end%>
+</tbody>
+</table>
+<div align='center'><%=will_paginate @pessoas%></div>
+
+<%@pessoas.each_with_index do |p|%>
+<!-- Modal qualificacao -->
+<div class="modal fade" id="qualificacao-<%= p.id %>-notes" tabindex="-1" role="dialog" aria-labelledby="qualificacao-<%= p.id %>-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" align="center">
+        <h3 class="modal-title" id="qualificacao-<%= p.id %>-label" align='center'><%= p.nome %>
+        </h3>
+        <h4><b>Qualificação Funcional</b></h4>
+      </div>
+      <div class="modal-body">
+        <div class='col-sm-12 col-md-12 well'>
+          <%= simple_form_for :departamento, url: pessoa_qualificacao_funcional_path(:pessoa_id=>p.id), :method => :post do |f| %>
+          <%= f.collection_select :departamento_id, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example',   multiple: false, :style => "width: 100%" %>
+          <br>
+          <%= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    <!-- Modal qualificacao-->
+
+<!-- Modal criar_pessoa_contrato -->
+<div class="modal fade" id="criar_pessoa_contrato-notes" tabindex="-1" role="dialog" aria-labelledby="criar_pessoa_contrato-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" align="center">
+        <h3 class="modal-title" id="criar_pessoa_contrato-label" align='center'>Novo Contrato Administrativo Temporário</h3>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for :pessoa_contrato, url: criar_pessoa_contrato_pessoas_path, :method => :post do |f| %>
+        <div class='col-sm-12 col-md-12 well'>
+          <div class='col-sm-12 col-md-12 row'>
+            <div class='col-sm-9 col-md-9'>
+              <%= f.input :nome %>
+            </div>
+            <div class='col-sm-3 col-md-3 row'>
+              <%= f.input :cpf ,:input_html=>{:class=>"cpf"}%>
+            </div>
+          </div>
+          <div class='col-sm-12 col-md-12'>
+            <div class='col-sm-3 col-md-3  row'>
+              <%= f.input :rg %>
+            </div>
+            <div class='col-sm-2 col-md-2'>
+              <%= f.input :nascimento,:as=>:string,:input_html=>{:class=>"data"}%>
+            </div>
+            <div class='col-sm-3 col-md-3'>
+              <%= f.input :nacionalidade %>
+            </div>
+            <div class='col-sm-2 col-md-2'>
+              <%= f.input :sexo,:as=>:select,:collection=>["Masculino","Feminino"] %>
+            </div>
+            <div class='col-sm-2 col-md-2'>
+              <%= f.input :estado_civil,:as=>:select,:collection=>["Solteiro(a)","Casado(a)","Divorciado(a)","Viúvo(a)","União Estável"] %>
+            </div>
+          </div>
+        </div>
+        <div class='col-sm-12 col-md-12'>
+          <% if current_user.entidade? == true %>
+          <%= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+          <% else %>
+          <a class='btn btn-default' data-toggle='tooltip' data-placement='left' title='Seu usuário não tem Entidade definida. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Confirmação indisponível</a>
+          <% end %>
+        </div>
+        <% end %>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>    <!-- Modal criar_pessoa_contrato-->
+
+<% end%>
+
+<!-- Modal Contrato Administrativo -->
+<!-- <a role="button" data-toggle="modal" data-target="#contratos_administrativo-notes" class='btn btn-primary'>Cadastrar Ministrante</a> -->
+<div class="modal fade" id="contratos_administrativo-notes" tabindex="-1" role="dialog" aria-labelledby="contratos_administrativo-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="contratos_administrativo-label" align='center'>
+          Cadastrar Ministrante
+        </h3>
+      </div>
+      <div class="modal-body">
+        <div align="center", class="well">
+          <h4>Qual situação se aplica?</h4>
+          <br>
+          <!-- criar pessoa_funcionario_contrato -->
+          <%#= simple_form_for :departamento, url: pessoa_qualificacao_funcional_path(:pessoa_id=>p.id), :method => :post do |f| %>
+          <%#= f.collection_select :departamento_id, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example',   multiple: false, :style => "width: 100%" %>
+          <br>
+          <%#= f.submit "O Contratado já possui informações pessoais na base de dados", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary btn-lg' %>
+          <%# end %>
+          <!-- criar pessoa_funcionario_contrato -->
+
+          <%#= link_to 'O ministrante já possui informações pessoais na base de dados', root_path, method: :post, :class => 'btn btn-primary' %>
+          <br><br>ou<br><br>
+          <!-- criar pessoa_funcionario_contrato -->
+
+          <!-- criar pessoa_funcionario_contrato -->
+          <%= link_to 'O ministrante é externo e precisa ser cadastrado', root_path, :class => 'btn btn-primary' %>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div><!-- Modal Contrato Administrativo -->

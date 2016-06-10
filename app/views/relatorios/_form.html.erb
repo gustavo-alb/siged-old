@@ -1,0 +1,8 @@
+<%= simple_form_for @relatorio, :html => { :class => 'form-horizontal' } do |f| %>
+<%= f.input :index %>
+<%= f.input :show %>
+
+<%= f.button :submit, :class => 'btn-primary' %>
+<%= link_to "Cancelar",
+relatorios_path, :class => 'btn btn-default' %>
+<% end %>

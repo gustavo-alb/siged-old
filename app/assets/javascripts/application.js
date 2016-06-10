@@ -19,6 +19,8 @@
 //= require select2
 //= require jquery
 // require best_in_place
+//= require highcharts
+//= require chartkick
 //= require autocomplete-rails
 
 jQuery(function() {

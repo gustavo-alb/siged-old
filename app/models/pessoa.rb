@@ -70,14 +70,9 @@ class Pessoa < ActiveRecord::Base
   ]
 
   def registro_valido?
-    if self.nome.blank? and self.cpf.blank? and self.endereco.blank? and self.sexo.blank? and self.cpf.blank? and self.rg.blank? and self.numero.blank? and self.bairro.blank? and self.telefone_celular.blank?
-      # entidade_id,
-
-      # self.destroy
-      puts "Esse registro vai para o saco!"
+    if self.endereco.blank? or self.numero.blank? or self.bairro.blank? or self.telefone_celular.blank? or self.estado_civil.blank?
       return false
     else
-      puts "tudo ok aqui!"
       return true
     end
   end

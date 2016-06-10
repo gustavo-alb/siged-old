@@ -53,6 +53,7 @@ class ApplicationController < ActionController::Base
     @usuarios = User.order(:username).collect{|u|["#{u.name} (#{u.username})",u.id]}
     @noticias = Mensagem.noticias.order(:created_at)
     @anos_letivos = AnoLetivo.order(:ano).collect{|a|[a.ano,a.id]}
-    @naturezas = ["Sala de Aula","Coordenação Pedagógica","Direção","Secretaria Escolar","Biblioteca","Sala de Leitura","Coordenador do Mais Educação","Projeto","Sala de Leitura","Retorno de Licença Prêmio","Retorno de Licença Maternidade","Retorno de Licença Sem Vencimento","Exoneração","Aposentadoria"]
+    @naturezas = ["Sala de Aula","Coordenação Pedagógica","Direção","Secretaria Escolar","Biblioteca","Sala de Leitura","Coordenador do Mais Educação","Projeto","Sala de Leitura"]
+    # ,"Retorno de Licença Prêmio","Retorno de Licença Maternidade","Retorno de Licença Sem Vencimento","Exoneração","Aposentadoria"
   end
 end

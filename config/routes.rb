@@ -3,6 +3,9 @@ Siged20::Application.routes.draw do
 
 
 
+  resources :relatorios
+
+
   get "contrato/show"
 
   get "contrato/update"
@@ -243,6 +246,7 @@ Siged20::Application.routes.draw do
     end
     resources :contrato, only: [:show, :update], controller: 'pessoas/contrato'
     get "dashboard",:on=>:collection
+    post 'buscar_cod_barra',:on=>:collection
     get "gerar_relatorio"
     get "nao_lotados",:on=>:collection
     get  "teste_lista_lotacao", :on => :collection
@@ -270,7 +274,10 @@ Siged20::Application.routes.draw do
       member do
         post :edicao_rapida
       end
-      resources :contrato, only: [:show, :update], controller: 'funcionarios/contrato'
+      resources :contrato, only: [:show, :update, :gerar_contrato], controller: 'funcionarios/contrato' do
+        get 'gerar_contrato'
+      end
+      post "criar_funcionario_contrato", :on=>:collection
       get "gerar_contrato"
       post :ativar_funcionario
       post :desativar_funcionario
@@ -300,6 +307,7 @@ Siged20::Application.routes.draw do
       get "boletins"
       get "exibir_boletim"
       resources :lotacoes do
+
         get "destinos"
         get "devolver_funcionario"
         get "confirmar_lotacao"

@@ -11,28 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160428142048) do
-
-  create_table "activities", :force => true do |t|
-    t.integer  "trackable_id"
-    t.string   "trackable_type"
-    t.integer  "owner_id"
-    t.string   "owner_type"
-    t.string   "key"
-    t.text     "parameters"
-    t.integer  "recipient_id"
-    t.string   "recipient_type"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
-    t.string   "nome"
-    t.string   "matricula"
-    t.string   "numero"
-    t.string   "cpf"
-  end
-
-  add_index "activities", ["owner_id", "owner_type"], :name => "index_activities_on_owner_id_and_owner_type"
-  add_index "activities", ["recipient_id", "recipient_type"], :name => "index_activities_on_recipient_id_and_recipient_type"
-  add_index "activities", ["trackable_id", "trackable_type"], :name => "index_activities_on_trackable_id_and_trackable_type"
+ActiveRecord::Schema.define(:version => 20160608200551) do
 
   create_table "add_usuario_to_pontos", :force => true do |t|
     t.integer  "usuario_id"
@@ -789,6 +768,15 @@ ActiveRecord::Schema.define(:version => 20160428142048) do
   add_index "listas", ["pessoa_id"], :name => "index_listas_on_pessoa_id"
   add_index "listas", ["tipo_lista_id"], :name => "index_listas_on_tipo_lista_id"
 
+  create_table "lot_observacoes", :force => true do |t|
+    t.integer  "lotacao_id"
+    t.string   "item"
+    t.string   "descricao"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "responsavel"
+  end
+
   create_table "lotacaos", :force => true do |t|
     t.integer  "funcionario_id"
     t.integer  "escola_id"
@@ -1221,6 +1209,13 @@ ActiveRecord::Schema.define(:version => 20160428142048) do
   add_index "referencia_niveis", ["codigo"], :name => "index_referencia_niveis_on_codigo"
   add_index "referencia_niveis", ["nome"], :name => "index_referencia_niveis_on_nome"
 
+  create_table "relatorios", :force => true do |t|
+    t.string   "index"
+    t.string   "show"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "requisicoes", :force => true do |t|
     t.integer  "funcionario_id"
     t.string   "tipo_requisicao"
@@ -1494,16 +1489,5 @@ ActiveRecord::Schema.define(:version => 20160428142048) do
     t.datetime "updated_at"
     t.integer  "entidade_id"
   end
-
-  create_table "versions", :force => true do |t|
-    t.string   "item_type",  :null => false
-    t.integer  "item_id",    :null => false
-    t.string   "event",      :null => false
-    t.string   "whodunnit"
-    t.text     "object"
-    t.datetime "created_at"
-  end
-
-  add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
 
 end

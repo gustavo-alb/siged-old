@@ -101,13 +101,14 @@ class UsuariosController < ApplicationController
   def update
     @user = Usuario.find(params[:id])
     @orgaos=Orgao.order(:sigla).collect{|o|[o.sigla,o.id]}
+    @entidades = Entidade.all.collect{|e|[e.nome,e.id]}
     if params[:usuario][:password].blank?
       params[:usuario].delete(:password)
       params[:usuario].delete(:password_confirmation)
     end
 
     respond_to do |format|
-      if @user.update_attributes(params[:usuario])
+      if @user.update_attributes!(params[:usuario])
         format.html { redirect_to(@user, :notice => "Usuario #{@user.username} atualizado com sucesso.") }
         format.xml  { head :ok }
       else

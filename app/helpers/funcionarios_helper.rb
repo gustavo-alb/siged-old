@@ -276,6 +276,16 @@ def modal_observacao_contrato_p(pessoa)
   raw(html)
 end
 
+def municipio_opcao(funcionario)
+  if funcionario.categoria
+    if funcionario.categoria.nome == 'Estado Novo' or funcionario.categoria.nome == 'Concurso de 2012' or funcionario.categoria_contrato?
+      return ", com #{municipio_de_opcao(funcionario)} como município de opção"
+    end
+  else
+    return ""
+  end
+end
+
 def qualificacao_funcional_regime(funcionario,opcao)
   if opcao == 'qualificacao'
     if funcionario.categoria

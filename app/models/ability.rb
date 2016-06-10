@@ -28,36 +28,36 @@ class Ability
 
     if user.role? :chefia_ucada
       can :manage,Funcionario
-        #cannot :destroy,Funcionario
-        can :manage,Pessoa
-        #cannot :destroy,Pessoa
-        can :manage,Departamento
-        cannot :update,Departamento
-        cannot :create,Departamento
-        cannot :destroy,Departamento
-        can :read,Orgao
-        can :agenda,Orgao
-        can :read,Lotacao
-        can :qualificar_funcionario, Pessoa
-      end
+      #cannot :destroy,Funcionario
+      can :manage,Pessoa
+      #cannot :destroy,Pessoa
+      can :manage,Departamento
+      cannot :update,Departamento
+      cannot :create,Departamento
+      cannot :destroy,Departamento
+      can :read,Orgao
+      can :agenda,Orgao
+      can :read,Lotacao
+      can :qualificar_funcionario, Pessoa
+    end
 
-      if user.role? :sead
-        can :read,Pessoa
-        can :read, Funcionario
-        can :read, Lotacao
-      end
+    if user.role? :sead
+      can :read,Pessoa
+      can :read, Funcionario
+      can :read, Lotacao
+    end
 
-      if user.role? :ucada
-        can :manage,Funcionario
-        cannot :destroy,Funcionario
-        can :manage,Pessoa
-        cannot :destroy,Pessoa
-        cannot :destroy,TipoLista,:privada=>false
-        can :manage,TipoLista
-        cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
-          l.privada==true and (l.role_ids & user.role_ids).none?
-        end
-        can [:qualificar_funcionario, :qualificacao_funcional], Pessoa
+    if user.role? :ucada
+      can :manage,Funcionario
+      cannot :destroy,Funcionario
+      can :manage,Pessoa
+      cannot :destroy,Pessoa
+      cannot :destroy,TipoLista,:privada=>false
+      can :manage,TipoLista
+      cannot [:update,:destroy],TipoLista,TipoLista.privadas do |l|
+        l.privada==true and (l.role_ids & user.role_ids).none?
+      end
+      can [:qualificar_funcionario, :qualificacao_funcional], Pessoa
         # can [:qualificacao_funcional], Pessoa do |pessoa|
           # pessoa.funcionario.entidade_id == current_user.entidade_id
         # end
@@ -208,25 +208,33 @@ class Ability
     end
 
     if user.role? :lotacao
+      can [:read, :contratos_administrativos , :criar_pessoa_contrato, :cancelar_pessoa_contrato, :contrato_novo, :dashboard, :buscar_cod_barra], Pessoa
+      can [:criar_funcionario_contrato, :edicao_rapida], Funcionario
+      can :read, Relatorio
       can :manage, Lotacao
       cannot :convalidar,Lotacao
       can [:read, :carta],Funcionario
-      can :manage,Pessoa
-      cannot :create,Pessoa
-      cannot :edit,Pessoa
-      cannot :destroy,Pessoa
-      can :edicao_rapida,Funcionario
+
+      # can :manage,Pessoa
+      # cannot :create,Pessoa
+      # cannot :edit,Pessoa
+      # cannot :destroy,Pessoa
+      # can :edicao_rapida,Funcionario
       # can :manage,Funcionario
-      cannot :create,Funcionario
-      cannot :destroy,Funcionario
-      cannot :edit,Funcionario
+      # cannot :create,Funcionario
+      # cannot :destroy,Funcionario
+      # cannot :edit,Funcionario
+
       can :manage, AnoLetivo
       cannot :create, AnoLetivo
       can :gerir_carencias, Carencia
+
       can :autocomplete_departamento_nome,Departamento
-      can :autocomplete_escola_nome,Escola
-      can :manage, Escola
+      can [:read, :autocomplete_escola_nome, :lotacoes_por_escola],Escola
+
+      # can :manage, Escola
       can :inspecionar, Escola
+
       cannot [:create,:update,:destroy,:configuracoes],Escola
       cannot :especificar_lotacao,Lotacao
     end
@@ -311,7 +319,10 @@ class Ability
     if user.role? :contratos_criacao_gea
       can [:read, :contratos_administrativos , :criar_pessoa_contrato, :cancelar_pessoa_contrato, :contrato_novo], Pessoa
       can [:destroy, :edit], Pessoa do |pessoa|
-        pessoa.registro_valido? == false
+        pessoa.lotacoes.any? == false
+      end
+      can [:destroy], Funcionario do |funcionario|
+        funcionario.categoria_contrato? and !funcionario.contrato_completo?
       end
     end
 
