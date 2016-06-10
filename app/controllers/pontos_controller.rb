@@ -141,7 +141,7 @@ class PontosController < ApplicationController
         @lotacoes = (@atuais).uniq.sort_by{|l|l.pessoa.nome}
       end
     else
-      @lotacoes =  @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true)
+      @lotacoes =  @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true).sort_by{|l|l.pessoa.nome}
     end
     @pdf = CombinePDF.new
     @lotacoes.each do |l|
