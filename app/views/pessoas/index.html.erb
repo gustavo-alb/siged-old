@@ -121,7 +121,7 @@ Pessoas&nbsp;&nbsp;&nbsp;
                     <li><a data-toggle='tooltip' data-placement='left' title='Servidor com status inativo. Lotação indisponível. Favor contatar o Administrador do Sistema'><i class='fa fa-meh-o fa-fw'></i> Lotação indisponível</a></li>
                     <% end %>
                     <% if can? :destroy, f %>
-                    <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar Funcionário".html_safe, pessoa_funcionario_path(p,f),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
+                    <li><%= link_to "<i class='fa fa-eraser fa-fw'></i> Apagar Funcionário".html_safe, pessoa_funcionario_path(p,f.id),:method=>:delete,:confirm=>"Tem Certeza?" %></li>
                     <% end %>
                     <% if f.contrato_completo? %>
                     <li><%= link_to "<i class='fa fa-print fa-fw'></i> Imprimir contrato".html_safe,pessoa_funcionario_contrato_gerar_contrato_path(:pessoa_id=>p.id,:funcionario_id=>f,:contrato_id=>f.contrato.id) %></li>

@@ -319,7 +319,7 @@ class Ability
     if user.role? :contratos_criacao_gea
       can [:read, :contratos_administrativos , :criar_pessoa_contrato, :cancelar_pessoa_contrato, :contrato_novo], Pessoa
       can [:destroy, :edit], Pessoa do |pessoa|
-        pessoa.registro_valido? == false
+        pessoa.lotacoes.any? == false
       end
       can [:destroy], Funcionario do |funcionario|
         funcionario.categoria_contrato? and !funcionario.contrato_completo?

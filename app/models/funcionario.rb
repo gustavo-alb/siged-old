@@ -69,6 +69,7 @@ class Funcionario < ActiveRecord::Base
   has_many :boletins, :class_name=>"BoletimFuncional",:dependent=>:nullify
   has_many :especificacoes,:class_name=>"EspecificarLotacao",:dependent => :destroy
   has_one :contrato, :dependent => :destroy
+  has_many :lot_observacoes, through: :lotacoes
   accepts_nested_attributes_for :lotacoes
   accepts_nested_attributes_for :pessoa
   scope :direcao,  -> { joins(:comissionados).where("comissionados.ativo=? and comissionados.tipo=?",true,'DIRETORIA')}

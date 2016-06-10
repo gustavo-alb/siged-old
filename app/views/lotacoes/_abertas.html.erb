@@ -24,7 +24,7 @@
         <td><%= detalhes(lot.destino) %></td>
         <td><%= lot.data_lotacao.to_s_br%></td>
         <td><%= detalhes(lot.usuario)%></td>
-        <td><%= status_lotacao(lot.status.first.status)%></td>
+        <td><%= novo_state_lotacao(lot,'historico')%></td>
         <td>
           <div class="btn-group">
             <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -43,10 +43,10 @@
               <%# if can? :destroy,Funcionario %>
               <li><%= link_to "<i class='fa fa-thumbs-o-up fa-fw'></i> Confirmar Lotação".html_safe, "#",:'data-toggle'=>"modal",:'data-target'=>"#confirmacao-#{lot.id}"%></li>
               <%# end %>
+
+              <li><a data-toggle="modal" data-target="#cancelar_lotacao-<%= lot.id %>-notes"><i class='fa fa-rotate-left fa-fw'></i> Cancelar lotação</a></li>
             </ul>
           </div>
-          <%#= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
-          <%#= link_to "Cancelar Lotação", pessoa_funcionario_lotacao_path(@pessoa,@funcionario,lot),:method=>:delete,:class=>"btn btn-danger btn-xs",:'data-confirm'=>"Tem certeza?"%>
         </td>
       </tr>
       <%= render :partial=>"confirmar_lotacao",:locals=>{:lot=>lot}%>
@@ -54,5 +54,35 @@
     </tbody>
   </table>
 </div>
+<% end %>
+
+<% @lotacoes_abertas.each do |lot| %>
+<!-- Modal -->
+<div class="modal fade" id="cancelar_lotacao-<%= lot.id %>-notes" tabindex="-1" role="dialog" aria-labelledby="cancelar_lotacao-<%= lot.id %>-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" align="center">
+        <h3 class="modal-title" id="cancelar_lotacao-<%= lot.id %>-label" align='center'><%= lot.funcionario.pessoa.nome %></h3>
+        <p><%= lot.funcionario.cargo.nome %> - <%= lot.funcionario.categoria.nome.upcase %>, DESIGNADO PARA O (A) <%= lot.destino.nome %></p>
+      </div>
+      <div class="modal-body">
+        <p style="text-align: center"><strong>Status atual do processo:&nbsp;</strong></p>
+        <%= barra_progresso_lotacao(lot) %>
+        <hr>
+        <%= simple_form_for :cancelar_lotacao, url: pessoa_funcionario_lotacao_salvar_cancelamento_path(@pessoa.id,@funcionario.id,lot.id), :method => :post do |f| %>
+        <div class="col-sm-12 col-md-12 well">
+        <%= f.input :motivo, as: :text, input_html: {size: "4x4"}, :placeholder => 'Entre com o motivo do cancelamento da lotação...',:required=>true,:autocomplete=>'on' %>
+        </div>
+        <%= f.submit "Confirmar!!!", :onclick=>"return confirm('Confirmar esta ação?')", :class => 'btn btn-primary' %>
+        <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">cancelar</button>
+        <% end -%>
+      </div>
+      <!-- <div class="modal-footer"> -->
+        <!-- <button type="button" class="btn btn-default btn-xs" data-dismiss="modal">Fechar</button> -->
+      <!-- </div> -->
+    </div>
+  </div>
+</div>
+<!-- Modal -->
 <% end %>
 

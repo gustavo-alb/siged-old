@@ -209,12 +209,16 @@ class LotacoesController < ApplicationController
   end
 
   def salvar_confirmacao
+    @usuario= current_user
     @funcionario = Funcionario.find(params[:funcionario_id])
     @confirma = params[:confirmacao][:codigo_barra]
     @lotacao = Lotacao.em_aberto.find(params[:lotacao_id])
     @codigo = params[:confirmacao][:codigo_barra]
     if @codigo==@lotacao.codigo_barra
       @lotacao.confirma_lotacao
+      @lotacao.confirmar
+      # @lotacao.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{pontualidade_apresentacao(@lotacao)}",:responsavel=>"current_user.name}")
+      @lotacao.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{@lotacao.pontualidade_apresentacao}",:responsavel=>"#{@usuario.name}")
       redirect_to pessoa_funcionario_lotacoes_url(@pessoa,@funcionario), :notice => 'Confirmação de Lotação Efetuada.'
     else
       redirect_to  pessoa_funcionario_lotacoes_url(@pessoa,@funcionario), :alert => 'Confirmação de Lotação não executada, Código de Barras incorreto'
@@ -249,25 +253,31 @@ class LotacoesController < ApplicationController
 
 
   def salvar_cancelamento
-    motivo = params[:motivo]
+    motivo = params[:cancelar_lotacao][:motivo]
     @funcionario = Funcionario.find(params[:funcionario_id])
     @pessoa = @funcionario.pessoa
     @lotacao = Lotacao.em_aberto.find(params[:lotacao_id])
     @lotacao.cancela_lotacao(motivo)
-    if params[:cancelar][:cancelar]=="true"
-      redirect_to lotacoes_convalidar_path, :notice => 'Lotação Cancelada.'
-    elsif params[:cancelar][:cancelar]=="false" or params[:cancelar][:cancelar]==nil or params[:cancelar][:cancelar]==""
-      redirect_to pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => 'Lotação Cancelada.'
-    end
+    @lotacao.cancelar
+    @lotacao.lot_observacoes.create(:item=>'Cancelado',:descricao=>"Motivo: #{motivo}",:responsavel=>"#{current_user.name}")
+    # if params[:cancelar][:cancelar]=="true"
+    #   redirect_to lotacoes_convalidar_path, :notice => 'Lotação Cancelada.'
+    # elsif params[:cancelar][:cancelar]=="false" or params[:cancelar][:cancelar]==nil or params[:cancelar][:cancelar]==""
+    #   redirect_to pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => 'Lotação Cancelada.'
+    # end
+    redirect_to pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => 'Lotação Cancelada.'
   end
 
 
   def salvar_devolucao
+    @usuario = current_user
     motivo = params[:devolucao][:motivo]
     @funcionario = Funcionario.find(params[:funcionario_id])
     @pessoa = @funcionario.pessoa
     @lotacao = Lotacao.finalizadas.find(params[:lotacao_id])
     @lotacao.devolve_funcionario(motivo)
+    @lotacao.devolver
+    @lotacao.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{motivo}",:responsavel=>"#{@usuario.name}")
     redirect_to pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => 'Funcionário Devolvido ao NUPES'
   end
 
@@ -348,7 +358,8 @@ class LotacoesController < ApplicationController
 
     respond_to do |format|
       if @lotacao.save
-        if @funcionario.categoria_contrato? and @funcionario.contrato.lotacao_id.blank?
+        @lotacao.encaminhar
+        if @funcionario.categoria_contrato? and @funcionario.contrato and @funcionario.contrato.lotacao_id.blank?
           @funcionario.contrato.update_attributes(:lotacao_id=>@lotacao.id)
         end
         puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAé aqui"

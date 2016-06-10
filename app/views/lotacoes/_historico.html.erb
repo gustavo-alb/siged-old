@@ -1,43 +1,96 @@
 <br>
 <div class="col-sm-12 col-md-12 well">
-  <table class="table table-striped tabela-colapsavel">
-    <thead>
-      <tr>
-        <th>Destino</th>
-        <th>Data</th>
-        <th>Estafeta</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @lotacoes.each do |lot| %>
-      <tr>
-        <td><%= detalhes(lot.destino) %></td>
-        <td><%= lot.data_lotacao.to_s_br%></td>
-        <td><%= detalhes(lot.usuario)%></td>
-        <td><%= status_lotacao(lot.status.last.status)%></td>
-        <td>
-          <div class="btn-group">
-            <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Escolha <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right">
-              <% if can? :carta, @funcionario %>
-              <!-- <li><%#= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li> -->
-              <%# end %>
-              <%# if can? :manage, :all %>
-              <li><%= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_nova_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li>
-              <% end %>
-              <li><%= link_to "<i class='fa fa-rotate-left fa-fw'></i> Devolver funcionário".html_safe, "#",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%></li>
-            </ul>
-          </div>
-          <%#= link_to "Emitir Carta", pessoa_funcionario_carta_path(@pessoa,@funcionario,:lotacao=>lot.id),:class=>"btn btn-primary btn-xs"%>
-          <%#= link_to "<i class='fa fa-rotate-left fa-fw'></i> Devolver funcionário".html_safe, "#",:class=>"btn btn-danger btn-xs",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%>
-        </td>
-      </tr>
-      <%= render :partial=>"devolver_funcionario",:locals=>{:lot=>lot}%>
-      <% end%>
-    </tbody>
-  </table>
+  <% if !@funcionario.lotacoes.ativas.any? %>
+  <div class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span class="sr-only">Error:</span>
+    Este servidor não possui nenhuma lotação ativa.<br>O registro indica que o último <b><%= novo_state_lotacao(@funcionario.lotacoes.last,'informacao')%></b> em <%= @funcionario.lot_observacoes.last.created_at.strftime("%d/%m/%Y às %H:%M") %><%= contar_dias(@funcionario.lot_observacoes.last.created_at.to_date,'informacao') %>.
+  </div>
+  <% end %>
+  <div class="col-sm-12 col-md-12">
+    <table class="table table-striped tabela-colapsavel">
+      <thead>
+        <tr>
+          <th>Destino</th>
+          <th>Data</th>
+          <th>Estafeta</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @lotacoes.order('data_lotacao DESC').each do |lot| %>
+        <tr>
+          <td><%= detalhes(lot.destino) %></td>
+          <td><%= lot.data_lotacao.to_s_br%></td>
+          <td><%= detalhes(lot.usuario)%></td>
+          <td><%= novo_state_lotacao(lot,'historico')%></td>
+          <td>
+            <div class="btn-group">
+              <button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Escolha <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <% if can? :carta, @funcionario %>
+                <li><%= link_to "<i class='fa fa-print fa-fw'></i> Emitir Carta".html_safe, pessoa_funcionario_nova_carta_path(@pessoa,@funcionario,:lotacao=>lot.id) %></li>
+                <% end %>
+                <li><%= link_to "<i class='fa fa-rotate-left fa-fw'></i> Devolver funcionário".html_safe, "#",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.status.last.status=="LOTADO"%></li>
+                <% if can? :manage, :all %>
+                <li><%= link_to "<i class='fa fa-rotate-left fa-fw'></i> Devolver funcionário".html_safe, "#",:'data-toggle'=>"modal",:'data-target'=>"#devolucao-#{lot.id}" if lot.lot_observacoes.last.item=="confirmado"%></li>
+                <% end %>
+                <li><a data-toggle="modal" data-target="#historico-<%= lot.id %>-notes"><i class='fa fa-eye fa-fw'></i> Detalhes</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+        <%= render :partial=>"devolver_funcionario",:locals=>{:lot=>lot}%>
+        <% end%>
+      </tbody>
+    </table>
+  </div>
 </div>
+<% @lotacoes.each do |lot| %>
+<!-- Modal -->
+<div class="modal fade" id="historico-<%= lot.id %>-notes" tabindex="-1" role="dialog" aria-labelledby="historico-<%= lot.id %>-label" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" align="center">
+        <h3 class="modal-title" id="historico-<%= lot.id %>-label" align='center'><%= lot.funcionario.pessoa.nome %></h3>
+        <p><%= lot.funcionario.cargo.nome %> - <%= lot.funcionario.categoria.nome.upcase %>, DESIGNADO (A) PARA O (A) <%= lot.destino.nome.upcase %></p>
+      </div>
+      <div class="modal-body">
+        <p style="text-align: center"><strong>Status atual do processo:&nbsp;</strong></p>
+        <%= barra_progresso_lotacao(lot) %>
+        <hr>
+        <table class="table table-striped table-hover table-bordered table-condensed">
+          <thead>
+            <tr>
+              <th>Ocorrência</th>
+              <th>Descrição</th>
+              <th>Data</th>
+              <th>Responsável</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for lot_observacao in lot.lot_observacoes.order('created_at DESC') %>
+            <tr>
+              <td><%= lot_observacao.item %></td>
+              <td><%= lot_observacao.descricao %>
+                <% if lot.natureza.present? and lot_observacao.item == 'Encaminhado' %> (<%= lot.natureza %>)<% end %>
+              </td>
+              <td><%= lot_observacao.created_at.strftime("%d/%m/%Y às %H:%M") %></td>
+              <td><%= lot_observacao.responsavel %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <!-- <p><strong>Status geral do processo:&nbsp;</strong><%= lot.ativo %></p> -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<% end %>

@@ -69,3 +69,4 @@ gem 'select2-rails', '~> 4.0', '>= 4.0.1.1'
 gem 'wicked'
 gem "chartkick"
 gem 'groupdate'
+gem 'state_machine'
