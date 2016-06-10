@@ -359,6 +359,7 @@ class LotacoesController < ApplicationController
     respond_to do |format|
       if @lotacao.save
         @lotacao.encaminhar
+        @lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{@lotacao.destino.nome}",:responsavel=>"#{lotacao.usuario.name}")
         if @funcionario.categoria_contrato? and @funcionario.contrato and @funcionario.contrato.lotacao_id.blank?
           @funcionario.contrato.update_attributes(:lotacao_id=>@lotacao.id)
         end

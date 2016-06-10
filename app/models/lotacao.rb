@@ -239,21 +239,40 @@ def pontualidade_apresentacao
   end
 end
 
+def status_para_state
+  if self.status.last.status == 'ENCAMINHADO' or self.status.last.status == 'EM TRÂNSITO'
+    self.encaminhar
+    self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'CANCELADO'
+    self.cancelar
+    self.lot_observacoes.create(:item=>'Cancelado',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'LOTADO'
+    self.confirmar
+    self.lot_observacoes.create(:item=>'Lotado',:descricao=>"",:responsavel=>"#{self.usuario.name}")
+  elsif self.status.last.status == 'À DISPOSIÇÃO DO NUPES' or self.status.last.status == 'NÃO LOTADO'
+    self.devolver
+    self.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+  end
+end
+
   state_machine :state, :initial => nil do
     event :encaminhar do
       transition any => :encaminhado
     end
     event :cancelar do
-      transition :encaminhado => :cancelado
+      # transition :encaminhado => :cancelado
+      transition any => :cancelado
     end
     event :confirmar do
-      transition :encaminhado => :confirmado
+      # transition :encaminhado => :confirmado
+      transition any => :confirmado
     end
     event :devolver do
-      transition :confirmado => :devolvido
+      # transition :confirmado => :devolvido
+      transition any => :devolvido
     end
     after_transition nil => :encaminhado do |lotacao, transition|
-      lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{lotacao.destino.nome}",:responsavel=>"#{lotacao.usuario.name}")
+      # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{lotacao.destino.nome}",:responsavel=>"#{lotacao.usuario.name}")
     end
     after_transition :confirmado => :devolvido do |lotacao, transition|
 

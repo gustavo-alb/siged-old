@@ -35,7 +35,7 @@
 
     <div class="col-sm-6 col-md-6">
       <%= f.label 'Departamento' %>
-      <%= f.collection_select :departamento_id, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
+      <%= f.collection_select :unidade_organizacional_id, Departamento.all, :id, :nome, {include_blank: true}, id: 'placeholder-example', multiple: false, :style => "width: 100%" %>
     </div>
   </div>
   <div class="col-sm-12 col-md-12">
