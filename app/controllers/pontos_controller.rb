@@ -178,7 +178,7 @@ class PontosController < ApplicationController
       @filhos_devolvidos = @objeto.funcionarios_filhos.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and ? BETWEEN lotacaos.data_lotacao and lotacaos.data_devolucao",true,@data)
       @funcionarios = (@devolvidos+@atuais+@filhos_devolvidos+@filhos_atuais).uniq.sort_by{|f|f.pessoa.nome}.paginate :page => params[:page], :per_page => 8
     else
-      @funcionarios = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month).paginate :page => params[:page], :per_page => 8
+      @funcionarios = @objeto.funcionarios.joins(:pessoa,:lotacoes).uniq.where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month).paginate :page => params[:page], :per_page => 8
     end
     @encaminhados = @objeto.funcionarios.joins(:lotacoes).where("lotacaos.finalizada = ? and lotacaos.ativo = ?",false,true).uniq.paginate :page => params[:page], :per_page => 8
     @aba = params[:aba]
