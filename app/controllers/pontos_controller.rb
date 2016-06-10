@@ -132,12 +132,16 @@ class PontosController < ApplicationController
       @obj_tipo = "Escola"
     end
     @data = data
-    @atuais = @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true)
-    @filhos_atuais = @objeto.lotacoes_filhos.ativas.where("lotacaos.finalizada = ?  and lotacaos.destino_id in (?) and lotacaos.destino_type = ?",true,@objeto.departamentos_filho_ids,"Departamento")
-    if params[:ponto][:subordinados] and params[:ponto][:subordinados]=="1"
-      @lotacoes = (@atuais+@filhos_atuais).uniq.sort_by{|l|l.pessoa.nome}
+    if @tipo!="departamento"
+      @atuais = @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true)
+      @filhos_atuais = @objeto.lotacoes_filhos.ativas.where("lotacaos.finalizada = ?  and lotacaos.destino_id in (?) and lotacaos.destino_type = ?",true,@objeto.departamentos_filho_ids,"Departamento")
+      if params[:ponto][:subordinados] and params[:ponto][:subordinados]=="1"
+        @lotacoes = (@atuais+@filhos_atuais).uniq.sort_by{|l|l.pessoa.nome}
+      else
+        @lotacoes = (@atuais).uniq.sort_by{|l|l.pessoa.nome}
+      end
     else
-      @lotacoes = (@atuais).uniq.sort_by{|l|l.pessoa.nome}
+      @lotacoes =  @objeto.lotacoes.ativas.where("lotacaos.finalizada = ?",true)
     end
     @pdf = CombinePDF.new
     @lotacoes.each do |l|
@@ -166,8 +170,8 @@ class PontosController < ApplicationController
     @data = data||Date.today
     #@data = params[:data] || Date.today
     @devolvidos = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and ? BETWEEN lotacaos.data_lotacao and lotacaos.data_devolucao",true,@data)
-    
-    
+
+
     if @tipo=="departamento"
       @atuais = @objeto.funcionarios.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month)
       @filhos_atuais = @objeto.funcionarios_filhos.joins(:pessoa,:lotacoes).where("lotacaos.finalizada = ? and lotacaos.data_lotacao <= ? and lotacaos.data_devolucao is null",true,@data.end_of_month)
