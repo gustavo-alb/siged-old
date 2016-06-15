@@ -4,7 +4,9 @@
   <div class="alert alert-danger" role="alert">
     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
     <span class="sr-only">Error:</span>
-    Este servidor não possui nenhuma lotação ativa.<br>O registro indica que o último <b><%= novo_state_lotacao(@funcionario.lotacoes.last,'informacao')%></b> em <%= @funcionario.lot_observacoes.last.created_at.strftime("%d/%m/%Y às %H:%M") %><%= contar_dias(@funcionario.lot_observacoes.last.created_at.to_date,'informacao') %>.
+    Este servidor não possui nenhuma lotação ativa.<br>
+
+    <!-- O registro indica que o último <b><%#= novo_state_lotacao(@funcionario.lotacoes.last,'informacao')%></b> em <%#= @funcionario.lot_observacoes.last.created_at.strftime("%d/%m/%Y às %H:%M") %><%#= contar_dias(@funcionario.lot_observacoes.last.created_at.to_date,'informacao') %>. -->
   </div>
   <% end %>
   <div class="col-sm-12 col-md-12">
