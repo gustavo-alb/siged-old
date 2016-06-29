@@ -53,7 +53,7 @@ class Lotacao < ActiveRecord::Base
     Lotacao.where("ativo = false")
   end
   #scope :inativa, -> { where("ativo = ?",false)}
-  scope :ativas, -> { where("ativo = ? and natureza <> ?",true,"Complementar Carga Horária")}
+  scope :ativas, -> { where("lotacaos.ativo = ? and lotacaos.natureza <> ?",true,"Complementar Carga Horária")}
   scope :complementares_ativas, -> { where("ativo = ? and natureza = ?",true,"Complementar Carga Horária")}
   # scope :canceladas, -> { joins(:statuses).where("lotacoes.status = 'CANCELADO'")}
   scope :canceladas, -> {joins(:status).where("statuses.status = 'CANCELADO'")}
