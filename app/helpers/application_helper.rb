@@ -16,6 +16,7 @@ module ApplicationHelper
     end
   end
 
+
   def booleano(obj)
     if obj==true
       return "Verificado"

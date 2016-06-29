@@ -6,7 +6,9 @@ class Lotacao < ActiveRecord::Base
   #attr_accessible *column_names
   #attr_accessible :destino_nome
   #audited :associated_with => :funcionario
-  validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create
+  validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create,:if=>Proc.new{|l|l.tipo_lotacao=="SUMARIA ESPECIAL" or l.tipo_lotacao=="ESPECIAL"}
+  validates_uniqueness_of :destino_id,:scope=>[:funcionario_id,:destino_type,:ativo],:message=>"Já lotado neste destino"
+
   validates_presence_of :usuario_id
   validates_presence_of :natureza,:if=>Proc.new{|l|l.tipo_lotacao=="REGULAR" or l.tipo_lotacao=="SUMARIA"},:on=>:create
   #validates_presence_of :funcionario_id
@@ -30,9 +32,16 @@ class Lotacao < ActiveRecord::Base
   has_one :contrato,:dependent=>:destroy
   has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
+  validate :validar_complementar
   def funcionario_v
     if self.funcionario_id.blank?
       self.errors.add(:funcionario_id,"Funcionario não está presente")
+    end
+  end
+
+  def validar_complementar
+    if self.natureza!="Complementar Carga Horária" and self.funcionario.lotacoes.ativas.where(:destino_type=>"Escola").any?
+      self.errors.add(:natureza,"Apenas Lotações complementares em escolas são permitidas quando o funcionário já está lotado")
     end
   end
 
@@ -44,7 +53,8 @@ class Lotacao < ActiveRecord::Base
     Lotacao.where("ativo = false")
   end
   #scope :inativa, -> { where("ativo = ?",false)}
-  scope :ativas, -> { where(:ativo=>true)}
+  scope :ativas, -> { where("ativo = ? and natureza <> ?",true,"Complementar Carga Horária")}
+  scope :complementares_ativas, -> { where("ativo = ? and natureza = ?",true,"Complementar Carga Horária")}
   # scope :canceladas, -> { joins(:statuses).where("lotacoes.status = 'CANCELADO'")}
   scope :canceladas, -> {joins(:status).where("statuses.status = 'CANCELADO'")}
   scope :confirmada_fechada, -> { where("finalizada = ? and ativo=?",true,true)}
@@ -225,35 +235,35 @@ class Lotacao < ActiveRecord::Base
   # end
   # end
 
-def pontualidade_apresentacao
-  limite = self.data_lotacao+3.day
-  if self.data_confirmacao < limite
-    return "Apresentaçao feita dentro do prazo"
-  else
-    tempo = self.data_confirmacao - limite
-    if tempo == 1
-      return "Apresentaçao feita fora do prazo (#{tempo.to_i} dia)"
-    elsif tempo > 1
-      return "Apresentaçao feita fora do prazo (#{tempo.to_i} dias)"
+  def pontualidade_apresentacao
+    limite = self.data_lotacao+3.day
+    if self.data_confirmacao < limite
+      return "Apresentaçao feita dentro do prazo"
+    else
+      tempo = self.data_confirmacao - limite
+      if tempo == 1
+        return "Apresentaçao feita fora do prazo (#{tempo.to_i} dia)"
+      elsif tempo > 1
+        return "Apresentaçao feita fora do prazo (#{tempo.to_i} dias)"
+      end
     end
   end
-end
 
-def status_para_state
-  if self.status.last.status == 'ENCAMINHADO' or self.status.last.status == 'EM TRÂNSITO'
-    self.encaminhar
-    self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
-  elsif self.status.last.status == 'CANCELADO'
-    self.cancelar
-    self.lot_observacoes.create(:item=>'Cancelado',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
-  elsif self.status.last.status == 'LOTADO'
-    self.confirmar
-    self.lot_observacoes.create(:item=>'Lotado',:descricao=>"",:responsavel=>"#{self.usuario.name}")
-  elsif self.status.last.status == 'À DISPOSIÇÃO DO NUPES' or self.status.last.status == 'NÃO LOTADO'
-    self.devolver
-    self.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+  def status_para_state
+    if self.status.last.status == 'ENCAMINHADO' or self.status.last.status == 'EM TRÂNSITO'
+      self.encaminhar
+      self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+    elsif self.status.last.status == 'CANCELADO'
+      self.cancelar
+      self.lot_observacoes.create(:item=>'Cancelado',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+    elsif self.status.last.status == 'LOTADO'
+      self.confirmar
+      self.lot_observacoes.create(:item=>'Lotado',:descricao=>"",:responsavel=>"#{self.usuario.name}")
+    elsif self.status.last.status == 'À DISPOSIÇÃO DO NUPES' or self.status.last.status == 'NÃO LOTADO'
+      self.devolver
+      self.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{self.motivo}",:responsavel=>"#{self.usuario.name}")
+    end
   end
-end
 
   state_machine :state, :initial => nil do
     event :encaminhar do
