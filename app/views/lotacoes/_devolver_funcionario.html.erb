@@ -7,7 +7,7 @@
         <h4 class="modal-title" id="myModalLabel">Confirmar Devolução</h4>
       </div>
       <div class="modal-body">
-        <%= simple_form_for :devolucao,:url=>pessoa_funcionario_lotacao_salvar_devolucao_url(@pessoa,@funcionario,lot), :html => { :class => 'form-horizontal' } do |f|%>
+        <%= simple_form_for :devolucao,:url=>pessoa_funcionario_lotacao_salvar_devolucao_url(@pessoa,@funcionario,:lotacao_id=>lot), :html => { :class => 'form-horizontal' } do |f|%>
           <%= f.input :motivo,:as=>:text,:input_html=>{:size=>"2x4"}%>
         </div>
         <div class="modal-footer">

@@ -32,7 +32,7 @@ class Lotacao < ActiveRecord::Base
   has_one :contrato,:dependent=>:destroy
   has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
-  validate :validar_complementar
+  validate :validar_complementar, :on => :create
   def funcionario_v
     if self.funcionario_id.blank?
       self.errors.add(:funcionario_id,"Funcionario não está presente")
@@ -278,15 +278,13 @@ class Lotacao < ActiveRecord::Base
       transition any => :confirmado
     end
     event :devolver do
-      # transition :confirmado => :devolvido
       transition any => :devolvido
     end
     # after_transition any => :encaminhado do |lotacao, transition|
       # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #lotacao.destino.nome}",:responsavel=>"#lotacao.usuario.name}")
     # end
-    after_transition :confirmado => :devolvido do |lotacao, transition|
-
-    end
+    # after_transition :confirmado => :devolvido do |lotacao, transition|
+    # end
   end
 
   def adicionar_lot_observacoes(opcao)

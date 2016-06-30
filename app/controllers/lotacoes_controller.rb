@@ -273,7 +273,8 @@ class LotacoesController < ApplicationController
     motivo = params[:devolucao][:motivo]
     @funcionario = Funcionario.find(params[:funcionario_id])
     @pessoa = @funcionario.pessoa
-    @lotacao = Lotacao.finalizadas.find(params[:lotacao_id])
+    # @lotacao = Lotacao.finalizadas.find(params[:lotacao_id])
+    @lotacao = Lotacao.find(params[:lotacao_id])
     @lotacao.devolve_funcionario(motivo)
     @lotacao.devolver
     @lotacao.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{motivo}",:responsavel=>"#{@usuario.name}")
