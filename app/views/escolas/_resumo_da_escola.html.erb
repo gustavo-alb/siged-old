@@ -1,4 +1,36 @@
-<table class="tablesorter" cellspacing="0">
+<br>
+<div class="col-sm-12 col-md-12 col-lg-12">
+  <%#= line_chart   Visit.pluck("country").uniq.map { |c| { name: c, data: @visits.where(country: c).group_by_day(:visited_at, format: "%B %d, %Y").count }  }, discrete: true %>
+  <%#= pie_chart Escola.where("escolas.id = 2073").joins(:cargos).group("cargos.nome").count, label: "Quantidade" %>
+</div>
+<table class="table table-striped table-hover table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th>Cargo</th>
+      <th>Efetivos</th>
+      <th title="Ex-Território e MEC">Federais<sup>(?)</sup></th>
+      <th>Contratos</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody>
+   <% @escola.funcionarios.group_by{|g|g.cargo.nome}.sort.each do |cargo, funcionarios| %>
+   <tr>
+     <td><%= cargo %></td>
+     <td><%= @escola.funcionarios.efetivos.com_este_cargo(cargo).count %></td>
+     <td><%= @escola.funcionarios.federais.com_este_cargo(cargo).count %></td>
+     <td><%= @escola.funcionarios.contratos_adm.com_este_cargo(cargo).count %></td>
+     <td><%= funcionarios.count %></td></tr>
+     <% end %>
+     <tr>
+       <td colspan="4"><b>TOTAL</b></td>
+       <td><b><%= @escola.funcionarios.count %></b></td>
+     </tr>
+   </tbody>
+ </table>
+
+
+ <table class="table table-striped table-hover table-bordered table-condensed">
   <thead>
     <tr>
       <th>Cargo</th>
@@ -9,12 +41,12 @@
     </tr>
   </thead>
   <tbody>
-<% @cargos_principais.each do |cargo| %>    <%# @funcionarios.each do |f| %>
+    <% @cargos_principais.each do |cargo| %>    <%# @funcionarios.each do |f| %>
     <tr>
      <td><%= cargo.nome %></td>
      <td><%= cargo.funcionarios.efetivos.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
      <td><%= cargo.funcionarios.federais.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
-     <td><%= cargo.funcionarios.contratos.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
+     <td><%= cargo.funcionarios.contratos_adm.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
      <td><%= cargo.funcionarios.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
    </tr>
    <% end %>
@@ -22,11 +54,16 @@
      <td>OUTROS</td>
      <td><%= @funcionarios_outros.efetivos.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
      <td><%= @funcionarios_outros.federais.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
-     <td><%= @funcionarios_outros.contratos.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
+     <td><%= @funcionarios_outros.contratos_adm.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
      <td><%= @funcionarios_outros.joins(:lotacoes).where("lotacaos.destino_id = #{@escola.id} and lotacaos.destino_type = 'Escola'").count %></td>
    </tr>
-  </tbody>
-  
+   <tr>
+     <td colspan="4">Total</td>
+     <td></td>
+   </tr>
+
+ </tbody>
+
 </table>
 
 

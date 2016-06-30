@@ -1,4 +1,5 @@
-<table class="tablesorter" cellspacing="0">
+<br>
+<table class="table table-striped table-hover table-bordered table-condensed">
   <thead>
     <tr>
       <th>Nome</th>
@@ -8,13 +9,13 @@
   </thead>
   <tbody>
     <%@ambientes.each do |a|%>
-      <tr>
-        <td><%=a.nome%></td>
-        <%if can? :especificar_lotacao,Lotacao%>
-          <td><%=link_to "Controle de Ambiente", escola_controle_ambiente_path(@escola,:ambiente=>a.id),:remote=>true%></td>
-          <td><%#=link_to "Remover Ambiente", escola_ambiente_excluir_turma_path(@escola,@ambiente,:turma_id=>t.id),:confirm=>"Tem certeza que deseja remover a turma",:remote=>true%></td>
-        </tr>
-      <%end%>
+    <tr>
+      <td><%=a.nome%></td>
+      <%if can? :especificar_lotacao,Lotacao%>
+      <td><%=link_to "Controle de Ambiente", escola_controle_ambiente_path(@escola,:ambiente=>a.id),:remote=>true%></td>
+      <td><%#=link_to "Remover Ambiente", escola_ambiente_excluir_turma_path(@escola,@ambiente,:turma_id=>t.id),:confirm=>"Tem certeza que deseja remover a turma",:remote=>true%></td>
+    </tr>
+    <%end%>
     <%end%>
   </tbody>
 </table>

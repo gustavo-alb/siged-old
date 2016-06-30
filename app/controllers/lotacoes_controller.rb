@@ -217,8 +217,7 @@ class LotacoesController < ApplicationController
     if @codigo==@lotacao.codigo_barra
       @lotacao.confirma_lotacao
       @lotacao.confirmar
-      # @lotacao.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{pontualidade_apresentacao(@lotacao)}",:responsavel=>"current_user.name}")
-      @lotacao.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{@lotacao.pontualidade_apresentacao}",:responsavel=>"#{@usuario.name}")
+      @lotacao.adicionar_lot_observacoes('confirmacao')
       redirect_to pessoa_funcionario_lotacoes_url(@pessoa,@funcionario), :notice => 'Confirmação de Lotação Efetuada.'
     else
       redirect_to  pessoa_funcionario_lotacoes_url(@pessoa,@funcionario), :alert => 'Confirmação de Lotação não executada, Código de Barras incorreto'
@@ -358,11 +357,12 @@ class LotacoesController < ApplicationController
 
     respond_to do |format|
       if @lotacao.save
-        @lotacao.encaminhar
-        @lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{@lotacao.destino.nome}",:responsavel=>"#{@lotacao.usuario.name}")
+        @lotacao.encaminhar!
+        # @lotacao.lot_observacoes('encaminhamento')
         if @funcionario.categoria_contrato? and @funcionario.contrato and @funcionario.contrato.lotacao_id.blank?
           @funcionario.contrato.update_attributes(:lotacao_id=>@lotacao.id)
         end
+
         puts "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAé aqui"
         format.html { redirect_to(pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => "O Funcionário foi lotado com sucesso.
           Destino: #{@lotacao.destino.nome}") }

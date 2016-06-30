@@ -33,10 +33,9 @@ class Funcionario < ActiveRecord::Base
   scope :contratos,  -> { joins(:categoria).where("categorias.nome ilike ?","%contrato%")}
   scope :contratos_adm,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Contrato Horista"), Categoria.find_by_nome("Contrato Horista - Indígena"), Categoria.find_by_nome("
     Contrato Horista - Afrodescendente"), Categoria.find_by_nome("Contrato Gestão - Nível Médio"), Categoria.find_by_nome("Contrato Administrativo")])}
-
   scope :em_comissao,  -> { where("funcionarios.categoria_id in (?)",[Categoria.find_by_nome("Sem Vínculo"), Categoria.find_by_nome("Ex-Território Federal do Amapá - Comissionado"), Categoria.find_by_nome("Ministério da Educação - Comissionado")])}
 
-
+  scope :com_este_cargo, lambda {|cargo| select("funcionarios.*").joins(:cargo).where("cargos.nome ilike ?",cargo)}
   #has_and_belongs_to_many :grupos_educacionais,:class_name=>"GrupoEducacional",:join_table=>:colapso_grupo
   has_many :gratificacoes
   belongs_to :pessoa,:class_name=>'Pessoa'

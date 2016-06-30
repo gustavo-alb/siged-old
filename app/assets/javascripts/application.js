@@ -19,8 +19,17 @@
 //= require select2
 //= require jquery
 // require best_in_place
-//= require highcharts
-//= require chartkick
+
+//= require jquery
+//= require jquery_ujs
+// require_tree .
+// require turbolinks
+
+//= require highcharts/highcharts
+//= require highcharts/highcharts-more
+//= require highcharts/highstock
+
+
 //= require autocomplete-rails
 
 jQuery(function() {

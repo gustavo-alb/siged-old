@@ -40,8 +40,8 @@ class Lotacao < ActiveRecord::Base
   end
 
   def validar_complementar
-    if self.natureza!="Complementar Carga Horária" and self.funcionario.lotacoes.ativas.where(:destino_type=>"Escola").any?
-      self.errors.add(:natureza,"Apenas Lotações complementares em escolas são permitidas quando o funcionário já está lotado")
+    if self.natureza!="Complementar Carga Horária" and self.funcionario.lotacoes.ativas.where(:destino_type=>"Escola").any? #and self.status.status == "ENCAMINHADO"
+      self.errors.add(:natureza,"Funcionário com processo de lotação ativo. Apenas Lotações complementares são permitidas neste caso.")
     end
   end
 
@@ -281,11 +281,23 @@ class Lotacao < ActiveRecord::Base
       # transition :confirmado => :devolvido
       transition any => :devolvido
     end
-    after_transition nil => :encaminhado do |lotacao, transition|
-      # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{lotacao.destino.nome}",:responsavel=>"#{lotacao.usuario.name}")
-    end
+    # after_transition any => :encaminhado do |lotacao, transition|
+      # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #lotacao.destino.nome}",:responsavel=>"#lotacao.usuario.name}")
+    # end
     after_transition :confirmado => :devolvido do |lotacao, transition|
 
+    end
+  end
+
+  def adicionar_lot_observacoes(opcao)
+    if opcao == 'encaminhamento'
+      self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+    elsif opcao == 'confirmacao'
+      # self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+      self.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{self.pontualidade_apresentacao}",:responsavel=>"#{self.usuario.name}")
+    elsif opcao == 'sumaria'
+      self.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #{self.destino.nome}",:responsavel=>"#{self.usuario.name}")
+      self.lot_observacoes.create(:item=>'Lotado',:descricao=>"#{self.pontualidade_apresentacao}",:responsavel=>"#{self.usuario.name}")
     end
   end
 
@@ -333,11 +345,14 @@ class Lotacao < ActiveRecord::Base
       elsif self.tipo_lotacao=="REGULAR"
         self.orgao = self.destino.orgao
         processo.processo="LR#{cod.numero(num)}/#{Date.today.year}"
+        processo.lotacao.adicionar_lot_observacoes('encaminhamento')
       elsif self.tipo_lotacao=="ESPECIAL"
         processo.processo="LE#{cod.numero(num)}/#{Date.today.year}"
+        processo.lotacao.adicionar_lot_observacoes('encaminhamento')
       elsif self.tipo_lotacao=="SUMARIA" or self.tipo_lotacao=="SUMARIA ESPECIAL"
         processo.processo="LS#{cod.numero(num)}/#{Date.today.year}"
         processo.finalizado=true
+        processo.lotacao.adicionar_lot_observacoes('sumaria')
       elsif self.tipo_lotacao=="COMISSÃO"
         processo.processo="LC#{cod.numero(num)}/#{Date.today.year}"
         processo.finalizado=true

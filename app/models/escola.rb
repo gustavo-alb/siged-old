@@ -11,6 +11,8 @@ class Escola < ActiveRecord::Base
   has_many :settings
   has_many :ambientes,:dependent=>:destroy
   has_many :funcionarios,:through=>:lotacoes
+  has_many :cargos,:through=>:funcionarios
+  has_many :categorias,:through=>:funcionarios
   has_many :comissionados
   has_many :lotacoes,:class_name=>"Lotacao",:dependent=>:destroy,:as=>:destino
   has_many :especificacoes,:class_name=>'EspecificarLotacao',:dependent=>:destroy

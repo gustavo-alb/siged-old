@@ -1,66 +1,99 @@
-<%model_class = Escola%>
+<%- model_class = Escola -%>
 <%content_for :titulo do%>
-  Detalhes de 
-  <%end%>
-  <dl class="dl-horizontal">
-          <dt><strong>Codigo:</strong></dt>
-      <dd><%= @escola.codigo %></dd>
-          <dt><strong>Tipologia:</strong></dt>
-      <dd><%= @escola.tipologia %></dd>
-          <dt><strong>Rede:</strong></dt>
-      <dd><%= @escola.rede %></dd>
-          <dt><strong>Zona:</strong></dt>
-      <dd><%= @escola.zona %></dd>
-          <dt><strong>Endereco:</strong></dt>
-      <dd><%= @escola.endereco %></dd>
-          <dt><strong>Telefone:</strong></dt>
-      <dd><%= @escola.telefone %></dd>
-          <dt><strong>Fax:</strong></dt>
-      <dd><%= @escola.fax %></dd>
-          <dt><strong>Email:</strong></dt>
-      <dd><%= @escola.email %></dd>
-          <dt><strong>Celular:</strong></dt>
-      <dd><%= @escola.celular %></dd>
-          <dt><strong>Numero:</strong></dt>
-      <dd><%= @escola.numero %></dd>
-          <dt><strong>Complemento:</strong></dt>
-      <dd><%= @escola.complemento %></dd>
-          <dt><strong>Bairro:</strong></dt>
-      <dd><%= @escola.bairro %></dd>
-          <dt><strong>Gt:</strong></dt>
-      <dd><%= @escola.gt_id %></dd>
-          <dt><strong>Diretor:</strong></dt>
-      <dd><%= @escola.diretor %></dd>
-          <dt><strong>Orgao:</strong></dt>
-      <dd><%= @escola.orgao_id %></dd>
-          <dt><strong>Lotacao:</strong></dt>
-      <dd><%= @escola.lotacao_id %></dd>
-          <dt><strong>Cep:</strong></dt>
-      <dd><%= @escola.cep %></dd>
-          <dt><strong>Cnpj:</strong></dt>
-      <dd><%= @escola.cnpj %></dd>
-          <dt><strong>Tipo destino:</strong></dt>
-      <dd><%= @escola.tipo_destino_id %></dd>
-          <dt><strong>Municipio:</strong></dt>
-      <dd><%= @escola.municipio_id %></dd>
-          <dt><strong>Esfera:</strong></dt>
-      <dd><%= @escola.esfera_id %></dd>
-          <dt><strong>Entidade:</strong></dt>
-      <dd><%= @escola.entidade_id %></dd>
-          <dt><strong>Slug:</strong></dt>
-      <dd><%= @escola.slug %></dd>
-          <dt><strong>Ano letivo:</strong></dt>
-      <dd><%= @escola.ano_letivo_id %></dd>
-          <dt><strong>Nome:</strong></dt>
-      <dd><%= @escola.nome %></dd>
-          <dt><strong>Distrito:</strong></dt>
-      <dd><%= @escola.distrito %></dd>
-    
-  </dl>
-  <%= link_to 'Voltar', escolas_path, :class => 'btn btn-default'  %>
-  <%= link_to 'Editar', edit_escola_path(@escola), :class => 'btn btn-default' %>
-  <%= link_to "Apagar",
-              escola_path(@escola),
-              :method => 'delete',
-              :data => { :confirm => "Você tem certeza?" },
-              :class => 'btn btn-danger' %>
+<%#= javascript_include_tag "highcharts.js", "chartkick" %>
+<h2 align="center"><%= @escola.nome%>&nbsp;&nbsp;&nbsp;
+<div class="btn-group">
+  <button type="button" class="form-control btn btn-default dropdown-toggle" data-toggle="dropdown">
+    <i class="fa fa-cogs fa-fw"></i>&nbsp;&nbsp;&nbsp;<span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-right" role="menu">
+    <%# if can? :create, Pessoa %>
+    <!-- <li><%= link_to "<i class='fa fa-user fa-fw'></i> Cadastrar pessoa".html_safe, new_pessoa_path %></li> -->
+    <%# end %>
+    <%# if can? :criar_pessoa_contrato, Pessoa %>
+    <!-- <li><a role="button" data-toggle="modal" data-target="#criar_pessoa_contrato-notes"><i class='fa fa-plus fa-fw'></i> Novo contrato administrativo</a></li> -->
+    <%# end %>
+    <%# if can? :manage, :all %>
+    <li><%= link_to "<i class='fa fa-user fa-fw'></i> Configurações".html_safe, root_path %></li>
+    <%#= link_to image_tag('icn_config.png',:title=>'Configurações'), escola_configuracoes_path(@escola),:rel=>'facebox',:rev=>"height:300px;width:500px" if can?(:configuracoes,Escola)%>
+    <%# end %>
+  </ul>
+</div>
+</h2>
+<%end%>
+<section>
+  <div class="panel">
+    <!-- <ul id="myTab1" class="nav nav-tabs nav-justified"> -->
+    <ul class="nav nav-tabs nav-justified">
+      <li><a href="#identificacao" data-toggle="tab">Identificação</a></li>
+      <li><a href="#funcionarios" data-toggle="tab">Funcionários</a></li>
+      <li><a href="#ambientes" data-toggle="tab">Ambientes</a></li>
+      <li><a href="#projetos" data-toggle="tab">Projetos</a></li>
+    </ul>
+    <!-- <div id="myTabContent" class="tab-content"> -->
+    <!-- <div class="tab-pane fade active in" id="sobre"> -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="identificacao">
+        <div class="col-sm-12 col-md-12">
+          <%= render :partial=>"identificacao" %>
+        </div>
+      </div>
+      <div class="tab-pane" id="funcionarios">
+        <ul class="nav nav-tabs nav-justified">
+          <li><a href="#funcionarios-resumo" data-toggle="tab">Resumo</a></li>
+          <li><a href="#funcionarios-quadro" data-toggle="tab">Quadro Funcional</a></li>
+          <li><a href="#funcionarios-confirmacoes" data-toggle="tab">Confirmações</a></li>
+        </ul>
+        <div class="tab-content">
+          <li class="tab-pane active" id="funcionarios-resumo">
+            <%= render :partial=>"resumo_da_escola" %>
+          </li>
+          <li class="tab-pane" id="funcionarios-quadro">
+            <%= render :partial=>"quadro_funcional" %>
+          </li>
+          <li class="tab-pane" id="funcionarios-confirmacoes">
+            <%=render :partial=>'lotacao'%>
+          </li>
+        </div>
+      </div>
+      <div class="tab-pane" id="ambientes">
+        <ul class="nav nav-tabs nav-justified">
+          <li><a href="#ambientes-turmas" data-toggle="tab">Turmas</a></li>
+          <li><a href="#ambientes-outros" data-toggle="tab">Outros</a></li>
+        </ul>
+        <ul class="tab-content">
+          <li class="tab-pane active" id="ambientes-turmas">
+            <%=render :partial=>'turmas'%>
+          </li>
+          <li class="tab-pane" id="ambientes-outros">
+            <%=render :partial=>'ambientes'%>
+          </li>
+        </ul>
+      </div>
+      <div class="tab-pane" id="projetos">
+        <%=render :partial=>'ambientes'%>
+      </div>
+    </div>
+  </div>
+</section>
+<%= button_to "Clique aqui para gerar o relatório",escola_gerar_controle_ch_path(@escola),:remote=>true,:method=>:get,:class=>'alt_btn'%>
+
+
+<%content_for :links do%>
+<%=link_to "Escolas",escolas_path%>
+<%end%>
+<%if can? :especificar_lotacao,Lotacao%>
+<%= link_to "Incluir Turma", escola_incluir_turma_path(@escola),:rel=>"facebox",:rev=>"height:100px;width:600px"%>,
+<%= link_to 'Editar Escola', edit_escola_path(@escola),:class=>"alt_btn",:type=>"submit"%> ou
+<% end %>
+<%= link_to 'Voltar', escolas_path,:type=>"submit" %>
+
+
+
+<%= link_to 'Voltar', escolas_path, :class => 'btn btn-default'  %>
+<%= link_to 'Editar', edit_escola_path(@escola), :class => 'btn btn-default' %>
+<%= link_to "Apagar",
+escola_path(@escola),
+:method => 'delete',
+:data => { :confirm => "Você tem certeza?" },
+:class => 'btn btn-danger' %>

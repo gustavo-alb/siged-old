@@ -326,5 +326,12 @@ class Ability
       end
     end
 
+
+    if user.role? :gea_funcionarios_leitura
+      can [:read], Pessoa do |pessoa|
+        pessoa.id.present?
+      end
+    end
+
   end
 end

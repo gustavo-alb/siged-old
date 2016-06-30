@@ -1,0 +1,42 @@
+    <%#= high_chart_globals(@chart_globals) %>
+    <%#= high_chart("some_id", @chart) %>
+<br>
+<div class="col-sm-12 col-md-12 well">
+  <div class="col-sm-1 col-md-1">
+  </div>
+  <div class="col-sm-11 col-md-11">
+    <dl class="dl-horizontal">
+      <p><strong>Código:</strong> <%= @escola.codigo %></p>
+      <p><strong>Nome:</strong> <%= @escola.nome %></p>
+      <p><strong>Diretor:</strong> <%= detalhes(@escola.diretor) %></p>
+      <%if !@escola.secretario.nil?%>
+      <p><strong>Secretário:</strong> <%= detalhes(@escola.secretario) %></p>
+      <%end%>
+      <%if !@escola.diretor_adjunto.nil?%>
+      <p><strong>Diretor Adjunto:</strong> <%= detalhes(@escola.diretor_adjunto) %></p>
+      <%end%>
+      <%if !@escola.tipologia.nil?%>
+      <p><strong>Tipologia:</strong> <%= @escola.tipologia %></p>
+      <%end%>
+      <p><strong>Rede:</strong> <%= detalhes(@escola.esfera) %></p>
+      <p><strong>Zona:</strong> <%= @escola.zona %></p>
+      <%if !@escola.endereco.nil?%>
+      <p><strong>Endereço:</strong> <%= @escola.endereco %></p>
+      <%end%>
+      <p><strong>Cidade:</strong> <%= @escola.municipio.nome %>  <%if @escola.distrito.present?%> - <%= @escola.distrito %> <%end%></p>
+      <%if !@escola.telefone.nil?%>
+      <p><strong>Telefone:</strong> <%= @escola.telefone %></p>
+      <%end%>
+      <%if !@escola.fax.nil?%>
+      <p><strong>Fax:</strong> <%= @escola.fax %></p>
+      <%end%>
+      <%if !@escola.email.nil?%>
+      <p><strong>Email:</strong> <%= @escola.email %></p>
+      <%end%>
+      <p><strong>Funcionários Lotados e Confirmados:</strong> <%= @funcionarios.count %></p>
+      <p><strong>Funcionários Lotados e Aguardando Confirmação de Apresentação:</strong> <%= @encaminhados.count %></p>
+      <p><strong>Ano Letivo:</strong> Ano letivo</p>
+      <p><strong>Níveis de ensino:</strong> Níveis de ensino em sentence</p>
+    </dl>
+  </div>
+</div>

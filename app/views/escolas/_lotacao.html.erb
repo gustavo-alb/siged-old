@@ -1,27 +1,28 @@
-  <table class="tablesorter" cellspacing="0">
-          <thead>
-            <tr>
-              <th>Matrícula</th>
-              <th>Funcionário</th>
-              <th>Cargo</th>
-              <th title="Regência Semanal Disponível">RSD<sup>(?)</th>
-              <th>Ações</th>
-              <th colspan=3></th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @encaminhados.each do |f| %>
-            <tr>
-             <td><%= f.matricula %></td>
-             <td><%= detalhes(f.pessoa) %></td>
-             <td><%= cargo_resumido(f) %></td>
-             <td title='<%=turmas(f)%>'><%= cor_rsd(f)%></td>
-             <%if can? :especificar_lotacao,Lotacao%>
-             <td><%= link_to  image_tag('/images/pdf.png',:title=>"Carta de Apresentação"), pessoa_funcionario_carta_path(f.pessoa,f,:lotacao=>@escola.lotacoes.ativo.find_by_funcionario_id(f.id).id) %></td>
-             <td><%= link_to  image_tag('/images/positivo.png',:title=>"Confirmação de Lotação"), pessoa_funcionario_lotacao_confirmar_lotacao_path(f.pessoa,f,@escola.lotacoes.ativo.find_by_funcionario_id(f.id)),:rel=>"facebox",:rev=>"height:300px;width:500px"  %></td>
-             <td><%= link_to  image_tag('/images/icn_deletar.png',:title=>"Cancelar Lotação"), pessoa_funcionario_lotacao_cancelar_lotacao_path(f.pessoa,f,@escola.lotacoes.ativo.find_by_funcionario_id(f.id),:convalidar=>false),:rel=>"facebox",:rev=>"height:300px;width:500px"  %></td>
-             <% end %>
-           </tr>
-           <% end %>
-         </tbody>
-       </table>
+<br>
+<table class="table table-striped table-hover table-bordered table-condensed">
+  <thead>
+    <tr>
+      <th>Matrícula</th>
+      <th>Funcionário</th>
+      <th>Cargo</th>
+      <th title="Regência Semanal Disponível">RSD<sup>(?)</th>
+      <th>Ações</th>
+      <th colspan=3></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @encaminhados.each do |f| %>
+    <tr>
+     <td><%= f.matricula %></td>
+     <td><%= detalhes(f.pessoa) %></td>
+     <td><%= cargo_resumido(f) %></td>
+     <td title='<%=turmas(f)%>'><%= cor_rsd(f)%></td>
+     <%if can? :especificar_lotacao,Lotacao%>
+     <td><%#= link_to  image_tag('/images/pdf.png',:title=>"Carta de Apresentação"), pessoa_funcionario_carta_path(f.pessoa,f,:lotacao=>@escola.lotacoes.ativo.find_by_funcionario_id(f.id).id) %></td>
+     <td><%#= link_to  image_tag('/images/positivo.png',:title=>"Confirmação de Lotação"), pessoa_funcionario_lotacao_confirmar_lotacao_path(f.pessoa,f,@escola.lotacoes.ativo.find_by_funcionario_id(f.id)),:rel=>"facebox",:rev=>"height:300px;width:500px"  %></td>
+     <td><%#= link_to  image_tag('/images/icn_deletar.png',:title=>"Cancelar Lotação"), pessoa_funcionario_lotacao_cancelar_lotacao_path(f.pessoa,f,@escola.lotacoes.ativo.find_by_funcionario_id(f.id),:convalidar=>false),:rel=>"facebox",:rev=>"height:300px;width:500px"  %></td>
+     <% end %>
+   </tr>
+   <% end %>
+ </tbody>
+</table>

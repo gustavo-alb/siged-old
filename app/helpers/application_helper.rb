@@ -160,7 +160,7 @@ module ApplicationHelper
     message=""
     if opcao == 'historico'
       if state=='encaminhado'
-        message+="<span class='label label-info'>Em trânsito para o destino há #{contar_dias(lotacao.data_lotacao,'simples')}</span>"
+        message+="<span class='label label-info'>#{contar_dias(lotacao.data_lotacao,'historico')}</span>"
       elsif state=='cancelado'
         message+="<span class='label label-danger'>Procedimento cancelado</span>"
       elsif state=='confirmado'
@@ -199,6 +199,16 @@ module ApplicationHelper
         return ". Assim, contabiliza-se #{diferenca.to_i} dia sem labor efetivo"
       elsif diferenca > 1
         return ", Assim, contabiliza-se #{diferenca.to_i} dias sem labor efetivo"
+      end
+    elsif opcao == 'historico'
+      if diferenca = 0
+        return "Trânsito para o destino iniciado hoje"
+      elsif diferenca = 1
+        return "Em trânsito para o destino há #{diferenca.to_i} dia"
+      elsif diferenca > 1
+        return "Em trânsito para o destino há #{diferenca.to_i} dias"
+      else
+        return "Em trânsito para o destino"
       end
     end
   end
