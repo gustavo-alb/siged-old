@@ -283,8 +283,9 @@ class Lotacao < ActiveRecord::Base
     # after_transition any => :encaminhado do |lotacao, transition|
       # lotacao.lot_observacoes.create(:item=>'Encaminhado',:descricao=>"Destino: #lotacao.destino.nome}",:responsavel=>"#lotacao.usuario.name}")
     # end
-    # after_transition :confirmado => :devolvido do |lotacao, transition|
-    # end
+    after_transition :confirmado => :devolvido do |lotacao, transition|
+       lotacao.update_attributes(:ativo => false)
+    end
   end
 
   def adicionar_lot_observacoes(opcao)

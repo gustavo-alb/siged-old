@@ -275,9 +275,9 @@ class LotacoesController < ApplicationController
     @pessoa = @funcionario.pessoa
     # @lotacao = Lotacao.finalizadas.find(params[:lotacao_id])
     @lotacao = Lotacao.find(params[:lotacao_id])
-    @lotacao.devolve_funcionario(motivo)
+    # @lotacao.devolve_funcionario(motivo)
     # tirei esse aqui
-    # @lotacao.devolver
+    @lotacao.devolver
     # tirei esse aqui
     @lotacao.lot_observacoes.create(:item=>'Devolvido',:descricao=>"Motivo: #{motivo}",:responsavel=>"#{@usuario.name}")
     redirect_to pessoa_funcionario_lotacoes_path(@pessoa,@funcionario), :notice => 'Funcionário Devolvido ao NUPES'
