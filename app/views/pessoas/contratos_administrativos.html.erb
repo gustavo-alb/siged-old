@@ -11,7 +11,8 @@
         <% if can? :contrato_novo, @pessoa %>
         <li><%#= link_to '<i class="fa fa-user fa-fw"></i> Novo contrato'.html_safe, contrato_novo_pessoa_path(@pessoa), :method => :put, :remote => true %></li>
         <% end %>
-        <% if @pessoa.funcionarios.contratos_adm.count < 1 %>
+        <%# if can? :cancelar_pessoa_contrato, @pessoa%>
+        <% if @pessoa.funcionarios.contratos_adm.count < 1 and can? :cancelar_pessoa_contrato, @pessoa%>
         <li><%= link_to '<i class="fa fa-times fa-fw"></i> Cancelar'.html_safe, pessoa_cancelar_pessoa_contrato_path(:pessoa_id=>@pessoa.id), method: :put %></li>
         <% end %>
       </ul>

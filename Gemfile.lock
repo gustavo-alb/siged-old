@@ -103,7 +103,6 @@ GEM
     fastercsv (1.5.5)
     friendly_id (4.0.10.1)
       activerecord (>= 3.0, < 4.0)
-    hash-deep-merge (0.1.1)
     hike (1.2.3)
     i18n (0.7.0)
     iconv (1.0.4)
@@ -118,8 +117,6 @@ GEM
     kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    lazy_high_charts (1.5.5)
-      hash-deep-merge
     less (2.6.0)
       commonjs (~> 0.2.7)
     less-rails (2.6.0)
@@ -287,7 +284,6 @@ DEPENDENCIES
   jquery-historyjs
   jquery-rails
   kaminari
-  lazy_high_charts
   less-rails
   liquid
   mini_magick
