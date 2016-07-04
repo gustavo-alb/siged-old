@@ -451,7 +451,7 @@ end
     @funcionario = Funcionario.new(params[:funcionario])
     @funcionario.pessoa=Pessoa.find_by_slug(params[:pessoa_id])
     respond_to do |format|
-      if @funcionario.save!
+      if @funcionario.save
         format.html { redirect_to(pessoa_funcionario_url(@pessoa,@funcionario), :notice => 'Funcionário cadastrado com sucesso.') }
         format.xml  { render :xml => @funcionario, :status => :created, :location => @funcionario }
       else
