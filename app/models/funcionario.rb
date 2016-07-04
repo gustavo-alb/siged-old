@@ -20,7 +20,11 @@ class Funcionario < ActiveRecord::Base
   scope :diretores, lambda { |q| where("diretor = ?" , true) }
   scope :disciplina_def, -> {  where("disciplina_contratacao_id is not ?",nil)}
   scope :disciplina_indef, -> {  where("disciplina_contratacao_id is ?",nil)}
+  scope :sem_matricula, -> {  where("matricula is ?",nil)}
   scope :sem_categoria,  -> { where("categoria_id is ?",nil)}
+  scope :sem_nivel_e_nomeacao,  -> { where("nivel_id is null or data_nomeacao is null")}
+
+  # f.nivel_id.nil? or f.nivel_id.blank? or f.data_nomeacao.nil? or f.data_nomeacao.blank?
   scope :sem_lotacao,  -> { includes(:lotacoes).where(:lotacaos => { :funcionario_id => nil })}
   scope :da_escola,lambda {|id|joins(:lotacoes).where("lotacaos.escola_id = ?",id) }
   scope :ativos, -> { where(:ativo=>true)}
