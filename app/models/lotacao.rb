@@ -32,7 +32,7 @@ class Lotacao < ActiveRecord::Base
   has_one :contrato,:dependent=>:destroy
   has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
-  validate :validar_complementar, :on => :create
+  # validate :validar_complementar, :on => :create
   def funcionario_v
     if self.funcionario_id.blank?
       self.errors.add(:funcionario_id,"Funcionario não está presente")
