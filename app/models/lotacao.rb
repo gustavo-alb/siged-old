@@ -169,8 +169,8 @@ class Lotacao < ActiveRecord::Base
     proc2.processo="DV#{proc2.processo}"
     proc2.tipo="DEVOLUÇÃO"
     self.ativo = false
-    self.save!
-    if proc2.save!
+    self.save
+    if proc2.save
       if self.funcionario.lotacoes_atuais.include?(self) and !self.funcionario.lotacoes.complementares.none?
         self.funcionario.lotacoes.complementares.order("created_at asc").first.update_attributes(:complementar=>false)
       end
