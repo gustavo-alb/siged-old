@@ -23,7 +23,7 @@
   </table> -->
   <%#end%>
 
-  <% Pessoa.find(16718, 16725, 16737, 16739, 16747, 16743, 16746, 16748, 16749, 16322, 16312, 16323, 11311) do |pessoa|%>
+  <% Pessoa.find(16718, 16725, 16737, 16739, 16747, 16743, 16746, 16748, 16749, 16322, 16312, 16323, 11311).each do |pessoa|%>
   <table class="table table-striped table-hover table-bordered table-condensed">
     <thead>
       <tr data-toggle='collapse' data-target='#minhas_atividades-<%= pessoa.object_id %>' class='accordion-toggle' >
