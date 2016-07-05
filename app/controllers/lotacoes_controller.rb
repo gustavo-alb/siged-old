@@ -275,7 +275,7 @@ class LotacoesController < ApplicationController
     @pessoa = @funcionario.pessoa
     # @lotacao = Lotacao.finalizadas.find(params[:lotacao_id])
     @lotacao = Lotacao.find(params[:lotacao_id])
-    # @lotacao.devolve_funcionario(motivo)
+    @lotacao.devolve_funcionario(motivo)
     # tirei esse aqui
     @lotacao.devolver
     # tirei esse aqui
