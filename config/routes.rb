@@ -246,6 +246,7 @@ Siged20::Application.routes.draw do
     end
     resources :contrato, only: [:show, :update], controller: 'pessoas/contrato'
     get "dashboard",:on=>:collection
+    get "com_pendencias",:on=>:collection
     post 'buscar_cod_barra',:on=>:collection
     get "gerar_relatorio"
     get "nao_lotados",:on=>:collection

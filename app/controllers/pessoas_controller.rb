@@ -495,13 +495,11 @@ class PessoasController < ApplicationController
         redirect_to dashboard_pessoas_path, alert: "Algo não aconteceu como deveria. Que tal tentar novamente?"
       end
     end
+  end
 
-    # if @lotacao
-    #   puts "#{@lotacao}"
-    #   # render html: "<strong>#{@lotacao.id}</strong>".html_safe
-    # else
-    #   puts "Nada aqui"
-    # end
+
+  def com_pendencias
+    @funcionarios = Funcionario.sem_nivel_e_nomeacao
   end
 
 end
