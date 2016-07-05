@@ -32,7 +32,7 @@ class Lotacao < ActiveRecord::Base
   has_one :contrato,:dependent=>:destroy
   has_one :pessoa,:through=>:funcionario
   before_save :funcionario_v
-  # validate :validar_complementar, :on => :create
+  validate :validar_complementar, :on => :create
   def funcionario_v
     if self.funcionario_id.blank?
       self.errors.add(:funcionario_id,"Funcionario não está presente")
@@ -42,6 +42,8 @@ class Lotacao < ActiveRecord::Base
   def validar_complementar
     if self.natureza!="Complementar Carga Horária" and self.funcionario.lotacoes.ativas.where(:destino_type=>"Escola").any? #and self.status.status == "ENCAMINHADO"
       self.errors.add(:natureza,"Funcionário com processo de lotação ativo. Apenas Lotações complementares são permitidas neste caso.")
+    elsif self.funcionario.lotacoes.ativas.where(:destino_type=>"Departamento")
+      self.errors.add(:destino_nome,"Funcionário precisa ser devolvido antes de ser lotado novamente.")
     end
   end
 
