@@ -6,8 +6,8 @@ class Lotacao < ActiveRecord::Base
   #attr_accessible *column_names
   #attr_accessible :destino_nome
   #audited :associated_with => :funcionario
-  validates_uniqueness_of :orgao_id,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create,:if=>Proc.new{|l|l.tipo_lotacao=="SUMARIA ESPECIAL" or l.tipo_lotacao=="ESPECIAL"}
-  validates_uniqueness_of :destino_id,:scope=>[:funcionario_id,:destino_type,:ativo],:message=>"Já lotado neste destino"
+  validates_uniqueness_of :orgao_id,:on=>:create,:scope=>[:funcionario_id,:ativo],:message=>"Funcionário precisa ser devolvido para ser lotado novamente.",:on=>:create,:if=>Proc.new{|l|l.tipo_lotacao=="SUMARIA ESPECIAL" or l.tipo_lotacao=="ESPECIAL"}
+  validates_uniqueness_of :destino_id,:on=>:create,:scope=>[:funcionario_id,:destino_type,:ativo],:message=>"Já lotado neste destino"
 
   validates_presence_of :usuario_id
   validates_presence_of :natureza,:if=>Proc.new{|l|l.tipo_lotacao=="REGULAR" or l.tipo_lotacao=="SUMARIA"},:on=>:create
